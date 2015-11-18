@@ -1,0 +1,31 @@
+@extends('app')
+
+@section('title')
+Customers
+@endsection
+
+@section('content')
+
+<ul>
+@foreach ($customers as $c)
+<li>{!! $c->customer_name !!}
+    <ul>
+        @foreach ($c->customer_contacts as $cc)
+        <li>
+            @if ($cc->email != "")
+            <a href="mailto:{!! $cc->email !!}">
+            {!! $cc->first_name !!}
+            </a>
+            (Tel: {!! $cc->phone !!}, Mob: {!! $cc->mobile !!})
+            @else
+            {!! $cc->first_name !!}
+            @endif
+            (Tel: {!! $cc->phone !!}, Mob: {!! $cc->mobile !!})
+        </li>
+        @endforeach
+    </ul>
+</li>
+@endforeach
+</ul>
+
+@endsection

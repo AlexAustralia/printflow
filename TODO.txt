@@ -1,0 +1,26 @@
+
+On the 'Evaluate Prices’ screen, can we make the ‘Create Quote’ screen now link back to the first screen, the ‘Edit Quote Request’ Screen and populate the relevant fields?
+
+
+
+Lastly, we need a way of emailing the job title, summary, quantities etc to the customer as a PDF quote.
+
+
+it would be nice if instead of having to click back through multiple pages to get to the edit quote request screen, for example, that all those steps of the workflow should be a fixed row of buttons across the top, with the current step highlighted (If it’s a 10 minute job, go ahead.)
+
+GST on QRI is integer?!
+
+
+Older:
+
+Make the seeder add David and Myself as primary people
+Make the choose suppliers page reject multiple same suppliers per QuoteRequest
+Move page title to header?
+Remove/replace header <PRE></PRE>
+Change laravel less file with font-weight..
+Prevent duplicate quantities per quote request
+When removing suppliers, remove quotes and quote items
+when removing quote request items, remove quote items
+
+** Emails... Get foo <a@b.c> format into a format Mail::raw can understand..
+
