@@ -23,11 +23,11 @@
             <th width="7%">Quote Number</th>
             <th width="7%">Job Number</th>
             <th>Description</th>
-            <th width="7%">Quantity</th>
-            <th width="14%">Supplier</th>
-            <th width="7%">Job Cost</th>
-            <th width="7%">Job Sell</th>
-            <th width="7%">Date Last Ordered</th>
+            <th width="10%">Quantity</th>
+            <th width="20%">Supplier</th>
+            <th width="10%">Job Cost</th>
+            <th width="10%">Job Sell</th>
+            <th width="10%">Date Last Ordered</th>
             <th width="5%"></th>
             <tbody>
             @foreach($array as $item)
