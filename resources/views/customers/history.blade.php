@@ -34,7 +34,7 @@
                 <tr>
                     <td>{{$item['quote_number']}}</td>
                     <td>{{$item['job_number']}}</td>
-                    <td><a href="#" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
+                    <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
                     <td>{{$item['quantity']}}</td>
                     <td><a href="{{URL::to('/suppliers/'.$item["supplier_id"].'/edit')}}">{{$item['supplier_name']}}<a/></td>
                     <td>{{$item['job_cost']}}</td>
