@@ -159,4 +159,52 @@ class CustomersController extends Controller {
 		return redirect()->route('customers.index')->with(['message' => $result ? 'Customer deleted!' : 'Something went wrong, please try again.']);
 	}
 
+	/**
+	 * Show the history page for particular customers.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function history($id)
+	{
+		$customer = Customer::find($id);
+		$quotes = $customer->quotes;
+
+		$array = array();
+		$i = 0;
+
+		foreach($quotes as $quote)
+		{
+			$array[$i]['quote_number'] = $quote->id;
+			if(isset($quote->job->id)) {
+				$array[$i]['job_number'] = $quote->job->id;
+				$array[$i]['supplier_id'] = $quote->job->supplier->id;
+				$array[$i]['supplier_name'] = $quote->job->supplier->supplier_name;
+				$array[$i]['job_cost'] = $quote->job->net_cost;
+				$array[$i]['job_sell'] = $quote->job->net_sell;
+			}
+			else {
+				$array[$i]['job_number'] = '';
+				$array[$i]['supplier_id'] = '';
+				$array[$i]['supplier_name'] = '';
+				$array[$i]['job_cost'] = '';
+				$array[$i]['job_sell'] = '';
+			}
+			$array[$i]['title'] = $quote->title;
+			$array[$i]['description'] = $quote->summary;
+
+			$array[$i]['quantity'] = 0;
+			foreach($quote->qris as $item) {
+				$array[$i]['quantity'] += $item->quantity;
+			}
+
+			$array[$i]['request_date'] = $quote->request_date;
+
+			$i++;
+		}
+
+		return view('customers.history', compact('customer', 'array'));
+	}
+
 }
+

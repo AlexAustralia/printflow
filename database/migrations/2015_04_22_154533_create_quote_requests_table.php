@@ -7,7 +7,7 @@ class CreateQuoteRequestsTable extends Migration {
 
 	/**
 	 * Run the migrations.
-	 *
+	 * This table contains the information about quotes
 	 * @return void
 	 */
 	public function up()

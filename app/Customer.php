@@ -53,5 +53,10 @@ class Customer extends Model {
                 $this->postal_country;
     }
 
+    // Get customer's quotes
+    public function quotes()
+    {
+        return $this->hasMany('App\QuoteRequest');
+    }
 
 }

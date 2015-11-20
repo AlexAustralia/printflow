@@ -16,10 +16,27 @@ class QuoteRequest extends Model {
     {
         return $this->hasMany('App\QuoteRequestItem');
     }
-    
-    public function quotes()
+
+    //Get all quantity of the whole quote
+    //TODO: Complete this function
+    public function quantity()
     {
-        return $this->hasMany('App\Quote');
+        $quote_items = $this->hasMany('App\QuoteRequestItem');
+        $amount = 0;
+
+        foreach($quote_items as $quote_item)
+        {
+            $amount = $amount + $quote_item->quantity;
+        }
+
+        //return $amount;
+        return $this->hasMany('App\QuoteRequestItem');
+    }
+    
+    // Get quote's jobs
+    public function job()
+    {
+        return $this->hasOne('App\Quote');
     }
 
     public function first_quote(){

@@ -10,7 +10,10 @@ Route::controllers([
 Route::get('json/suppliers', 'JsonController@suppliers');
 Route::get('json/customers', 'JsonController@customers');
 
+// Customer section
+Route::get('customers/{id}/history', 'CustomersController@history');
 Route::resource('customers', 'CustomersController');
+
 // Route::resource('customer_contacts', 'CustomerContactsController');
 // Route::resource('customer_addresses', 'CustomerAddressesController');
 Route::resource('suppliers', 'SuppliersController');

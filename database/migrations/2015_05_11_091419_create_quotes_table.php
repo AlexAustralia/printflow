@@ -7,14 +7,14 @@ class CreateQuotesTable extends Migration {
 
 	/**
 	 * Run the migrations.
-	 *
+	 * This table contains the information about accepted quotes = jobs
 	 * @return void
 	 */
 	public function up()
 	{
 		Schema::create('quotes', function(Blueprint $table)
 		{
-			$table->increments('id'); // quote number
+			$table->increments('id'); // job number
 			$table->timestamps();
 
             $table->integer('quote_request_id')->unsigned();

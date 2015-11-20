@@ -87,7 +87,7 @@ Customers
     <li class="row customer-row">
 
         <div class="customer">
-            {!! $c->customer_name !!} 
+            <a href="customers/{!! $c->id !!}/history">{!! $c->customer_name !!}</a>
             <div class="pull-right"> 
                 <a class="btn btn-default edit" title="Edit {!! ucwords(strtolower($c->customer_name)) !!}" href="{!! route('customers.edit', ['id' => $c->id]) !!}"><i class="fa fa-pencil"></i></a> 
             </div>
