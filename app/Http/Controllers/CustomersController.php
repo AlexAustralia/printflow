@@ -199,6 +199,7 @@ class CustomersController extends Controller {
 			}
 
 			$array[$i]['request_date'] = $quote->request_date;
+			$array[$i]['expiry_date'] = $quote->expiry_date;
 
 			$i++;
 		}

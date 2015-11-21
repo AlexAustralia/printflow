@@ -28,6 +28,7 @@
             <th width="10%">Job Cost</th>
             <th width="10%">Job Sell</th>
             <th width="10%">Date Last Ordered</th>
+            <th width="10%">Expiry Date</th>
             <th width="5%"></th>
             <tbody>
             @foreach($array as $item)
@@ -40,13 +41,14 @@
                     <td>{{$item['job_cost']}}</td>
                     <td>{{$item['job_sell']}}</td>
                     <td>{{$item['request_date']}}</td>
+                    <td>{{$item['expiry_date']}}</td>
                     <td><div class="btn-group">
                             <button type="button" class="btn btn-default dropdown-toggle"
                                     data-toggle="dropdown" aria-expanded="false">
                                 ...
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Edit</a></li>
+                                <li><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}">Edit</a></li>
                                 <li><a href="#">Duplicate</i></a></li>
                                 <li><a href="#">Delete</a></li>
                                 <li class="divider"></li>
@@ -64,6 +66,11 @@
             </tbody>
         </table>
     </div>
+
+    <div class="pull-right">
+        <a class="btn btn-warning" href="{{URL::to('customers')}}"><span class="glyphicon glyphicon-backward"></span> Back</a>
+    </div>
+
 
 <script>
     $(function () {
