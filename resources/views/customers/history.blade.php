@@ -19,22 +19,28 @@
 
         <p><a href="{{URL::to('quote_requests/create')}}" class="btn btn-primary" role="button">Add New Quote</a></p>
 
-        <table class="table table-striped table-hover">
-            <th width="7%">Quote Number</th>
-            <th width="7%">Job Number</th>
-            <th>Description</th>
-            <th width="10%">Quantity</th>
-            <th width="20%">Supplier</th>
-            <th width="10%">Job Cost</th>
-            <th width="10%">Job Sell</th>
-            <th width="10%">Date Last Ordered</th>
-            <th width="10%">Expiry Date</th>
-            <th width="5%"></th>
+        <table id="table" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th width="7%">Quote Number</th>
+                <th width="7%">Job Number</th>
+                <th width="7%">Status</th>
+                <th>Description</th>
+                <th width="10%">Quantity</th>
+                <th width="20%">Supplier</th>
+                <th width="10%">Job Cost</th>
+                <th width="10%">Job Sell</th>
+                <th width="10%">Date Last Ordered</th>
+                <th width="10%">Expiry Date</th>
+                <th width="5%"></th>
+            </tr>
+            </thead>
             <tbody>
             @foreach($array as $item)
                 <tr>
                     <td>{{$item['quote_number']}}</td>
                     <td>{{$item['job_number']}}</td>
+                    <td><span class="label label-info">{{$item['status']}}</span></td>
                     <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
                     <td>{{$item['quantity']}}</td>
                     <td><a href="{{URL::to('/suppliers/'.$item["supplier_id"].'/edit')}}">{{$item['supplier_name']}}<a/></td>
@@ -58,23 +64,20 @@
                     </td>
                 </tr>
             @endforeach
-            @if(count($array) == 0)
-                <tr>
-                    <td colspan="9">There is no data available</td>
-                </tr>
-            @endif
             </tbody>
         </table>
     </div>
 
+    <hr>
     <div class="pull-right">
         <a class="btn btn-warning" href="{{URL::to('customers')}}"><span class="glyphicon glyphicon-backward"></span> Back</a>
     </div>
 
 
 <script>
-    $(function () {
-        $("[data-toggle='tooltip']").tooltip();
+    $(document).ready(function(){
+       $('#table').DataTable();
+       $("[data-toggle='tooltip']").tooltip();
     });
 </script>
 @endsection

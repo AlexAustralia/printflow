@@ -201,6 +201,9 @@ class CustomersController extends Controller {
 			$array[$i]['request_date'] = $quote->request_date;
 			$array[$i]['expiry_date'] = $quote->expiry_date;
 
+			//TODO: add status value after Workflow module done
+			$array[$i]['status'] = 'invoiced';
+
 			$i++;
 		}
 

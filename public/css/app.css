@@ -6325,3 +6325,20 @@ div[data-delete] {
 }
 
 /*# sourceMappingURL=app.css.map */
+/* Customising CSS */
+
+.dataTables_filter input {
+  border: 1px solid #aaa;
+  float: right;
+  margin-right: -15px;
+  padding: 5px;
+  margin-top: -8px;
+}
+
+.dataTables_length select {
+  border: 1px solid #aaa;
+  float: right;
+  margin-right: -15px;
+  padding: 5px;
+
+}
