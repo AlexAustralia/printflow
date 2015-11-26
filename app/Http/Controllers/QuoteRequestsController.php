@@ -22,7 +22,7 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function index()
 	{
-        $quote_requests = QuoteRequest::All();
+        $quote_requests = QuoteRequest::where('customer_id', '>', 0)->get();
         return view('quote_requests.index', compact('quote_requests'));
 	}
 
@@ -33,9 +33,9 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function create()
 	{
-        #$supplier_lists = Supplier::lists('supplier_name', 'id');
-		#return view('quote_requests.create', compact('supplier_lists'));
-        $qr = QuoteRequest::create([]);
+        //$supplier_lists = Supplier::lists('supplier_name', 'id');
+		//return view('quote_requests.create');
+        $qr = QuoteRequest::firstOrCreate(['customer_id' => 0]);
         return redirect()->route('quote_requests.edit', $qr["id"]);
 	}
 

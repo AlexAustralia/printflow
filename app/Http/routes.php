@@ -15,12 +15,13 @@ Route::group(['middleware' => 'auth'], function(){
 	// Supplier section
 	Route::resource('suppliers', 'SuppliersController');
 
+	//Quotes Section
+	Route::resource('quote_requests', 'QuoteRequestsController');
 
 
 
 	// Not tested routes
 
-	Route::resource('quote_requests', 'QuoteRequestsController');
 	Route::resource('quotes', 'QuotesController');
 
 	// View list of suppliers for quote request id

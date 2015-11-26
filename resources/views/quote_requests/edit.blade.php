@@ -87,10 +87,9 @@ Enter Quote Request
     };
         
     $(function () {
-        $('input[name="qri_quantity[]"]').on('input', updateTotal);
-        $('input[name="qri_price[]"]').on('input', updateTotal);
-        $('input[name="title"]').on('input', updateTitle);
-        //updateTotal();
+        $('#qri_items').delegate('input[name="qri_quantity[]"]', 'input', updateTotal)
+        $('#qri_items').delegate('input[name="qri_price[]"]', 'input', updateTotal)
+        $('#qri_items').delegate('input[name="title"]', 'input', updateTotal)
     });
 
 
@@ -192,6 +191,7 @@ Enter Quote Request
     
     <p style="float:right; margin-top:30px">
         {!! Form::submit('Save', array('class' => 'btn btn-primary')) !!}
+        <a href="{{URL::to('/')}}" class="btn btn-danger" role="button">Cancel</a>
     </p>
     <p style="clear:both;"></p>
 
