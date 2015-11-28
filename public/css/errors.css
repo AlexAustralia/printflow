@@ -1,0 +1,16 @@
+#field {
+    margin-left: .5em;
+    float: left;
+}
+
+input.error, select.error {
+    border: 1px solid red;
+}
+label.error {
+    background: #d45252;
+    border-radius: 3px 3px 3px 3px;
+    color: white;
+    margin-left: 0px;
+    pading-top: 20px;
+    padding: 1px 6px;
+}

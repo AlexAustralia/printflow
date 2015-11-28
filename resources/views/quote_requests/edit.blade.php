@@ -6,9 +6,34 @@ Enter Quote Request
 @endsection
 
 @section('content')
-
+<link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
+<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script>
-  $(function() {
+  $(document).ready(function() {
+
+      // Validation of the form
+      $('#quote_form').validate(
+              {
+                  rules: {
+                      customer: {
+                          required: true,
+                      },
+                      request_date: {
+                          required: true,
+                      },
+                  },
+              }
+      );
+
+      // Submitting the form
+      $('#submit_quote').click(function(){
+
+          //If Customer is not valid, clear the customer field
+          if($('#customer_id').val() == 0){
+              $('#customer').val('');
+          }
+      });
+
     $( "#request_date" ).datepicker({
         dateFormat: "dd/mm/yy",
         changeMonth: true,
@@ -32,7 +57,7 @@ Enter Quote Request
             $("#customer_id").val( ui.item ? ui.item.value : '' );
         }
     });
-    $('#addRow').click(function(e) { 
+    $('#addRow').click(function(e) {
         var tbody = $('#qri_items').find("tbody"),
         tr = tbody.find("tr:last"),
         tr_new = tr.clone();
@@ -44,7 +69,7 @@ Enter Quote Request
         tr_new.find("input[name='qri_total[]']").val('');
         tr_new.find("input[name='qri_unit_price[]']").val('');
         tr_new.find(':checkbox').prop("checked", false);
-        
+
         tr.after(tr_new);
     });
 
@@ -58,7 +83,7 @@ Enter Quote Request
             qty = parseInt($(this).val()) || 1;
 
             price = parseFloat($('input[name="qri_price[]"]').eq(index).val()) || 0;
-            
+
             var gst = price * 0.1;
             $('input[name="qri_gst[]"]').eq(index).val(gst.toFixed(2));
 
@@ -75,17 +100,6 @@ Enter Quote Request
         });
     };
 
-    var updateTitle = function() {
-        /*
-        var titles = $('input[name="qri_description[]"]');
-        var title = $('input[name="title"]').val();
-
-        titles.each(function() {
-            $(this).val(title);
-        });
-        */
-    };
-        
     $(function () {
         $('#qri_items').delegate('input[name="qri_quantity[]"]', 'input', updateTotal)
         $('#qri_items').delegate('input[name="qri_price[]"]', 'input', updateTotal)
@@ -96,18 +110,18 @@ Enter Quote Request
   });
 </script>
 
-{!! Form::open(array('url' => 'quote_requests/'.$q->id, 'method' => 'put')) !!}
+{!! Form::open(array('url' => 'quote_requests/'.$q->id, 'method' => 'put', 'id' => 'quote_form')) !!}
 
     <!-- https://jqueryui.com/autocomplete/#custom-data -->
-    <!-- Customer list to be modified jquery autocomplete dropdown 
+    <!-- Customer list to be modified jquery autocomplete dropdown
          with hidden id field -->
     <p style="float:left">
     {!! Form::label('customer', 'Customer') !!}<br />
-    
+
     {!! Form::text('customer', $q->customer["customer_name"], array('id' => 'customer')) !!}
     {!! Form::hidden('customer_id', $q->customer_id, array('id' => 'customer_id')) !!}
     <p>
-    
+
     <p style="float:left">
     {!! Form::label('request_date', 'Request Date') !!}<br />
     {!! Form::text('request_date', $q->request_date, array('id' => 'request_date')) !!}
@@ -142,10 +156,10 @@ Enter Quote Request
     {!! Form::textarea('summary', $q->summary,
                 array('rows' => '4')) !!}
     </p>
-    
+
     <p style="float: right; ">
     {!! Form::label('terms', 'Terms') !!}<br />
-    {!! Form::textarea('terms', $q->terms, 
+    {!! Form::textarea('terms', $q->terms,
                 array('rows' => '4')) !!}
     </p>
 
@@ -186,12 +200,12 @@ Enter Quote Request
             <td></td>
         </tr>
     </table>
-    
-    <p style="margin-top:10px; text-align:right"><a id="addRow" class="btn btn-primary" role="button">Add another row</a></p>   
-    
+
+    <p style="margin-top:10px; text-align:right"><a id="addRow" class="btn btn-primary" role="button">Add another row</a></p>
+
     <p style="float:right; margin-top:30px">
-        {!! Form::submit('Save', array('class' => 'btn btn-primary')) !!}
-        <a href="{{URL::to('/')}}" class="btn btn-danger" role="button">Cancel</a>
+        {!! Form::submit('Save', array('class' => 'btn btn-primary', 'id' => 'submit_quote')) !!}
+        <a href="{{URL::previous()}}" class="btn btn-danger" role="button">Cancel</a>
     </p>
     <p style="clear:both;"></p>
 
