@@ -83,24 +83,27 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function update($id)
 	{
+        // Get stored quote lines for delete checking
+        $quotes_lines = QuoteRequestItem::where('quote_request_id', $id)->get();
+
         // Separate out the incoming data
         $all = Input::all();
-
-        $qri_deletes = array_pull($all, 'qri_delete'); 
-        if ($qri_deletes === null){
-            $qri_deletes = [];
-        };
 
 		$qri_input = array_where($all, function($key, $value){
             return starts_with($key, 'qri');
         });
+
+        $qri_id_storing = array();
+        foreach ($qri_input['qri_id'] as $item)
+        {
+            array_push($qri_id_storing, $item);
+        }
 
         $qr_input = array_where($all, function($key, $value){
             return !starts_with($key, 'qri') 
                     && $key != '_method'
                     && $key != 'customer';
         });
-
 
         // invert qri_input array
         $input = $qri_input;
@@ -132,6 +135,7 @@ class QuoteRequestsController extends Controller {
         }
         $qri_input = $output;
 
+        //return $qri_input;
 
         // process inverted qri_input array
         foreach ($qri_input as $qri){
@@ -145,11 +149,11 @@ class QuoteRequestsController extends Controller {
                 // create new qri
 
                 // first check if anything has been entered
-                if (!($qri["quantity"] == "" &&
-                    $qri["price"] == "" &&
-                    $qri["gst"] == "" &&
-                    $qri["total"] == "" &&
-                    $qri["unit_price"] == "")){
+                if (($qri["quantity"] != "" &&
+                    $qri["price"] != "" &&
+                    $qri["gst"] != "" &&
+                    $qri["total"] != "" &&
+                    $qri["unit_price"] != "")){
                         QuoteRequestItem::create($qri);
                 }
             } else {
@@ -159,17 +163,19 @@ class QuoteRequestsController extends Controller {
             }
         }
 
-        // process qri_deletes
-        foreach ($qri_deletes as $qri_id){
-            $item = QuoteRequestItem::find($qri_id);
-            $item->delete();
+        // Delete chosen items
+        foreach ($quotes_lines as $quotes_line) {
+            if (!in_array($quotes_line->id, $qri_id_storing))
+            {
+                $quote_line_delete = QuoteRequestItem::find($quotes_line->id);
+                $quote_line_delete->delete();
+            }
         }
 
-        
         // process other input (quote request data)
         $q = QuoteRequest::find($id);
         $q->update($qr_input);
-        return redirect()->route('quote_requests.edit', $id)->with('message', 'Quote Request Updated');
+        return redirect()->route('quote_requests.index');
 	}
 
 	/**

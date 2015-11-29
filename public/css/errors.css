@@ -10,7 +10,6 @@ label.error {
     background: #d45252;
     border-radius: 3px 3px 3px 3px;
     color: white;
-    margin-left: 0px;
-    pading-top: 20px;
+    margin-top: 4px;
     padding: 1px 6px;
 }
