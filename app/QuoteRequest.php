@@ -17,6 +17,10 @@ class QuoteRequest extends Model {
         return $this->hasMany('App\QuoteRequestItem');
     }
 
+    public function quotes()
+    {
+        return $this->hasMany('App\Quote');
+    }
 
     // Get quote's jobs
     public function job()

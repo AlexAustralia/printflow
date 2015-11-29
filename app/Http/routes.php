@@ -18,14 +18,16 @@ Route::group(['middleware' => 'auth'], function(){
 	//Quotes Section
 	Route::resource('quote_requests', 'QuoteRequestsController');
 
+	// Jobs Section
+	// View list of suppliers for quote request id
+	Route::get('/choose_suppliers/{id}', 'QuotesController@get_choose_suppliers');
 
 
 	// Not tested routes
 
 	Route::resource('quotes', 'QuotesController');
 
-	// View list of suppliers for quote request id
-	Route::get('/choose_suppliers/{id}', 'QuotesController@get_choose_suppliers');
+
 	// Add or remove supplier from list
 	Route::post('/choose_suppliers/{id}', 'QuotesController@post_choose_suppliers');
 

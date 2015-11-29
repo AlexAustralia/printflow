@@ -7,6 +7,7 @@ use App\QuoteRequest;
 use App\QuoteRequestItem;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Input;
 
 class QuoteRequestsController extends Controller {
@@ -70,9 +71,10 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function edit($id)
 	{
+        $message = Session::get('message');
         $q = QuoteRequest::find($id);
         $quote_request = $q;
-		return view('quote_requests.edit', compact('q', 'quote_request'));
+		return view('quote_requests.edit', compact('q', 'quote_request' ,'message'));
 	}
 
 	/**
@@ -135,8 +137,6 @@ class QuoteRequestsController extends Controller {
         }
         $qri_input = $output;
 
-        //return $qri_input;
-
         // process inverted qri_input array
         foreach ($qri_input as $qri){
             $qri_id = array_pull($qri, 'id');
@@ -153,13 +153,24 @@ class QuoteRequestsController extends Controller {
                     $qri["price"] != "" &&
                     $qri["gst"] != "" &&
                     $qri["total"] != "" &&
-                    $qri["unit_price"] != "")){
+                    $qri["unit_price"] != "" &&
+                    $qri["quantity"] > 0 &&
+                    $qri["price"] > 0)){
                         QuoteRequestItem::create($qri);
                 }
             } else {
                 // update old qri
                 $item = QuoteRequestItem::find($qri_id);
-                $item->update($qri);
+
+                if (($qri["quantity"] != "" &&
+                    $qri["price"] != "" &&
+                    $qri["gst"] != "" &&
+                    $qri["total"] != "" &&
+                    $qri["unit_price"] != "" &&
+                    $qri["quantity"] > 0 &&
+                    $qri["price"] > 0)) {
+                        $item->update($qri);
+                }
             }
         }
 
@@ -175,7 +186,9 @@ class QuoteRequestsController extends Controller {
         // process other input (quote request data)
         $q = QuoteRequest::find($id);
         $q->update($qr_input);
-        return redirect()->route('quote_requests.index');
+
+        //return redirect()->route('quote_requests.index');
+        return redirect()->route('quote_requests.edit', $id)->with('message', 'Quote Request has been Updated');
 	}
 
 	/**

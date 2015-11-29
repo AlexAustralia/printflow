@@ -135,6 +135,15 @@
         });
     </script>
 
+    @if (isset($message))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Success</h4>
+            @if(is_array($message)) @foreach ($message as $m) {{ $m }} @endforeach
+            @else {{ $message }} @endif
+        </div>
+    @endif
+
     {!! Form::open(array('url' => 'quote_requests/'.$q->id, 'method' => 'put', 'id' => 'quote_form', 'class' => 'form-horizontal')) !!}
 
             <!-- https://jqueryui.com/autocomplete/#custom-data -->
@@ -142,14 +151,14 @@
          with hidden id field -->
     <div class="form-group">
         <div class="col-md-2">
-            {!! Form::label('customer', 'Customer', array('class' => 'control-label')) !!}
+            {!! Form::label('customer', 'Customer *', array('class' => 'control-label')) !!}
             {!! Form::text('customer', $q->customer["customer_name"], array('id' => 'customer', 'class' => 'form-control')) !!}
             {!! Form::hidden('customer_id', $q->customer_id, array('id' => 'customer_id')) !!}
 
         </div>
 
         <div class="col-md-2">
-            {!! Form::label('request_date', 'Request Date', array('class' => 'control-label')) !!}
+            {!! Form::label('request_date', 'Request Date *', array('class' => 'control-label')) !!}
             {!! Form::text('request_date', $q->request_date, array('id' => 'request_date', 'class' => 'form-control')) !!}
         </div>
 
@@ -171,7 +180,7 @@
 
     <div class="form-group">
         <div class="col-md-12">
-            {!! Form::label('title', 'Title', array('class' => 'control-label')) !!}
+            {!! Form::label('title', 'Title *', array('class' => 'control-label')) !!}
             {!! Form::text('title', $q->title, array('class' => 'form-control')) !!}
         </div>
     </div>
@@ -190,9 +199,9 @@
         <table id="qri_items" width="100%" class="table">
             <thead>
             <tr>
-                <th width="8%">Quantity</th>
+                <th width="8%">Quantity *</th>
                 <th width="35%">Description</th>
-                <th width="8%">Price</th>
+                <th width="8%">Price *</th>
                 <th width="8%">GST</th>
                 <th width="8%">Total</th>
                 <th width="8%">Unit Price</th>
@@ -200,13 +209,13 @@
             </tr>
             </thead>
             @if(count($q->qris) > 0)
-                @foreach ($q->qris as $qri):
+                @foreach ($q->qris as $qri)
                 <tr>
                     <td>{!! Form::hidden('qri_id[]', $qri->id, ['id' => 'qri_id']) !!}
                         {!! Form::hidden('qri_quote_request_id[]', $q->id) !!}
-                        {!! Form::text('qri_quantity[]', $qri->quantity, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number']) !!}</td>
+                        {!! Form::text('qri_quantity[]', $qri->quantity, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '1']) !!}</td>
                     <td>{!! Form::text('qri_description[]', $qri->description, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_price[]', $qri->price, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number']) !!}</td>
+                    <td>{!! Form::text('qri_price[]', $qri->price, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '0.01']) !!}</td>
                     <td>{!! Form::text('qri_gst[]', $qri->gst, ['style' => 'width: 100%']) !!}</td>
                     <td>{!! Form::text('qri_total[]', $qri->total, ['style' => 'width: 100%']) !!}</td>
                     <td>{!! Form::text('qri_unit_price[]', $qri->unit_price, ['style' => 'width: 100%']) !!}</td>
@@ -217,9 +226,9 @@
                 <tr>
                     <td>{!! Form::hidden('qri_id[]', null, ['id' => 'qri_id']) !!}
                         {!! Form::hidden('qri_quote_request_id[]', $q->id) !!}
-                        {!! Form::text('qri_quantity[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number']) !!}</td>
+                        {!! Form::text('qri_quantity[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '1']) !!}</td>
                     <td>{!! Form::text('qri_description[]', null, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_price[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number']) !!}</td>
+                    <td>{!! Form::text('qri_price[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '0.01']) !!}</td>
                     <td>{!! Form::text('qri_gst[]', null, ['style' => 'width: 100%']) !!}</td>
                     <td>{!! Form::text('qri_total[]', null, ['style' => 'width: 100%']) !!}</td>
                     <td>{!! Form::text('qri_unit_price[]', null, ['style' => 'width: 100%']) !!}</td>
@@ -235,7 +244,7 @@
     <div class="form-group">
         <div class="pull-right">
             <button type="button" class="btn btn-primary" id="submit_quote">Save</button>
-            <a href="{{URL::previous()}}" class="btn btn-danger" role="button">Cancel</a>
+            <a href="{{URL::to('/')}}" class="btn btn-danger" role="button">Cancel</a>
         </div>
     </div>
 
