@@ -22,14 +22,14 @@ Route::group(['middleware' => 'auth'], function(){
 	// View list of suppliers for quote request id
 	Route::get('/choose_suppliers/{id}', 'QuotesController@get_choose_suppliers');
 
+	// Add or remove supplier from list
+	Route::post('/choose_suppliers/{id}', 'QuotesController@post_choose_suppliers');
 
 	// Not tested routes
 
 	Route::resource('quotes', 'QuotesController');
 
 
-	// Add or remove supplier from list
-	Route::post('/choose_suppliers/{id}', 'QuotesController@post_choose_suppliers');
 
 
 	Route::get('/send_rfq_emails/{id}', 'QuotesController@get_send_rfq_emails');

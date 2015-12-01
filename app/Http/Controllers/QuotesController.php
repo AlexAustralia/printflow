@@ -24,22 +24,48 @@ class QuotesController extends Controller {
         //die("Sending RFQs for Quote Request ID: $qr_id");
     }
 
-    public function post_choose_suppliers($qr_id){
+    public function post_choose_suppliers(\Illuminate\Http\Request $request, $qr_id){
+
         $quote_request = QuoteRequest::Find($qr_id);
         $input = Request::all();
-        $action = $input['submit'];    
+
+        $action = $input['submit'];
 
         if ($action == "Add"){
+
+            // Validate form
+            $this->validate($request, [
+                'supplier' => 'required',
+                'supplier_id' => 'required|not_in:0',
+            ]);
+
             $supplier_id = $input['supplier_id'];
-            $quote_request->quotes()->save(new Quote($input));
+
+            if($supplier_id > 0)
+            {
+                // At first, we check if this supplier already in DB
+                $added_suppliers = array();
+                foreach ($quote_request->quotes as $quotes)
+                {
+                   array_push($added_suppliers, $quotes->supplier_id);
+                }
+
+                if(!in_array($supplier_id, $added_suppliers)) {
+                    $quote_request->quotes()->save(new Quote($input));
+                }
+            }
+
         } elseif ($action == "Remove") {
-            $supplier_id = $input['suppliers'];
-            $quote = $quote_request->quotes()->where('supplier_id', '=', $supplier_id);
-            $quote->delete();
+            if(isset($input['suppliers']))
+            {
+                $supplier_id = $input['suppliers'];
+
+                $quote = $quote_request->quotes()->where('supplier_id', '=', $supplier_id);
+                $quote->delete();
+            }
         }
 
-        return view('quotes.choose_suppliers', compact('quote_request'));
-   
+        return redirect('choose_suppliers/'.$qr_id);
     }
     
     public function get_send_rfq_emails($qr_id){
