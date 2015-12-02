@@ -22,8 +22,12 @@ Route::group(['middleware' => 'auth'], function(){
 	// View list of suppliers for quote request id
 	Route::get('/choose_suppliers/{id}', 'QuotesController@get_choose_suppliers');
 
-	// Add or remove supplier from list
+	// Choose Suppliers section on the Quotes Module - Add or remove supplier from list
 	Route::post('/choose_suppliers/{id}', 'QuotesController@post_choose_suppliers');
+
+	// Request Supplier Quotes on the Quote Module
+	Route::get('/send_rfq_emails/{id}', 'QuotesController@get_send_rfq_emails');
+	Route::post('/send_rfq_emails/{id}', 'QuotesController@post_send_rfq_emails');
 
 	// Not tested routes
 
@@ -32,8 +36,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 
-	Route::get('/send_rfq_emails/{id}', 'QuotesController@get_send_rfq_emails');
-	Route::post('/send_rfq_emails/{id}', 'QuotesController@post_send_rfq_emails');
+
 
 	Route::get('/enter_prices/{qrid}', 'QuotesController@get_enter_prices');
 	Route::get('/enter_prices/{qrid}/{qid}', 'QuotesController@get_enter_prices');

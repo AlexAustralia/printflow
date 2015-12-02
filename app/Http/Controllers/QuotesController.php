@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\Auth;
 use Request;
 use Mail;
 use App\helpers;
@@ -14,8 +15,8 @@ use PDF;
 
 class QuotesController extends Controller {
 
-    public function get_choose_suppliers($qr_id){
-
+    public function get_choose_suppliers($qr_id)
+    {
         $quote_request = QuoteRequest::Find($qr_id);
         //$quotes = Quote::where('quote_request_id', '=', $qr_id)->get();
 
@@ -24,8 +25,9 @@ class QuotesController extends Controller {
         //die("Sending RFQs for Quote Request ID: $qr_id");
     }
 
-    public function post_choose_suppliers(\Illuminate\Http\Request $request, $qr_id){
 
+    public function post_choose_suppliers(\Illuminate\Http\Request $request, $qr_id)
+    {
         $quote_request = QuoteRequest::Find($qr_id);
         $input = Request::all();
 
@@ -37,7 +39,10 @@ class QuotesController extends Controller {
             $this->validate($request, [
                 'supplier' => 'required',
                 'supplier_id' => 'required|not_in:0',
-            ]);
+            ], $messages = array(
+                'supplier.required' => 'You should enter a Supplier Name',
+                'supplier_id.not_in' => 'You should choose a valid Supplier'
+            ));
 
             $supplier_id = $input['supplier_id'];
 
@@ -68,27 +73,26 @@ class QuotesController extends Controller {
         return redirect('choose_suppliers/'.$qr_id);
     }
     
-    public function get_send_rfq_emails($qr_id){
-        $quote_request = QuoteRequest::Find($qr_id);
 
-        return view('quotes.send_rfq_emails', compact('quote_request'));
+    public function get_send_rfq_emails($qr_id)
+    {
+        $quote_request = QuoteRequest::Find($qr_id);
+        $user = Auth::user();
+
+        return view('quotes.send_rfq_emails', compact('quote_request', 'user'));
     }
     
-    public function post_send_rfq_emails($qr_id){
+
+    public function post_send_rfq_emails($qr_id)
+    {
         $quote_request = QuoteRequest::Find($qr_id);
         $input = request::all();
 
-        try {
-            $from = $input['from'];
-            $replyto = $input['reply-to'];
-            $bcc = $input['bcc'];
-            $subject = $input['subject'];
-            $body = $input['body'];
-        } catch (Exception $e){
-            echo 'Caught Exception in QuotesController.php', $e->getMessage(), "\n";
-            echo 'Referred by', $_SERVER['HTTP_REFERER'];
-            die();
-        }
+        $from = $input['from'];
+        $replyto = $input['reply-to'];
+        $bcc = $input['bcc'];
+        $subject = $input['subject'];
+        $body = $input['body'];
 
 
         // Split up combined text bcc addresses into correct pairs
@@ -108,9 +112,13 @@ class QuotesController extends Controller {
         $headers .= "From: ".$from."\r\n";
         $headers .= "Reply-to: ".$replyto."\r\n";
 
-        //send_email
+        // Send_email
         if (!mail($replyto, $subject, $body, $headers)){
-            die("Mail was NOT sent - there was a problem $replyto $subject $body $headers");
+            $quote_request = QuoteRequest::Find($qr_id);
+            $user = Auth::user();
+            $message = "Mail has not been sent due to some errors";
+
+            return view('quotes.send_rfq_emails', compact('quote_request', 'user', 'message'));
         }
 
         $quote = $quote_request->first_quote();

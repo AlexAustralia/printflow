@@ -1,4 +1,3 @@
-
 @extends('app')
 
 @section('title')
@@ -7,20 +6,28 @@ Request Supplier Quotes
 
 @section('content')
 
+    @if (isset($message))
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Error!</h4>
+            @if(is_array($message)) @foreach ($message as $m) {{ $m }} @endforeach
+            @else {{ $message }} @endif
+        </div>
+    @endif
 
-{!! Form::open(array('url' => '/send_rfq_emails/'.$quote_request->id, 'method' => 'post', 'class' => 'form-horizontal')) !!}
+    {!! Form::open(array('url' => '/send_rfq_emails/'.$quote_request->id, 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
     <div class="form-group">
         {!! Form::label('from', 'From:', array('class' => 'control-label col-sm-2')) !!}
         <div class="col-sm-10">
-            <input name="from" class="form-control" value="Franklin Direct <art@franklindirect.com.au>" />
+            <input name="from" class="form-control" value="Franklin Direct <{{$user->email}}>" />
         </div>
     </div>
 
     <div class="form-group">
         {!! Form::label('reply-to', 'Reply-To:', array('class' => 'control-label col-sm-2')) !!}
         <div class="col-sm-10">
-            <input name="reply-to" class="form-control" value="Franklin Direct <art@franklindirect.com.au>" />
+            <input name="reply-to" class="form-control" value="Franklin Direct <{{$user->email}}>" />
         </div>
     </div>
 
@@ -37,7 +44,7 @@ Request Supplier Quotes
             <input name="subject" class="form-control" value="Please Quote For Project: {!! $quote_request->title !!}" />
         </div>
     </div>
-    
+
     <div class="form-group">
         {!! Form::label('body', 'Body:', array('class' => 'control-label col-sm-2')) !!}
         <div class="col-sm-10">
@@ -50,16 +57,14 @@ Please quote on the following job:
 Quantities required are:
 
 @foreach ($quote_request->qris as $qri)
-{!! $qri->quantity !!}
+{!! $qri->quantity !!}  {!! $qri->description !!}
 @endforeach
 
 Kind Regards,
-Staff at Franklin Direct
+{{$user->name}} at Franklin Direct
 </textarea>
         </div>
     </div>
-
-
 
     <div style="margin-top:30px;">
         <p style="float:right;">
@@ -68,6 +73,6 @@ Staff at Franklin Direct
         <p style="clear:both;"></p>
     </div>
 
-{!! Form::close() !!}
+    {!! Form::close() !!}
 
 @endsection

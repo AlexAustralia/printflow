@@ -49,7 +49,8 @@ class QuoteRequest extends Model {
         $this->attributes['expiry_date'] = fixSetDate($value);
     }
 
-    public function emails(){
+    public function emails()
+    {
         $addresses = [];
         foreach ($this->quotes as $quote) {
             $addresses[] = $quote->supplier->supplier_name . " &lt;" . $quote->supplier->email() . "&gt;";

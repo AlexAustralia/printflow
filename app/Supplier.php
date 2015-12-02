@@ -38,11 +38,11 @@ class Supplier extends Model {
     }
 
     public function primary_person(){
-        $contact = $this->contacts()->where('primary_person', '=', '1')->first();
+        $contact = $this->supplier_contacts()->where('primary_person', '=', '1')->first();
 
-        if ($contact == null && count($this->contacts()) > 0){
+        if ($contact == null && count($this->supplier_contacts()) > 0){
             //die("No primary contact for ".$this->supplier_name.", returning first contact");
-            return $this->contacts()->first();
+            return $this->supplier_contacts()->first();
         }
     }
 
