@@ -135,7 +135,9 @@ class QuotesController extends Controller {
             $quote = Quote::Find($qid);
         }
 
-        return view('quotes.enter_prices', compact('quote_request', 'quote'));
+        $quote_request_lines = $quote_request->qris;
+
+        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
     }
     
     public function post_enter_prices($qr_id, $qid=null){
@@ -162,8 +164,6 @@ class QuotesController extends Controller {
             }
         }
 
-        //dd($output);
-
         foreach ($output as $item) {
             $id = $item["id"];
             if ($id == ""){ // Create new
@@ -174,7 +174,9 @@ class QuotesController extends Controller {
             }
         }
 
-        return view('quotes.enter_prices', compact('quote_request', 'quote'));
+        $quote_request_lines = $quote_request->qris;
+
+        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
     }
 
 
@@ -187,12 +189,14 @@ class QuotesController extends Controller {
         $quote = $quote_request->first_quote();
 
         if (isset($quote)) {
-            $quantities = $quote->quantities();
+            //$quantities = $quote->quantities();
+            $quote_request_lines = $quote_request->qris;
         } else {
-            $quantities = [];
+            //$quantities = [];
+            $quote_request_lines = [];
         }
 
-        return view('quotes.evaluate', compact('quote_request', 'quantities'));
+        return view('quotes.evaluate', compact('quote_request', 'quote_request_lines'));
     }
     
     public function post_evaluate($qr_id){

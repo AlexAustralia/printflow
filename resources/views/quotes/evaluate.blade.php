@@ -6,27 +6,36 @@ Evaluate Prices
 @endsection
 
 @section('content')
+    <script>
+        $(document).ready(function(){
+            $("[data-toggle='tooltip']").tooltip();
+        });
+    </script>
 
 {!! Form::open(array('method' => 'post', 'class' => 'form-horizontal')) !!}
 
-@if (count($quantities) == 0)
-    No quotes found
+@if (count($quote_request_lines) == 0)
+    <div class="alert alert-warning alert-block">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4>Message</h4>
+        No Quotes Found
+    </div>
 @else
 
-<p style="margin: 30px 0">
-    Choose the supplier you want to base your quote on. <br /> 
+<div class="alert alert-success alert-block">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    Choose the supplier you want to base your quote on. <br />
     These prices are the total net cost to the customer.
-</p>
+</div>
 
 
-<table width="100%" class="table">
-
+<table width="100%" class="table table-hover">
     <tr>
-        <td>Supplier:</td>
-        @foreach($quantities as $q)
-        <td>{!! $q !!}</td>
+        <th>Supplier:</th>
+        @foreach($quote_request_lines as $line)
+        <th><span data-toggle="tooltip" title="{{$line->description}}">{!! $line->quantity !!}</span></th>
         @endforeach
-        <td>&nbsp;</td>
+        <th>&nbsp;</th>
     </tr>
 
     @foreach($quote_request->quotes as $q)

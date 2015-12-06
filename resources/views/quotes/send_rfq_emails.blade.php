@@ -15,6 +15,8 @@ Request Supplier Quotes
         </div>
     @endif
 
+    @if($quote_request->emails() != '')
+
     {!! Form::open(array('url' => '/send_rfq_emails/'.$quote_request->id, 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
     <div class="form-group">
@@ -74,5 +76,13 @@ Kind Regards,
     </div>
 
     {!! Form::close() !!}
+
+    @else
+        <div class="alert alert-warning alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Message</h4>
+            No Suppliers chosen
+        </div>
+    @endif
 
 @endsection

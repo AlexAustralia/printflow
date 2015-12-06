@@ -29,6 +29,16 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/send_rfq_emails/{id}', 'QuotesController@get_send_rfq_emails');
 	Route::post('/send_rfq_emails/{id}', 'QuotesController@post_send_rfq_emails');
 
+	// Enter Supplier Prices on the Quote Module
+	Route::get('/enter_prices/{qrid}', 'QuotesController@get_enter_prices');
+	Route::get('/enter_prices/{qrid}/{qid}', 'QuotesController@get_enter_prices');
+	Route::post('/enter_prices/{qrid}', 'QuotesController@post_enter_prices');
+	Route::post('/enter_prices/{qrid}/{qid}', 'QuotesController@post_enter_prices');
+
+	// Evaluate Prices
+	Route::get('/evaluate/{qrid}', 'QuotesController@get_evaluate');
+	Route::post('/evaluate/{qrid}', 'QuotesController@post_evaluate');
+
 	// Not tested routes
 
 	Route::resource('quotes', 'QuotesController');
@@ -38,13 +48,8 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 
-	Route::get('/enter_prices/{qrid}', 'QuotesController@get_enter_prices');
-	Route::get('/enter_prices/{qrid}/{qid}', 'QuotesController@get_enter_prices');
-	Route::post('/enter_prices/{qrid}', 'QuotesController@post_enter_prices');
-	Route::post('/enter_prices/{qrid}/{qid}', 'QuotesController@post_enter_prices');
 
-	Route::get('/evaluate/{qrid}', 'QuotesController@get_evaluate');
-	Route::post('/evaluate/{qrid}', 'QuotesController@post_evaluate');
+
 
 	Route::get('/send_customer_quote/{qrid}', 'QuotesController@get_send_customer_quote');
 	Route::post('/send_customer_quote/{qrid}', 'QuotesController@post_send_customer_quote');
