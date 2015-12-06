@@ -12,15 +12,34 @@ Evaluate Prices
         });
     </script>
 
+
 {!! Form::open(array('method' => 'post', 'class' => 'form-horizontal')) !!}
 
 @if (count($quote_request_lines) == 0)
     <div class="alert alert-warning alert-block">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4>Message</h4>
-        No Quotes Found
+        <h4>Warning</h4>
+        You should create a quote request and specify a quantity before evaluating prices
+    </div>
+@elseif($error)
+    <div class="alert alert-warning alert-block">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4>Warning</h4>
+        You should enter all supplier prices before evaluating them
     </div>
 @else
+
+    @if (count($errors) > 0)
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Error</h4>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 <div class="alert alert-success alert-block">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -44,7 +63,12 @@ Evaluate Prices
         @foreach($q->quote_items() as $qi)
         <td>{!! $qi['total_inc_gst'] !!}</td>
         @endforeach
-        <td>{!! Form::radio('quote_id', $q->id) !!}</td>
+        <td>@if($quote_request->quote_id == $q->id)
+            {!! Form::radio('quote_id', $q->id, 'checked' ) !!}
+            @else
+            {!! Form::radio('quote_id', $q->id ) !!}
+            @endif
+        </td>
     </tr>
     @endforeach
 
@@ -53,7 +77,7 @@ Evaluate Prices
 <p style="float:right">
     <input type="submit" class="btn btn-primary" value="Create Quote" />
 </p>
-<p style="clear:both:></p>
+
 @endif
 
 {!! Form::close() !!}

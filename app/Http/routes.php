@@ -18,7 +18,6 @@ Route::group(['middleware' => 'auth'], function(){
 	//Quotes Section
 	Route::resource('quote_requests', 'QuoteRequestsController');
 
-	// Jobs Section
 	// View list of suppliers for quote request id
 	Route::get('/choose_suppliers/{id}', 'QuotesController@get_choose_suppliers');
 

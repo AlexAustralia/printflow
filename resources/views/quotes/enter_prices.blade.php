@@ -81,6 +81,15 @@ Enter Supplier Prices
     });
     </script>
 
+    @if (isset($message))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Success</h4>
+            @if(is_array($message)) @foreach ($message as $m) {{ $m }} @endforeach
+            @else {{ $message }} @endif
+        </div>
+    @endif
+
 
 {!! Form::open(array('method' => 'post', 'class' => 'form-horizontal', 'id' => 'supplier_prices_form')) !!}
 
@@ -223,8 +232,8 @@ Enter Supplier Prices
     @else
         <div class="alert alert-warning alert-block">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Message</h4>
-            No Suppliers chosen
+            <h4>Warning</h4>
+            No Suppliers chosen. Please choose suppliers and then try again
         </div>
     @endif
 

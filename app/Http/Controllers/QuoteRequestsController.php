@@ -85,9 +85,6 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function update($id)
 	{
-        // Get stored quote lines for delete checking
-        $quotes_lines = QuoteRequestItem::where('quote_request_id', $id)->get();
-
         // Separate out the incoming data
         $all = Input::all();
 
@@ -141,42 +138,30 @@ class QuoteRequestsController extends Controller {
         foreach ($qri_input as $qri){
             $qri_id = array_pull($qri, 'id');
 
-            if ($qri["description"] == "") {
-                $qri["description"] = $qr_input["title"];
-            }
+            $qri["description"] = $qr_input["title"];
 
             if ($qri_id == ""){
                 // create new qri
 
                 // first check if anything has been entered
                 if (($qri["quantity"] != "" &&
-                    $qri["price"] != "" &&
-                    $qri["gst"] != "" &&
-                    $qri["total"] != "" &&
-                    $qri["unit_price"] != "" &&
-                    $qri["quantity"] > 0 &&
-                    $qri["price"] > 0)){
+                    $qri["quantity"] > 0 )){
                         QuoteRequestItem::create($qri);
                 }
             } else {
                 // update old qri
                 $item = QuoteRequestItem::find($qri_id);
-
-                if (($qri["quantity"] != "" &&
-                    $qri["price"] != "" &&
-                    $qri["gst"] != "" &&
-                    $qri["total"] != "" &&
-                    $qri["unit_price"] != "" &&
-                    $qri["quantity"] > 0 &&
-                    $qri["price"] > 0)) {
-                        $item->update($qri);
-                }
+                if($qri["quantity"] == "" || is_numeric($qri["quantity"]))
+                $item->update($qri);
             }
         }
 
+        // Get stored quote lines for delete checking
+        $quotes_lines = QuoteRequestItem::where('quote_request_id', $id)->get();
+
         // Delete chosen items
         foreach ($quotes_lines as $quotes_line) {
-            if (!in_array($quotes_line->id, $qri_id_storing))
+            if (($quotes_line->quantity == 0) || ($quotes_line->quantity == ''))
             {
                 $quote_line_delete = QuoteRequestItem::find($quotes_line->id);
                 $quote_line_delete->delete();

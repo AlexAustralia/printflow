@@ -11,12 +11,6 @@
     <script>
         $(document).ready(function() {
 
-            var rows = {{count($q->qris)}};   // Number of rows in the table
-
-            if(rows == 0){
-                rows = 1;
-            }
-
             // Validation of the form
             $('#quote_form').validate(
                     {
@@ -45,15 +39,6 @@
                 $('#quote_form').submit();
             });
 
-            // Delete row button
-            $('#qri_items tbody').on('click', '#delete_row', function(){
-                $($(this).parents("tr").get(0)).remove();
-                rows--;
-                if(rows == 1) {
-                    $('#qri_items tbody').find('button').attr('disabled', true);
-                }
-            });
-
             $( "#request_date" ).datepicker({
                 dateFormat: "dd/mm/yy",
                 changeMonth: true,
@@ -78,59 +63,6 @@
                 change: function (event, ui) {
                     $("#customer_id").val( ui.item ? ui.item.value : '' );
                 }
-            });
-
-            $('#addRow').click(function(e) {
-
-                rows++;
-                $('#qri_items tbody').find('button').attr('disabled', false);
-
-                var tbody = $('#qri_items').find("tbody"),
-                        tr = tbody.find("tr:last"),
-                        tr_new = tr.clone();
-                tr_new.find("input[name='qri_id[]']").val('');
-                // leave qri_quote_request_id alone..
-                tr_new.find("input[name='qri_quantity[]']").val('');
-                tr_new.find("input[name='qri_description[]']").val('');
-                tr_new.find("input[name='qri_price[]']").val('');
-                tr_new.find("input[name='qri_gst[]']").val('');
-                tr_new.find("input[name='qri_total[]']").val('');
-                tr_new.find("input[name='qri_unit_price[]']").val('');
-                tr_new.find(':checkbox').prop("checked", false);
-
-                tr.after(tr_new);
-                $('#quote_form').validate();
-            });
-
-            var updateTotal = function() {
-                var index = 0;
-                var qtys = $('input[name="qri_quantity[]"]')
-
-                qtys.each(function() {
-                    qty = parseInt($(this).val()) || 1;
-
-                    price = parseFloat($('input[name="qri_price[]"]').eq(index).val()) || 0;
-
-                    var gst = price * 0.1;
-                    $('input[name="qri_gst[]"]').eq(index).val(gst.toFixed(2));
-
-                    var total = price + gst;
-                    $('input[name="qri_total[]"]').eq(index).val(total.toFixed(2));
-
-                    var unit_price = total/qty || 0;
-                    if (unit_price == "Infinity"){
-                        unit_price = 0;
-                    }
-                    $('input[name="qri_unit_price[]"]').eq(index).val(unit_price.toFixed(2));
-
-                    index++;
-                });
-            };
-
-            $(function () {
-                $('#qri_items').delegate('input[name="qri_quantity[]"]', 'input', updateTotal)
-                $('#qri_items').delegate('input[name="qri_price[]"]', 'input', updateTotal)
-                $('#qri_items').delegate('input[name="title"]', 'input', updateTotal)
             });
         });
     </script>
@@ -195,51 +127,44 @@
             {!! Form::textarea('terms', $q->terms, array('rows' => '4', 'class' => 'form-control')) !!}
         </div>
     </div>
+
     <div class="form-group">
-        <table id="qri_items" width="100%" class="table">
-            <thead>
-            <tr>
-                <th width="8%">Quantity *</th>
-                <th width="35%">Description</th>
-                <th width="8%">Price *</th>
-                <th width="8%">GST</th>
-                <th width="8%">Total</th>
-                <th width="8%">Unit Price</th>
-                <th width="5%"></th>
-            </tr>
-            </thead>
-            @if(count($q->qris) > 0)
-                @foreach ($q->qris as $qri)
-                <tr>
-                    <td>{!! Form::hidden('qri_id[]', $qri->id, ['id' => 'qri_id']) !!}
+        @if(count($q->qris) > 0)
+            <?php $i = 0;?>
+            @foreach ($q->qris as $qri)
+                <?php $i++;?>
+                <div class="col-md-3">
+                    @if($i == 1)
+                        {!! Form::label('qri_quantity[]', 'Quantity'.$i.' *', array('class' => 'control-label')) !!}
+                        {!! Form::hidden('qri_id[]', $qri->id, ['id' => 'qri_id']) !!}
                         {!! Form::hidden('qri_quote_request_id[]', $q->id) !!}
-                        {!! Form::text('qri_quantity[]', $qri->quantity, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '1']) !!}</td>
-                    <td>{!! Form::text('qri_description[]', $qri->description, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_price[]', $qri->price, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '0.01']) !!}</td>
-                    <td>{!! Form::text('qri_gst[]', $qri->gst, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_total[]', $qri->total, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_unit_price[]', $qri->unit_price, ['style' => 'width: 100%']) !!}</td>
-                    <td><button type="button" class="btn btn-sm btn-danger" id="delete_row" @if(count($q->qris) == 1) disabled @endif><span class="glyphicon glyphicon-remove"></span></button></td>
-                </tr>
-                @endforeach
-            @else
-                <tr>
-                    <td>{!! Form::hidden('qri_id[]', null, ['id' => 'qri_id']) !!}
+                        {!! Form::text('qri_quantity[]', $qri->quantity, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '1', 'class' => 'form-control']) !!}
+                    @else
+                        {!! Form::label('qri_quantity[]', 'Quantity'.$i, array('class' => 'control-label')) !!}
+                        {!! Form::hidden('qri_id[]', $qri->id, ['id' => 'qri_id']) !!}
                         {!! Form::hidden('qri_quote_request_id[]', $q->id) !!}
-                        {!! Form::text('qri_quantity[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '1']) !!}</td>
-                    <td>{!! Form::text('qri_description[]', null, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_price[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '0.01']) !!}</td>
-                    <td>{!! Form::text('qri_gst[]', null, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_total[]', null, ['style' => 'width: 100%']) !!}</td>
-                    <td>{!! Form::text('qri_unit_price[]', null, ['style' => 'width: 100%']) !!}</td>
-                    <td><button type="button" class="btn btn-sm btn-danger" id="delete_row" disabled><span class="glyphicon glyphicon-remove"></span></button></td>
-                </tr>
-            @endif
-        </table>
-        <div class="pull-right">
-            <a id="addRow" class="btn btn-primary" role="button">Add another row</a>
-        </div>
+                        {!! Form::text('qri_quantity[]', $qri->quantity, ['style' => 'width: 100%', 'number' => 'number', 'min' => '1', 'class' => 'form-control']) !!}
+                    @endif
+                </div>
+            @endforeach
+        @endif
+        @for($i = count($q->qris); $i < 4; $i++)
+                <div class="col-md-3">
+                    @if($i == 0)
+                        {!! Form::label('qri_quantity[]', 'Quantity'.($i+1).' *', array('class' => 'control-label')) !!}
+                        {!! Form::hidden('qri_id[]', null, ['id' => 'qri_id']) !!}
+                        {!! Form::hidden('qri_quote_request_id[]', $q->id) !!}
+                        {!! Form::text('qri_quantity[]', null, ['style' => 'width: 100%', 'required' => 'required', 'number' => 'number', 'min' => '1', 'class' => 'form-control']) !!}
+                    @else
+                        {!! Form::label('qri_quantity[]', 'Quantity'.($i+1), array('class' => 'control-label')) !!}
+                        {!! Form::hidden('qri_id[]', null, ['id' => 'qri_id']) !!}
+                        {!! Form::hidden('qri_quote_request_id[]', $q->id) !!}
+                        {!! Form::text('qri_quantity[]', null, ['style' => 'width: 100%', 'number' => 'number', 'min' => '1', 'class' => 'form-control']) !!}
+                    @endif
+                </div>
+        @endfor
     </div>
+
 
     <div class="form-group">
         <div class="pull-right">

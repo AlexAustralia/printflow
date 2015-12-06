@@ -18,11 +18,8 @@ class QuotesController extends Controller {
     public function get_choose_suppliers($qr_id)
     {
         $quote_request = QuoteRequest::Find($qr_id);
-        //$quotes = Quote::where('quote_request_id', '=', $qr_id)->get();
 
 		return view('quotes.choose_suppliers', compact('quote_request'));
-
-        //die("Sending RFQs for Quote Request ID: $qr_id");
     }
 
 
@@ -176,7 +173,7 @@ class QuotesController extends Controller {
 
         $quote_request_lines = $quote_request->qris;
 
-        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
+        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'))->with('message', 'Supplier Prices have been Updated');;
     }
 
 
@@ -196,16 +193,35 @@ class QuotesController extends Controller {
             $quote_request_lines = [];
         }
 
-        return view('quotes.evaluate', compact('quote_request', 'quote_request_lines'));
+        // Check if supplier prices was entered
+        $error = false;
+        foreach($quote_request->quotes as $quote)
+        {
+            foreach($quote->quote_items() as $quote_item)
+            {
+                if($quote_item == null) $error = true;
+            }
+
+        }
+
+        return view('quotes.evaluate', compact('quote_request', 'quote_request_lines', 'error'));
     }
     
-    public function post_evaluate($qr_id){
+    public function post_evaluate(\Illuminate\Http\Request $request, $qr_id){
+
+        // Validate form
+        $this->validate($request, [
+            'quote_id' => 'required',
+        ], $messages = array(
+            'quote_id.required' => 'You should choose a Supplier for creating a Quote'
+        ));
 
         $quote_request = QuoteRequest::find($qr_id);
         $quantities = $quote_request->first_quote()->quantities();
 
         $input = request::all();
         $quote_id = $input['quote_id'];
+
         $quote = Quote::find($quote_id);
 
         //echo "<pre>";
@@ -233,20 +249,22 @@ class QuotesController extends Controller {
                 $qri["total"] = $qri["price"] + $qri["gst"];
                 $qri["unit_price"] = $qri["total"] / $qri["quantity"];
                 $qri->save();
-
             }
-
         }
-    
-        return view('quotes.evaluate', compact('quote_request', 'quantities'));
 
+        $quote_request = QuoteRequest::find($qr_id);
+        $quote_request->quote_id = $input['quote_id'];
+        $quote_request->save();
+
+        return redirect('evaluate/'.$qr_id);
     }
 
 
     public function get_send_customer_quote($qr_id){
         $quote_request = QuoteRequest::Find($qr_id);
+        $qris = $quote_request->qris;
 
-        return view('quotes.send_customer_quote', compact('quote_request'));
+        return view('quotes.send_customer_quote', compact('quote_request' ,'qris'));
     }
     
     public function post_send_customer_quote($qr_id){

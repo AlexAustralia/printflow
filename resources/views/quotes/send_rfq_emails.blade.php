@@ -80,8 +80,8 @@ Kind Regards,
     @else
         <div class="alert alert-warning alert-block">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Message</h4>
-            No Suppliers chosen
+            <h4>Warning</h4>
+            No Suppliers chosen. Please choose suppliers and then try again
         </div>
     @endif
 
