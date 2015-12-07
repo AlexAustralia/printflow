@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\QuoteItem;
 use App\Supplier;
 use App\QuoteRequest;
 use App\QuoteRequestItem;
@@ -158,6 +159,20 @@ class QuoteRequestsController extends Controller {
 
         // Get stored quote lines for delete checking
         $quotes_lines = QuoteRequestItem::where('quote_request_id', $id)->get();
+        $quote_request = QuoteRequest::find($id);
+        $quotes = $quote_request->quotes;
+
+        // At first delete quote items related to chosen item
+        foreach($quotes as $quote)
+        {
+            foreach($quotes_lines as $quotes_line) {
+                if(($quotes_line->quantity == 0) || ($quotes_line->quantity == ''))
+                {
+                    $quote_items = QuoteItem::where('quote_id', $quote->id)->where('qri_id', $quotes_line->id);
+                    $quote_items->delete();
+                }
+            }
+        }
 
         // Delete chosen items
         foreach ($quotes_lines as $quotes_line) {

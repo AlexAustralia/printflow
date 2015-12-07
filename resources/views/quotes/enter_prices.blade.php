@@ -119,6 +119,7 @@ Enter Supplier Prices
                 <th width="{!! intval(85/count($quote_request_lines)) !!}%">
                     <span data-toggle="tooltip" title="{{$line->description}}">{!! $line->quantity !!}</span>
                     <input type="hidden" name="quantity[]" value="{!! $line->quantity !!}" />
+                    <input type="hidden" name="qri_id[]" value="{!! $line->id !!}" />
                 </th>
             @endforeach
         </tr>

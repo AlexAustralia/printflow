@@ -63,6 +63,10 @@ class QuotesController extends Controller {
                 $supplier_id = $input['suppliers'];
 
                 $quote = $quote_request->quotes()->where('supplier_id', '=', $supplier_id);
+
+                $quote_items = QuoteItem::where('quote_id', $quote->first()->id);
+                $quote_items->delete();
+
                 $quote->delete();
             }
         }
@@ -160,7 +164,6 @@ class QuotesController extends Controller {
                 $output[$i][$key] = $input[$key][$i];
             }
         }
-
         foreach ($output as $item) {
             $id = $item["id"];
             if ($id == ""){ // Create new
