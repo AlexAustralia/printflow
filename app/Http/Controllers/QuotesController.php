@@ -123,7 +123,9 @@ class QuotesController extends Controller {
         }
 
         $quote = $quote_request->first_quote();
-        return view('quotes.enter_prices', compact('quote_request', 'quote'));
+        $quote_request_lines = $quote_request->qris;
+
+        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
     }
 
 
