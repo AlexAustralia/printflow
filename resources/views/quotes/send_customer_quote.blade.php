@@ -25,6 +25,14 @@ Send Customer Quote
         </div>
     @endif
 
+    @if ($quote_request->quote_id == 0)
+        <div class="alert alert-warning alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Warning</h4>
+            No quotes created. Please create a quote on 'Evaluate Prices'
+        </div>
+    @else
+
 {!! Form::open(array('url' => '/send_customer_quote/'.$quote_request->id, 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
 <div class="form-group">
@@ -105,5 +113,6 @@ Send Customer Quote
     </div>
 
 {!! Form::close() !!}
+    @endif
 
 @endsection

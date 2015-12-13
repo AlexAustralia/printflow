@@ -187,7 +187,33 @@ class QuoteRequestsController extends Controller {
         $q = QuoteRequest::find($id);
         $q->update($qr_input);
 
-        //return redirect()->route('quote_requests.index');
+        // Storing artwork image
+        if (Input::hasFile('artwork'))
+        {
+            if (Input::file('artwork')->isValid())
+            {
+                $extension = Input::file('artwork')->getClientOriginalExtension();
+                $file_name = $id.'.'.$extension;
+                $destination_path = 'uploads/artworks';
+
+                Input::file('artwork')->move($destination_path, $file_name);
+
+                $q->artwork_image = $file_name;
+                $q->save();
+            }
+        }
+
+        // delete Quote PDF if exists
+        $path = 'quotes/'.$id.'.pdf';
+        if (file_exists($path))
+        {
+            unlink($path);
+        }
+
+        // Reset chosen supplier for quotes
+        $q->quote_id = 0;
+        $q->save();
+
         return redirect()->route('quote_requests.edit', $id)->with('message', 'Quote Request has been Updated');
 	}
 

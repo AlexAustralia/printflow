@@ -46,3 +46,5 @@ sftp-config.json
 *.lock
 node_modules
 .idea/
+/public/quotes
+/public/uploads/

@@ -8,8 +8,12 @@
 @section('content')
     <link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
     <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.file-input.js') }}"></script>
     <script>
         $(document).ready(function() {
+
+            //Modify upload bitton
+            $('input[type=file]').bootstrapFileInput();
 
             // Validation of the form
             $('#quote_form').validate(
@@ -76,7 +80,7 @@
         </div>
     @endif
 
-    {!! Form::open(array('url' => 'quote_requests/'.$q->id, 'method' => 'put', 'id' => 'quote_form', 'class' => 'form-horizontal')) !!}
+    {!! Form::open(array('url' => 'quote_requests/'.$q->id, 'method' => 'put', 'id' => 'quote_form', 'class' => 'form-horizontal', 'files' => true)) !!}
 
             <!-- https://jqueryui.com/autocomplete/#custom-data -->
     <!-- Customer list to be modified jquery autocomplete dropdown
@@ -111,10 +115,19 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-12">
+        <div class="col-md-6">
             {!! Form::label('title', 'Title *', array('class' => 'control-label')) !!}
             {!! Form::text('title', $q->title, array('class' => 'form-control')) !!}
         </div>
+
+        @if(file_exists('uploads/artworks/'.$q->artwork_image) && ($q->artwork_image != null))
+            <a target='_blank' href="/uploads/artworks/{{$q->artwork_image}}" class="btn btn-warning" style="margin-top:27px;">View Artwork Image</a>
+        @else
+            <div class="col-md-6"
+            {!! Form::label('artwork', 'Quote Artwork', array('class' => 'control-label', 'style' => 'margin-top:27px; font-weight:bold;')) !!}
+            {!! Form::file('artwork', null) !!}
+        </div>
+        @endif
     </div>
 
     <div class="form-group">

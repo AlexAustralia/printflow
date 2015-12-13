@@ -146,6 +146,11 @@ class QuotesController extends Controller {
     
     public function post_enter_prices($qr_id, $qid=null){
         $quote_request = QuoteRequest::Find($qr_id);
+
+        // Reset chosen supplier for quotes
+        $quote_request->quote_id = 0;
+        $quote_request->save();
+
         if ($qid == null){
             $quote = $quote_request->first_quote();
         } else {
@@ -175,6 +180,13 @@ class QuotesController extends Controller {
                 $qi = QuoteItem::find($id);
                 $qi->update($item);
             }
+        }
+
+        // delete Quote PDF if exists
+        $path = 'quotes/'.$qr_id.'.pdf';
+        if (file_exists($path))
+        {
+            unlink($path);
         }
 
         $quote_request_lines = $quote_request->qris;
@@ -261,6 +273,13 @@ class QuotesController extends Controller {
         $quote_request = QuoteRequest::find($qr_id);
         $quote_request->quote_id = $input['quote_id'];
         $quote_request->save();
+
+        // delete Quote PDF if exists
+        $path = 'quotes/'.$qr_id.'.pdf';
+        if (file_exists($path))
+        {
+            unlink($path);
+        }
 
         return redirect('evaluate/'.$qr_id);
     }
