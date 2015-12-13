@@ -285,6 +285,7 @@ class QuotesController extends Controller {
 
         if($input['submit'] == 'Create PDF')
         {
+            // Creating PDF Quote
             $html = view('quotes.pdf', compact('qr', 'customer', 'qris'));
             $dompdf = PDF::loadHTML($html)->save('../public/quotes/'.$qr->id.'.pdf');
 
@@ -292,7 +293,92 @@ class QuotesController extends Controller {
         }
         else
         {
-            echo 'Sending emails is under construction';
+            // Sending email
+            $user = Auth::user();
+            $contacts = $customer->customer_contacts;
+
+            $from = $user->email;
+            $replyto = $from;
+
+            $emails = array();
+            foreach($contacts as $contact)
+            {
+                array_push($emails, $contact->email);
+            }
+
+            //$bcc = implode(', ', $emails);
+            $subject = 'Quote';
+            //$body = $input['body'];
+
+            // Split up combined text bcc addresses into correct pairs
+            $combined_bccs = $emails;
+            $headers = "";
+            foreach($combined_bccs as $combined){
+                $matches = [];
+                $pattern = "/(.*?)\<(.*?)\>/";
+                preg_match($pattern, $combined, $matches);
+                if (count($matches)>=3){
+                    $headers .= "Bcc: ".$matches[2]."\r\n";
+                } else {
+                    $headers .= "Bcc: ".$combined."\r\n";
+                }
+            }
+
+            $headers .= "From: ".$from."\r\n";
+            $headers .= "Reply-to: ".$replyto."\r\n";
+
+            $path = 'quotes/18.pdf';
+            $html = 'Test message';
+
+            if ($path)
+            {
+                $fp = fopen($path,"rb");
+                $file = fread($fp, filesize($path));
+                fclose($fp);
+            }
+            $name = basename($path);
+            $EOL = "\r\n";
+            $boundary     = "--".md5(uniqid(time()));
+            $headers    = "MIME-Version: 1.0;$EOL";
+            $headers   .= "Content-Type: multipart/mixed; boundary=\"$boundary\"$EOL";
+            $headers   .= "From: Franklin Direct <$from>";
+
+            $multipart  = "--$boundary$EOL";
+            $multipart .= "Content-Type: text/html;$EOL";
+            $multipart .= "Content-Transfer-Encoding: base64$EOL";
+            $multipart .= $EOL;
+            $multipart .= chunk_split(base64_encode($html));
+            $multipart .=  "$EOL--$boundary$EOL";
+            if (file_exists($path))
+            {
+                $multipart .= "Content-Type: application/octet-stream; name=\"$name\"$EOL";
+                $multipart .= "Content-Transfer-Encoding: base64$EOL";
+                $multipart .= "Content-Disposition: attachment; filename=\"$name\"$EOL";
+                $multipart .= $EOL;
+                $multipart .= chunk_split(base64_encode($file));
+                $multipart .= "$EOL--$boundary--$EOL";
+            }
+
+            $mail_to = 'rezultat-ltd@mail.ru';
+                $thema = 'Quote';
+            if(!mail($mail_to, $thema, $multipart, $headers))
+            {
+                echo 'Error';
+            }
+            else
+            {
+                echo 'OK';
+            }
+
+            return;
+            // Send_email
+            if (!mail($replyto, $subject, $body, $headers)){
+                $quote_request = QuoteRequest::Find($qr_id);
+                $user = Auth::user();
+                $message = "Mail has not been sent due to some errors";
+
+                return view('quotes.send_rfq_emails', compact('quote_request', 'user', 'message'));
+            }
         }
 
     }
