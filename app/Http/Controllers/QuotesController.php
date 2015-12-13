@@ -268,11 +268,12 @@ class QuotesController extends Controller {
 
     public function get_send_customer_quote($qr_id){
         $message = Session::get('message');
+        $error = Session::get('error');
 
         $quote_request = QuoteRequest::Find($qr_id);
         $qris = $quote_request->qris;
 
-        return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message'));
+        return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message', 'error'));
     }
     
     public function post_send_customer_quote(\Illuminate\Http\Request $request, $qr_id)
@@ -300,42 +301,20 @@ class QuotesController extends Controller {
             $from = $user->email;
             $replyto = $from;
 
-            $emails = array();
+            $mail_to = array();
             foreach($contacts as $contact)
             {
-                array_push($emails, $contact->email);
+                array_push($mail_to, $contact->email);
             }
 
-            //$bcc = implode(', ', $emails);
+            $mail_to = implode(', ', $mail_to);
+
             $subject = 'Quote';
-            //$body = $input['body'];
+            $body = '<p>Dear '.$customer->postal_attention.',</p><p>Please find enclosed a quote for your order.</p>'.
+                    '<p>Kind Regards,<br>'.$user->name.' at Franklin Direct</p>';
 
-            // Split up combined text bcc addresses into correct pairs
-            $combined_bccs = $emails;
-            $headers = "";
-            foreach($combined_bccs as $combined){
-                $matches = [];
-                $pattern = "/(.*?)\<(.*?)\>/";
-                preg_match($pattern, $combined, $matches);
-                if (count($matches)>=3){
-                    $headers .= "Bcc: ".$matches[2]."\r\n";
-                } else {
-                    $headers .= "Bcc: ".$combined."\r\n";
-                }
-            }
+            $path = 'quotes/'.$qr_id.'.pdf';
 
-            $headers .= "From: ".$from."\r\n";
-            $headers .= "Reply-to: ".$replyto."\r\n";
-
-            $path = 'quotes/18.pdf';
-            $html = 'Test message';
-
-            if ($path)
-            {
-                $fp = fopen($path,"rb");
-                $file = fread($fp, filesize($path));
-                fclose($fp);
-            }
             $name = basename($path);
             $EOL = "\r\n";
             $boundary     = "--".md5(uniqid(time()));
@@ -347,10 +326,15 @@ class QuotesController extends Controller {
             $multipart .= "Content-Type: text/html;$EOL";
             $multipart .= "Content-Transfer-Encoding: base64$EOL";
             $multipart .= $EOL;
-            $multipart .= chunk_split(base64_encode($html));
+            $multipart .= chunk_split(base64_encode($body));
             $multipart .=  "$EOL--$boundary$EOL";
+
             if (file_exists($path))
             {
+                $fp = fopen($path,"rb");
+                $file = fread($fp, filesize($path));
+                fclose($fp);
+
                 $multipart .= "Content-Type: application/octet-stream; name=\"$name\"$EOL";
                 $multipart .= "Content-Transfer-Encoding: base64$EOL";
                 $multipart .= "Content-Disposition: attachment; filename=\"$name\"$EOL";
@@ -359,28 +343,16 @@ class QuotesController extends Controller {
                 $multipart .= "$EOL--$boundary--$EOL";
             }
 
-            $mail_to = 'rezultat-ltd@mail.ru';
-                $thema = 'Quote';
-            if(!mail($mail_to, $thema, $multipart, $headers))
+            // Send_email
+            if(!mail($mail_to, $subject, $multipart, $headers))
             {
-                echo 'Error';
+                return redirect('send_customer_quote/'.$qr_id)->with('error', 'Mail has not been sent due to some errors');
             }
             else
             {
-                echo 'OK';
-            }
-
-            return;
-            // Send_email
-            if (!mail($replyto, $subject, $body, $headers)){
-                $quote_request = QuoteRequest::Find($qr_id);
-                $user = Auth::user();
-                $message = "Mail has not been sent due to some errors";
-
-                return view('quotes.send_rfq_emails', compact('quote_request', 'user', 'message'));
+                return redirect('send_customer_quote/'.$qr_id)->with('message', 'Mail has been sent successfully');
             }
         }
-
     }
 
 

@@ -16,6 +16,15 @@ Send Customer Quote
         </div>
     @endif
 
+    @if (isset($error))
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Error</h4>
+            @if(is_array($error)) @foreach ($error as $m) {{ $m }} @endforeach
+            @else {{ $error }} @endif
+        </div>
+    @endif
+
 {!! Form::open(array('url' => '/send_customer_quote/'.$quote_request->id, 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
 <div class="form-group">
