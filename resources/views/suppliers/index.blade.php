@@ -150,18 +150,13 @@ Suppliers
 
 </div>
 
-<script  type="text/javascript" src="<?php echo asset('js/list.min.js');?>"></script>
+<script  type="text/javascript" src="{{ asset('js/list.min.js') }}"></script>
 
 <script>
-
-// var supplierList = new List(
-//     'suppliers', 
-//     {
-//         searchClass : 'search',
-//         valueNames  : [ 'supplier' ]
-//     }
-// );
-
+    var options = {
+        valueNames: ['supplier']
+    };
+    var customerList = new List('suppliers', options);
 </script>
 
 @endsection

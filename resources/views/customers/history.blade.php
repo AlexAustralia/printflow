@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <p><a href="{{URL::to('quote_requests/create')}}" class="btn btn-primary" role="button">Add New Quote</a></p>
+        <p><a href="{{URL::to('quote_requests/create/'.$customer->id)}}" class="btn btn-primary" role="button">Add New Quote</a></p>
 
         <table id="table" class="table table-striped table-hover">
             <thead>

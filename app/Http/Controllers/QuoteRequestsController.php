@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\QuoteItem;
@@ -34,12 +35,10 @@ class QuoteRequestsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create($id = null)
 	{
-        //$supplier_lists = Supplier::lists('supplier_name', 'id');
-		//return view('quote_requests.create');
         $qr = QuoteRequest::firstOrCreate(['customer_id' => 0]);
-        return redirect()->route('quote_requests.edit', $qr["id"]);
+        return redirect()->route('quote_requests.edit', $qr["id"])->with('customer', $id);
 	}
 
 	/**
@@ -74,9 +73,16 @@ class QuoteRequestsController extends Controller {
 	public function edit($id)
 	{
         $message = Session::get('message');
+        $customer_id = Session::get('customer');
+
+        if(isset($customer_id))
+        {
+            $customer = Customer::find($customer_id);
+        }
+
         $q = QuoteRequest::find($id);
         $quote_request = $q;
-		return view('quote_requests.edit', compact('q', 'quote_request' ,'message'));
+		return view('quote_requests.edit', compact('q', 'quote_request' ,'message', 'customer_id', 'customer'));
 	}
 
 	/**

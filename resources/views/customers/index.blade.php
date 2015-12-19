@@ -150,18 +150,13 @@ Customers
 
 </div>
 
-<script  type="text/javascript" src="<?php echo asset('js/list.min.js');?>"></script>
+<script  type="text/javascript" src="{{ asset('js/list.min.js') }}"></script>
 
 <script>
-
-// var customerList = new List(
-//     'customers', 
-//     {
-//         searchClass : 'search',
-//         valueNames  : [ 'customer' ]
-//     }
-// );
-
+    var options = {
+        valueNames: ['customer']
+    };
+    var customerList = new List('customers', options);
 </script>
 
 @endsection

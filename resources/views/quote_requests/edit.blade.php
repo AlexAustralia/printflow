@@ -16,7 +16,7 @@
 
             $('#artwork_image').fancybox();
 
-            //Modify upload bitton
+            //Modify upload button
             $('input[type=file]').bootstrapFileInput();
 
             // Validation of the form
@@ -92,9 +92,13 @@
     <div class="form-group">
         <div class="col-md-2">
             {!! Form::label('customer', 'Customer *', array('class' => 'control-label')) !!}
-            {!! Form::text('customer', $q->customer["customer_name"], array('id' => 'customer', 'class' => 'form-control')) !!}
-            {!! Form::hidden('customer_id', $q->customer_id, array('id' => 'customer_id')) !!}
-
+            @if(isset($customer_id))
+                {!! Form::text('customer', $customer->customer_name, array('id' => 'customer', 'class' => 'form-control')) !!}
+                {!! Form::hidden('customer_id', $customer_id, array('id' => 'customer_id')) !!}
+            @else
+                {!! Form::text('customer', $q->customer["customer_name"], array('id' => 'customer', 'class' => 'form-control')) !!}
+                {!! Form::hidden('customer_id', $q->customer_id, array('id' => 'customer_id')) !!}
+            @endif
         </div>
 
         <div class="col-md-2">
