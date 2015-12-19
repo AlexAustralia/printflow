@@ -7,6 +7,9 @@
 @endsection
 
 @section('content')
+    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
+    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
+
     <div id="customers" class="container-fluid">
         <div class="row">
             <div class="col-sm-10">
@@ -26,6 +29,7 @@
                 <th width="7%">Job Number</th>
                 <th width="7%">Status</th>
                 <th>Description</th>
+                <th>Artwork</th>
                 <th width="10%">Quantity</th>
                 <th width="20%">Supplier</th>
                 <th width="10%">Job Cost</th>
@@ -42,6 +46,7 @@
                     <td>{{$item['job_number']}}</td>
                     <td><span class="label label-info">{{$item['status']}}</span></td>
                     <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
+                    <td>@if(isset($item['artwork_image']))<a data-toggle="tooltip" title="Zoom artwork" class="fancybox" href="/uploads/artworks/{{$item['artwork_image']}}"><img src="/uploads/artworks/{{$item['artwork_image']}}" width="60"></a> @endif</td>
                     <td>{{$item['quantity']}}</td>
                     <td><a href="{{URL::to('/suppliers/'.$item["supplier_id"].'/edit')}}">{{$item['supplier_name']}}<a/></td>
                     <td>{{$item['job_cost']}}</td>
@@ -76,8 +81,9 @@
 
 <script>
     $(document).ready(function(){
-       $('#table').DataTable();
-       $("[data-toggle='tooltip']").tooltip();
+        $('#table').DataTable();
+        $("[data-toggle='tooltip']").tooltip();
+        $('.fancybox').fancybox();
     });
 </script>
 @endsection

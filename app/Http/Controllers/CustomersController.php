@@ -192,6 +192,7 @@ class CustomersController extends Controller {
 			}
 			$array[$i]['title'] = $quote->title;
 			$array[$i]['description'] = $quote->summary;
+			$array[$i]['artwork_image'] = $quote->artwork_image;
 
 			$array[$i]['quantity'] = 0;
 			foreach($quote->qris as $item) {

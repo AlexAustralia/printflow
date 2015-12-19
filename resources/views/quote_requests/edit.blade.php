@@ -7,10 +7,14 @@
 
 @section('content')
     <link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
     <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
     <script>
         $(document).ready(function() {
+
+            $('#artwork_image').fancybox();
 
             //Modify upload bitton
             $('input[type=file]').bootstrapFileInput();
@@ -120,14 +124,14 @@
             {!! Form::text('title', $q->title, array('class' => 'form-control')) !!}
         </div>
 
-        @if(file_exists('uploads/artworks/'.$q->artwork_image) && ($q->artwork_image != null))
-            <a target='_blank' href="/uploads/artworks/{{$q->artwork_image}}" class="btn btn-warning" style="margin-top:27px;">View Artwork Image</a>
-        @else
-            <div class="col-md-6"
+        <div class="col-md-6"
             {!! Form::label('artwork', 'Quote Artwork', array('class' => 'control-label', 'style' => 'margin-top:27px; font-weight:bold;')) !!}
             {!! Form::file('artwork', null) !!}
-        </div>
+        @if(file_exists('uploads/artworks/'.$q->artwork_image) && ($q->artwork_image != null))
+            <a id="artwork_image" href="/uploads/artworks/{{$q->artwork_image}}" class="btn btn-warning">View Artwork Image</a>
         @endif
+        </div>
+
     </div>
 
     <div class="form-group">
