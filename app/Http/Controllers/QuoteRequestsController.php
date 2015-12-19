@@ -10,6 +10,7 @@ use App\QuoteRequestItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Input;
+use Intervention\Image\Facades\Image;
 
 class QuoteRequestsController extends Controller {
 
@@ -197,6 +198,13 @@ class QuoteRequestsController extends Controller {
                 $destination_path = 'uploads/artworks';
 
                 Input::file('artwork')->move($destination_path, $file_name);
+
+                // Make a thumbnail picture
+                $thumbnail = Image::make($destination_path.'/'.$file_name);
+                $thumbnail->resize(55, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $thumbnail->save('uploads/thumbnails/'.$file_name);
 
                 $q->artwork_image = $file_name;
                 $q->save();

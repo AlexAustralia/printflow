@@ -46,7 +46,7 @@
                     <td>{{$item['job_number']}}</td>
                     <td><span class="label label-info">{{$item['status']}}</span></td>
                     <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
-                    <td>@if(isset($item['artwork_image']))<a data-toggle="tooltip" title="Zoom artwork" class="fancybox" href="/uploads/artworks/{{$item['artwork_image']}}"><img src="/uploads/artworks/{{$item['artwork_image']}}" width="60"></a> @endif</td>
+                    <td>@if(isset($item['artwork_image']))<a class="fancybox" href="/uploads/artworks/{{$item['artwork_image']}}"><img src="/uploads/thumbnails/{{$item['artwork_image']}}"></a> @endif</td>
                     <td>{{$item['quantity']}}</td>
                     <td><a href="{{URL::to('/suppliers/'.$item["supplier_id"].'/edit')}}">{{$item['supplier_name']}}<a/></td>
                     <td>{{$item['job_cost']}}</td>

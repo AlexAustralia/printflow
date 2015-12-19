@@ -139,6 +139,7 @@ return [
         'Illuminate\Html\HtmlServiceProvider',
 
         'Illuminate\Broadcasting\BroadcastServiceProvider',
+		'Intervention\Image\ImageServiceProvider',
 
         //Debug Bar
         'Barryvdh\Debugbar\ServiceProvider',
@@ -205,7 +206,8 @@ return [
         'Html'      => 'Illuminate\Html\HtmlFacade',
         'PDF'       => 'Barryvdh\DomPDF\Facade',
 		
-		'Debugbar' => 'Barryvdh\Debugbar\Facade'
+		'Debugbar' => 'Barryvdh\Debugbar\Facade',
+		'Image' => 'Intervention\Image\Facades\Image'
 
 	],
 
