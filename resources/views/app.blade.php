@@ -70,6 +70,8 @@
    
 </head>
 <body>
+<div class="wrap">
+	<div rel="main">
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -157,7 +159,7 @@
 	@yield('content')
 
     </div>
-
+	</div></div>
     @include('partials.footer')
 
 </body>

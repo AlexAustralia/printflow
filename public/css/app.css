@@ -6342,3 +6342,22 @@ div[data-delete] {
   padding: 5px;
 
 }
+
+html,
+body {
+  height: 100%;
+}
+.wrap {
+  min-height: 100%;
+}
+.wrap [rel="main"] {
+  padding-bottom: 50px;
+}
+footer {
+  height: 50px;
+  margin-top: -25px;
+  background: #F8F8F8;
+  overflow: hidden;
+  padding: 20px;
+  width: 100%;
+}
