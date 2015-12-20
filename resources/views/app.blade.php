@@ -13,6 +13,8 @@
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/jquery.dataTables.min.css') }}" rel="stylesheet">
 
+	@yield('styles')
+
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
@@ -158,19 +160,5 @@
 
     @include('partials.footer')
 
-<script  type="text/javascript" src="<?php echo asset('js/list.min.js');?>"></script>
-
-<script>
-
-// var customerList = new List(
-//     'customers', 
-//     {
-//         searchClass : 'search',
-//         valueNames  : [ 'customer' ]
-//     }
-// );
-
-</script> 
-	<!-- Scripts -->
 </body>
 </html>

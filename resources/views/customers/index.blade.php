@@ -1,65 +1,67 @@
 @extends('app')
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-
-<style type="text/css" media="screen">
-
-    #customers ul { margin: 0; padding: 0; overfow: hidden; clear: both;}
-    #customers li { list-style: none; }
-
-    #customers input.search { 
-        border: 1px solid #aaa;
-        float: right;
-        font-size: 15px;
-        margin-right: -15px;
-        /*margin-top: -50px;*/
-        padding: 5px;        
-    }
-
-    #customers .customer-row {
-        border: 1px solid #f2f2f2;
-        margin-bottom: 20px;
-    }
-
-    #customers .customer {
-        background: #F9F9F9;
-        padding: 10px;
-        font-weight: bold;
-        border-bottom: 1px solid #eee;
-    }
-
-    #customers .customer .btn.edit {
-        margin: -4px;
-    }
-
-    #customers .contacts .heading {
-        width: 100%;
-        clear: both;
-        color: #aaa;
-        padding: 15px;
-        font-family: Helvetica, Arial;
-    }
-    
-    #customers .contacts .fa {
-        margin-right: 10px;
-    }
-
-    #customers .contact {
-        overflow: hidden;
-    }
-
-    #customers .contact:last-child {
-        padding-bottom: 20px;
-    }
-
-    #customers .unavailable {
-        color: #aaa;
-    }
-
-</style>
-
 @section('title')
 Customers
+@endsection
+
+@section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <style type="text/css" media="screen">
+
+        #customers ul { margin: 0; padding: 0; overfow: hidden; clear: both;}
+        #customers li { list-style: none; }
+
+        #customers input.search {
+            border: 1px solid #aaa;
+            float: right;
+            font-size: 15px;
+            margin-right: -15px;
+            /*margin-top: -50px;*/
+            padding: 5px;
+        }
+
+        #customers .customer-row {
+            border: 1px solid #f2f2f2;
+            margin-bottom: 20px;
+        }
+
+        #customers .customer {
+            background: #F9F9F9;
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+        }
+
+        #customers .customer .btn.edit {
+            margin: -4px;
+        }
+
+        #customers .contacts .heading {
+            width: 100%;
+            clear: both;
+            color: #aaa;
+            padding: 15px;
+            font-family: Helvetica, Arial;
+        }
+
+        #customers .contacts .fa {
+            margin-right: 10px;
+        }
+
+        #customers .contact {
+            overflow: hidden;
+        }
+
+        #customers .contact:last-child {
+            padding-bottom: 20px;
+        }
+
+        #customers .unavailable {
+            color: #aaa;
+        }
+
+    </style>
 @endsection
 
 @section('content')
