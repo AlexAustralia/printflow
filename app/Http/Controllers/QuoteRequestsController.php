@@ -3,6 +3,7 @@
 use App\Customer;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Quote;
 use App\QuoteItem;
 use App\Supplier;
 use App\QuoteRequest;
@@ -26,8 +27,9 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function index()
 	{
+        $message = Session::get('message');
         $quote_requests = QuoteRequest::where('customer_id', '>', 0)->get();
-        return view('quote_requests.index', compact('quote_requests'));
+        return view('quote_requests.index', compact('quote_requests', 'message'));
 	}
 
 	/**
@@ -230,6 +232,76 @@ class QuoteRequestsController extends Controller {
 
         return redirect()->route('quote_requests.edit', $id)->with('message', 'Quote Request has been Updated');
 	}
+
+
+    // Delete selected quote
+    public function delete()
+    {
+        // Get id of quote_request
+        $input = Input::all();
+        $id = $input['delete'];
+
+        $quote_request = QuoteRequest::find($id);
+
+        // Delete Quote PDF if it exists
+        $path = 'quotes/'.$id.'.pdf';
+        if (file_exists($path))
+        {
+            unlink($path);
+        }
+
+        // Delete Artwork image and its thumbnail if they exist
+        if($quote_request->artwork_image != null)
+        {
+            $path_image = 'uploads/artworks/'.$quote_request->artwork_image;
+            $path_thumbnail = 'uploads/thumbnails/'.$quote_request->artwork_image;
+            if (file_exists($path_image))
+            {
+                unlink($path_image);
+            }
+            if (file_exists($path_thumbnail))
+            {
+                unlink($path_thumbnail);
+            }
+        }
+
+        $quote_request_items = $quote_request->qris;
+
+        foreach($quote_request_items as $quote_request_item)
+        {
+            $quote_line_delete = QuoteRequestItem::find($quote_request_item->id);
+            $quote_line_delete->delete();
+        }
+
+        $quotes = $quote_request->quotes;
+
+        foreach($quotes as $quote)
+        {
+            $quote_lines = $quote->qris;
+
+            foreach($quote_lines as $quote_line)
+            {
+                $quote_line_delete = QuoteItem::find($quote_line->id);
+                $quote_line_delete->delete();
+            }
+
+            $quote_delete = Quote::find($quote->id);
+            $quote_delete->delete();
+        }
+
+        $quote_request->delete();
+
+        if(isset($input['customer_id']))
+        {
+            return redirect('customers/'.$input['customer_id'].'/history')->with('message', 'Quote / Job has been deleted successfully');
+        }
+        else
+        {
+            return redirect('/')->with('message', 'Quote / Job has been deleted successfully');
+        }
+
+    }
+
 
 	/**
 	 * Remove the specified resource from storage.

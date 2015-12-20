@@ -33,4 +33,9 @@ class Quote extends Model {
         }
         return $quantities;
     }
+
+    public function qris()
+    {
+        return $this->hasMany('App\QuoteItem');
+    }
 }

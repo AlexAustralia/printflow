@@ -7,6 +7,7 @@ use App\CustomerContact;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Session;
 use URL;
 use Input;
 use Debugbar;
@@ -167,6 +168,7 @@ class CustomersController extends Controller {
 	 */
 	public function history($id)
 	{
+		$message = Session::get('message');
 		$customer = Customer::find($id);
 		$quotes = $customer->quotes;
 
@@ -208,7 +210,7 @@ class CustomersController extends Controller {
 			$i++;
 		}
 
-		return view('customers.history', compact('customer', 'array'));
+		return view('customers.history', compact('customer', 'array', 'message'));
 	}
 
 }

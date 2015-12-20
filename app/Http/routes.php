@@ -17,6 +17,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	//Quotes Section
 	Route::get('quote_requests/create/{id}', 'QuoteRequestsController@create');
+	Route::post('quote_requests/delete', 'QuoteRequestsController@delete');
 	Route::resource('quote_requests', 'QuoteRequestsController');
 
 	// View list of suppliers for quote request id
