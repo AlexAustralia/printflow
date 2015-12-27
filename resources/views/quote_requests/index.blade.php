@@ -5,6 +5,9 @@ Quote Requests
 @endsection
 
 @section('content')
+    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
+    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
+
     <!-- Modal -->
     <div class="modal fade" id="delete_confirmation" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -36,18 +39,29 @@ Quote Requests
         </div>
     @endif
 
-    @if (!$quote_requests->count())
-        The system has no quote requests.
-    @else
-        <p>Found {!! $quote_requests->count() !!} quote requests</p>
+    <div class="row">
+        <div class="col-sm-10">
+            <h2>Quote Requests:</h2>
+        </div>
+    </div>
 
-        <table class="table">
+    @if (!$quote_requests->count())
+        <div class="alert alert-warning alert-block">
+            The system has no quote requests.
+        </div>
+    @else
+        <table class="table table-striped table-hover" id="table">
+            <thead>
                 <tr>
-                    <td>Customer Name</td>
-                    <td>Quote Number</td>
-                    <td>Title</td>
-                    <td>Quote Req. Date</td>
+                    <th>Customer Name</th>
+                    <th>Quote Number</th>
+                    <th>Artwork</th>
+                    <th>Title</th>
+                    <th>Quote Request Date</th>
+                    <th></th>
                 </tr>
+            </thead>
+            <tbody>
             @foreach($quote_requests as $q)
                 <tr>
                     @if($q->customer)
@@ -56,7 +70,8 @@ Quote Requests
                         <td><i>No Customer Selected</i></td>
                     @endif
                     <td>{!! $q->id !!}</td>
-                    <td><a href="{!! action('QuoteRequestsController@edit', ['id' => $q->id]) !!}">{!! $q->title !!}</a></td>
+                    <td>@if(isset($q->artwork_image))<a class="fancybox" href="/uploads/artworks/{{$q->artwork_image}}"><img src="/uploads/thumbnails/{{$q->artwork_image}}"></a> @endif</td>
+                    <td><a href="{!! action('QuoteRequestsController@edit', ['id' => $q->id]) !!}" data-toggle="tooltip" title="{{$q->summary}}">{!! $q->title !!}</a></td>
                     <td>{!! $q->request_date !!}</td>
                     <td>
                         <div class="btn-group">
@@ -72,17 +87,16 @@ Quote Requests
                                 <li><a href="#">Send Invoice</a></li>
                             </ul>
                         </div>
-                        
-                        <!--i>Delete, Dupe, Invoice, etc.</i-->
                     </td>
                 </tr>
             @endforeach
+            </tbody>
         </table>
     @endif
-
-    <p style="float:right">
+    <hr>
+    <div class="pull-right">
         <a href="/quote_requests/create" class="btn btn-primary">Create New</a>
-    </p>
+    </div>
 
     <script>
         function new_val(t){
@@ -90,5 +104,13 @@ Quote Requests
             $('#delete_quote').val(res);
             return false;
         }
+
+        $(document).ready(function() {
+            $('#table').DataTable( {
+                "order": [[ 1, "asc" ]]
+            });
+            $('.fancybox').fancybox();
+            $("[data-toggle='tooltip']").tooltip();
+        })
     </script>
 @endsection
