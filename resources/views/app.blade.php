@@ -44,8 +44,8 @@
 				var clone = $('.contacts').find('.row').first().clone();
 				var uniqueId = Date.now();
 				clone.find('.first_name').val('').attr('name', 'contacts[::'+uniqueId+'][first_name]');
-				clone.find('.last_name').val('').attr('name', 'contacts[::'+uniqueId+'][first_name]');
-				clone.find('.phone').val('').attr('name', 'contacts[::'+uniqueId+'][last_name]');
+				clone.find('.last_name').val('').attr('name', 'contacts[::'+uniqueId+'][last_name]');
+				clone.find('.phone').val('').attr('name', 'contacts[::'+uniqueId+'][phone]');
 				clone.find('.mobile').val('').attr('name', 'contacts[::'+uniqueId+'][mobile]');
 				clone.find('.email').val('').attr('name', 'contacts[::'+uniqueId+'][email]');
 				$(clone).insertBefore('#add-contact');

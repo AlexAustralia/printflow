@@ -108,44 +108,37 @@ class CustomersController extends Controller {
 	    $this->validate($request, [
 	        'customer_name' => 'required|unique:customers,customer_name,' . $id,
 	        'web_address'   => 'url'
-	        // 'body' => 'required',
 	    ]);
-
-	    // dd( $request->all() );
-	    // dd(Input::all());
-
-	    //store input to session
-	    // Input::flash();
-
 
 	    //create customer
         $customer = Customer::find($id);
         $customer->update(Input::all());
 
-        $contacts = $request->input('contacts');
-
         foreach( $request->input('contacts') as $key => $contact ) {
 
-        	if ( strpos($key, '::') !== false ) {
-        		$customer->customer_contacts()->create($contact);
-        	} else {
-				$result = CustomerContact::find($key);
-				$result->update($contact);
-        	}
-
-        }
-
+			// If at least one of the fields is not null, store contact
+			if(!empty($contact['first_name']) || !empty($contact['last_name']) || !empty($contact['phone']) || !empty($contact['mobile']) || !empty($contact['email']))
+			{
+				if (strpos($key, '::') !== false) {
+					$customer->customer_contacts()->create($contact);
+				} else {
+					$result = CustomerContact::find($key);
+					$result->update($contact);
+				}
+			}
+			else
+			{
+				// Contacts are empty, so check for deleting
+				if (strpos($key, '::') === false) {
+					$result = CustomerContact::find($key);
+					$result->delete();
+				}
+			}
+		}
+		    //return Input::all();
         Debugbar::addMessage(Input::all(), 'input');
 
-        // return;        
-		// dd($customer->customer_contacts()->save());
-		// $contact = $customer->customer_contacts()->save($customer, array('first_name' => 'AAAAAAA'));
-		// $contact = new CustomerContact(['first_name' => 'AAAAAAA']);
-		// $contact = $customer->customer_contacts()->save($contact);
-
-        return redirect()->route('customers.edit', compact('customer'))->with(['message' => 'Customer updated!', 'action' => $customer])->withInput();
-
-
+        return redirect()->route('customers.edit', compact('customer'))->with(['message' => 'Customer updated successfully!', 'action' => $customer])->withInput();
 	}
 
 	/**
