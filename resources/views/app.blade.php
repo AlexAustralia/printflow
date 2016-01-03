@@ -48,6 +48,7 @@
 				clone.find('.phone').val('').attr('name', 'contacts[::'+uniqueId+'][phone]');
 				clone.find('.mobile').val('').attr('name', 'contacts[::'+uniqueId+'][mobile]');
 				clone.find('.email').val('').attr('name', 'contacts[::'+uniqueId+'][email]');
+				clone.find('.primary_person').val('').attr('name', 'contacts[::'+uniqueId+'][primary_person]');
 				$(clone).insertBefore('#add-contact');
 			});
 

@@ -110,11 +110,26 @@ class CustomersController extends Controller {
 	        'web_address'   => 'url'
 	    ]);
 
-	    //create customer
+	    // Create customer
         $customer = Customer::find($id);
         $customer->update(Input::all());
 
+		$customer_contacts = $customer->customer_contacts;
+		$contacts_to_delete = array();
+
+		foreach ($customer_contacts as $contact)
+		{
+			array_push($contacts_to_delete, $contact->id);
+		}
+
         foreach( $request->input('contacts') as $key => $contact ) {
+
+			// Check for deleting entries
+			if(in_array($key, $contacts_to_delete))
+			{
+				$key_to_delete = array_search($key, $contacts_to_delete);
+				unset($contacts_to_delete[$key_to_delete]);
+			}
 
 			// If at least one of the fields is not null, store contact
 			if(!empty($contact['first_name']) || !empty($contact['last_name']) || !empty($contact['phone']) || !empty($contact['mobile']) || !empty($contact['email']))
@@ -135,7 +150,11 @@ class CustomersController extends Controller {
 				}
 			}
 		}
-		    //return Input::all();
+
+		// Delete needed contacts
+		sort($contacts_to_delete);
+		CustomerContact::destroy($contacts_to_delete);
+
         Debugbar::addMessage(Input::all(), 'input');
 
         return redirect()->route('customers.edit', compact('customer'))->with(['message' => 'Customer updated successfully!', 'action' => $customer])->withInput();
