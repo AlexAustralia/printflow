@@ -106,35 +106,56 @@ class SuppliersController extends Controller {
 	    $this->validate($request, [
 	        'supplier_name' => 'required|unique:suppliers,supplier_name,' . $id,
 	        'web_address'   => 'url'
-	        // 'body' => 'required',
 	    ]);
 
-	    //create customer
+	    // Create Supplier
         $supplier = Supplier::find($id);
         $supplier->update(Input::all());
 
-        $contacts = $request->input('contacts');
+		$supplier_contacts = $supplier->supplier_contacts;
+		$contacts_to_delete = array();
+
+		foreach ($supplier_contacts as $contact)
+		{
+			array_push($contacts_to_delete, $contact->id);
+		}
 
         foreach( $request->input('contacts') as $key => $contact ) {
 
-        	if ( strpos($key, '::') !== false ) {
-        		$supplier->customer_contacts()->create($contact);
-        	} else {
-				$result = SupplierContact::find($key);
-				$result->update($contact);
-        	}
+			// Check for deleting entries
+			if(in_array($key, $contacts_to_delete))
+			{
+				$key_to_delete = array_search($key, $contacts_to_delete);
+				unset($contacts_to_delete[$key_to_delete]);
+			}
 
+			// If at least one of the fields is not null, store contact
+			if(!empty($contact['first_name']) || !empty($contact['last_name']) || !empty($contact['phone']) || !empty($contact['mobile']) || !empty($contact['email']))
+			{
+				if (strpos($key, '::') !== false) {
+					$supplier->supplier_contacts()->create($contact);
+				} else {
+					$result = SupplierContact::find($key);
+					$result->update($contact);
+				}
+			}
+			else
+			{
+				// Contacts are empty, so check for deleting
+				if (strpos($key, '::') === false) {
+					$result = SupplierContact::find($key);
+					$result->delete();
+				}
+			}
         }
+
+		// Delete needed contacts
+		sort($contacts_to_delete);
+		SupplierContact::destroy($contacts_to_delete);
 
         Debugbar::addMessage(Input::all(), 'input');
 
-        // return;        
-		// dd($customer->customer_contacts()->save());
-		// $contact = $customer->customer_contacts()->save($customer, array('first_name' => 'AAAAAAA'));
-		// $contact = new CustomerContact(['first_name' => 'AAAAAAA']);
-		// $contact = $customer->customer_contacts()->save($contact);
-
-        return redirect()->route('suppliers.edit', compact('customer'))->with(['message' => 'Supplier updated!', 'action' => $customer])->withInput();
+        return redirect()->route('suppliers.edit', compact('supplier'))->with(['message' => 'Supplier updated successfully!', 'action' => $supplier])->withInput();
 	}
 
 	/**

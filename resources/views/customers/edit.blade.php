@@ -164,7 +164,7 @@ Edit Customer - <?php echo ucwords(strtolower(! empty($customer->customer_name) 
 
 				<div class="form-group col-xs-6">
 				    {{-- {!! Form::label('tel_number', 'Number:', ['class' => 'control-label']) !!} --}}
-				    {!! Form::text('tel_number', null, ['class' => 'form-control', 'placeholder' => 'number']) !!}
+				    {!! Form::text('fax_number', null, ['class' => 'form-control', 'placeholder' => 'number']) !!}
 				</div>
 			</div>
 				
