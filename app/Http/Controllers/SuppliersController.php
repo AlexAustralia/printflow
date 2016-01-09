@@ -44,30 +44,33 @@ class SuppliersController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-
 	    $this->validate($request, [
 	        'supplier_name' => 'required|unique:suppliers',
-	        // 'body' => 'required',
+			'web_address'   => 'url'
 	    ]);
 
-
-
-	    //store input to session
+	    // Store input to session
 	    Input::flash();
 
-	    //create customer
-        $result = Supplier::create( Input::all() );
+	    // Create Supplier
+        $result = Supplier::create(Input::all());
 
         if ( ! $result->id ) {
 			return redirect()->route('suppliers.create')->with('message', 'Unable to create supplier, please try again.');
         }
 
+		foreach( $request->input('contacts') as $key => $contact ) {
+
+			// If at least one of the fields is not null, store contact
+			if(!empty($contact['first_name']) || !empty($contact['last_name']) || !empty($contact['phone']) || !empty($contact['mobile']) || !empty($contact['email']))
+			{
+				$result->supplier_contacts()->create($contact);
+			}
+		}
+
         //redirect after successful save to customers.edit
 	    return redirect()->route('suppliers.edit', $result->id)->with('message', 'Supplier created!')->withInput();
 
-	    //DEBUG
-	    // Debugbar::addMessage(Input::all(), 'input');
-	    // Debugbar::addMessage($result, 'result');
 	}
 
 	/**
@@ -92,7 +95,7 @@ class SuppliersController extends Controller {
 		$supplier = Supplier::find($id);
 		$contacts = $supplier->supplier_contacts;
 		$action   = 'supplier.update';
-		return view('suppliers.edit', compact('supplier', 'contacts'))->with(compact('action'));;
+		return view('suppliers.edit', compact('supplier', 'contacts'))->with(compact('action'));
 	}
 
 	/**

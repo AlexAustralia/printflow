@@ -7,6 +7,7 @@
 @section('content')
 	<link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
 	<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+	<script src="{{ asset('js/edit_contacts.js') }}"></script>
 	<script>
 		$(document).ready(function() {
 
@@ -25,43 +26,6 @@
 						}
 					}
 			);
-
-			$('#physical_same input').on('change', function() {
-				var $checked = $('#physical_same').find('input');
-				if($checked.prop("checked")) {
-					// Checked
-					$('#physical_block').hide();
-
-					$('#physical_attention').val('');
-					$('#physical_street').val('');
-					$('#physical_city').val('');
-					$('#physical_state').val('');
-					$('#physical_postcode').val('');
-					$('#physical_country').val('');
-				}
-				else {
-					// Not checked
-					$('#physical_block').show();
-				}
-			});
-
-			$('div.contacts').on('click', '#remove_row', function() {
-				var rows = 0
-				$('div.contacts').find('div.contact').each(function() {
-					rows++;
-				});
-
-				var $row = $($(this).parents('div.contact').get(0));
-				if(rows == 1) {
-					// Clear row
-					$('#add-contact').click();
-					$('div.contact').find('input.form-control').each(function() {
-						$(this).val('');
-					});
-				}
-
-				$row.remove();
-			})
 		});
 	</script>
 
@@ -116,8 +80,7 @@
 		</div>
 
 		<div class="contact_numbers">
-
-			<div class="">
+			<div>
 
 				<label class="control-label">Phone number</label>
 
@@ -206,7 +169,7 @@
 
 			<div class="form-group">
 			    {!! Form::label('postal_street', 'Street Address (or PO Box):', ['class' => 'control-label']) !!}
-			    {!! Form::textarea('postal_street', $supplier->postal_street ?: Input::old('postal_street'), ['class' => 'form-control address']) !!}
+			    {!! Form::text('postal_street', $supplier->postal_street ?: Input::old('postal_street'), ['class' => 'form-control address']) !!}
 			</div>
 
 			<div class="row">
@@ -250,7 +213,7 @@
 
 				<div class="form-group">
 					{!! Form::label('physical_street', 'Street Address (or PO Box):', ['class' => 'control-label']) !!}
-					{!! Form::textarea('physical_street', $supplier->physical_street ?: Input::old('physical_street'), ['class' => 'form-control address']) !!}
+					{!! Form::text('physical_street', $supplier->physical_street ?: Input::old('physical_street'), ['class' => 'form-control address']) !!}
 				</div>
 
 				<div class="row">
@@ -276,10 +239,7 @@
 				</div>
 			</div>
 		</div>
-
 	</div> <!-- end .address -->
-
-
 
 	<div class="contacts">
 
@@ -326,7 +286,6 @@
 				</div>
 
 	        @endforeach				
-
 
 		@else
 

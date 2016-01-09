@@ -48,27 +48,30 @@ class CustomersController extends Controller {
 
 	    $this->validate($request, [
 	        'customer_name' => 'required|unique:customers',
-	        // 'body' => 'required',
+			'web_address'   => 'url'
 	    ]);
 
-
-
-	    //store input to session
+	    // Store input to session
 	    Input::flash();
 
-	    //create customer
-        $result = Customer::create( Input::all() );
+	    //Create Customer
+        $result = Customer::create(Input::all());
 
         if ( ! $result->id ) {
 			return redirect()->route('customers.create')->with('message', 'Unable to create customer, please try again.');
         }
 
+		foreach( $request->input('contacts') as $key => $contact ) {
+
+			// If at least one of the fields is not null, store contact
+			if(!empty($contact['first_name']) || !empty($contact['last_name']) || !empty($contact['phone']) || !empty($contact['mobile']) || !empty($contact['email']))
+			{
+				$result->customer_contacts()->create($contact);
+			}
+		}
+
         //redirect after successful save to customers.edit
 	    return redirect()->route('customers.edit', $result->id)->with('message', 'Customer created!')->withInput();
-
-	    //DEBUG
-	    // Debugbar::addMessage(Input::all(), 'input');
-	    // Debugbar::addMessage($result, 'result');
 
 	}
 
