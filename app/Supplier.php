@@ -59,4 +59,10 @@ class Supplier extends Model {
 
         return $c->email;
     }
+
+    // Get the list of products
+    public function products()
+    {
+        return $this->hasMany('App\Product', 'supplier_id', 'id');
+    }
 }

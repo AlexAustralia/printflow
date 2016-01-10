@@ -44,6 +44,7 @@ Quote Requests
             <h2>Quote Requests:</h2>
         </div>
     </div>
+    <hr>
 
     @if (!$quote_requests->count())
         <div class="alert alert-warning alert-block">

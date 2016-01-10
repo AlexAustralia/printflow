@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Supplier;
 use App\SupplierContact;
 
+use Illuminate\Support\Facades\Session;
 use URL;
 use Input;
 use Debugbar;
@@ -173,4 +174,14 @@ class SuppliersController extends Controller {
 		return redirect()->route('suppliers.index')->with(['message' => $result ? 'Supplier deleted!' : 'Something went wrong, please try again.']);
 	}
 
+
+	// Show the list of products of a certain supplier
+	public function products($id)
+	{
+		$message = Session::get('message');
+		$supplier = Supplier::find($id);
+		$products = $supplier->products;
+
+		return view('suppliers.products', compact('supplier', 'products', 'message'));
+	}
 }

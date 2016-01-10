@@ -105,7 +105,15 @@
 			            <li><a href="{{ url('/suppliers') }}">All Suppliers</a></li>
 			            <li><a href="{{ url('/suppliers/create') }}">Create Supplier</a></li>
 			          </ul>
-			        </li>	
+			        </li>
+
+					<li class="dropdown">
+						<a href="{{ url('/products') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Products <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ url('/products') }}">Product Library</a></li>
+							<li><a href="{{ url('/products/create') }}">Create Product</a></li>
+						</ul>
+					</li>
 
 				</ul>
 

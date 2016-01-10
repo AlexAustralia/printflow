@@ -89,7 +89,7 @@ Suppliers
     <li class="row supplier-row">
 
         <div>
-            <span  class="supplier">{!! $c->supplier_name !!}</span>
+            <a class="supplier" href="suppliers/{!! $c->id !!}/products">{!! $c->supplier_name !!}</a>
             <div class="pull-right"> 
                 <a class="btn btn-default edit" title="Edit {!! ucwords(strtolower($c->supplier_name)) !!}" href="{!! route('suppliers.edit', ['id' => $c->id]) !!}"><i class="fa fa-pencil"></i></a> 
             </div>

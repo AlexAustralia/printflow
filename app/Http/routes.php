@@ -13,6 +13,7 @@ Route::group(['middleware' => 'auth'], function(){
     // Route::resource('customer_addresses', 'CustomerAddressesController');
 
 	// Supplier section
+	Route::get('suppliers/{id}/products', 'SuppliersController@products');
 	Route::resource('suppliers', 'SuppliersController');
 
 	//Quotes Section
@@ -39,6 +40,15 @@ Route::group(['middleware' => 'auth'], function(){
 	// Evaluate Prices
 	Route::get('/evaluate/{qrid}', 'QuotesController@get_evaluate');
 	Route::post('/evaluate/{qrid}', 'QuotesController@post_evaluate');
+
+	// Products Library
+	Route::get('products', 'ProductsController@index');
+	Route::get('products/create', 'ProductsController@create');
+	Route::get('products/create/{id}', 'ProductsController@create');
+	Route::post('products/save', 'ProductsController@save');
+	Route::get('products/{id}/edit', 'ProductsController@edit');
+	Route::get('products/{id}/edit/{page}', 'ProductsController@edit');
+	Route::post('products/delete', 'ProductsController@delete');
 
 	// Not tested routes
 
