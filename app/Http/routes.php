@@ -41,6 +41,13 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/evaluate/{qrid}', 'QuotesController@get_evaluate');
 	Route::post('/evaluate/{qrid}', 'QuotesController@post_evaluate');
 
+	// Quotes - others
+	Route::resource('quotes', 'QuotesController');
+
+	// Jobs
+	Route::get('job/{id}/edit', 'JobsController@edit');
+	Route::post('job/{id}/save', 'JobsController@save');
+
 	// Products Library
 	Route::get('products', 'ProductsController@index');
 	Route::get('products/create', 'ProductsController@create');
@@ -50,15 +57,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('products/{id}/edit/{page}', 'ProductsController@edit');
 	Route::post('products/delete', 'ProductsController@delete');
 
+
+
+
+
 	// Not tested routes
-
-	Route::resource('quotes', 'QuotesController');
-
-
-
-
-
-
 
 
 

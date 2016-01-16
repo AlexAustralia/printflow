@@ -98,6 +98,7 @@ Send Customer Quote
         @endforeach
         </tbody>
     </table>
+</div>
 
     <div style="margin-top:30px;">
         <p style="float:right;">

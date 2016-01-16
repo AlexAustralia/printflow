@@ -26,6 +26,7 @@ return array(
     'CreateCustomerAddressesTable' => $baseDir . '/database/migrations/2015_04_22_144224_create_customer_addresses_table.php',
     'CreateCustomerContactsTable' => $baseDir . '/database/migrations/2015_04_22_144359_create_customer_contacts_table.php',
     'CreateCustomersTable' => $baseDir . '/database/migrations/2015_04_22_144223_create_customers_table.php',
+    'CreateJobsTable' => $baseDir . '/database/migrations/2016_01_17_052310_create_jobs_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateProductsTable' => $baseDir . '/database/migrations/2016_01_10_051904_create_products_table.php',
     'CreateQuoteItemsTable' => $baseDir . '/database/migrations/2015_05_14_091240_create_quote_items_table.php',

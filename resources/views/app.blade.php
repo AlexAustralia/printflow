@@ -161,6 +161,7 @@
         <a class="btn btn-primary" href="/enter_prices/{!! $quote_request->id !!}">Enter Supplier Prices</a>
         <a class="btn btn-primary" href="/evaluate/{!! $quote_request->id !!}">Evaluate Prices</a>
         <a class="btn btn-primary" href="/send_customer_quote/{!! $quote_request->id !!}">Send Customer Quote</a>
+		<a class="btn btn-primary" href="/job/{!! $quote_request->id !!}/edit">Create Job</a>
     </div>
     <p style="clear:both; margin-bottom:40px;"></p>
     @endif
