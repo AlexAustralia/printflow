@@ -10,4 +10,10 @@ class Job extends Model
         'quote_requests_id',
         'quote_request_items_id'
     );
+
+    // Get job item
+    public function job_item()
+    {
+        return $this->belongsTo('App\QuoteRequestItem', 'quote_request_items_id', 'id');
+    }
 }

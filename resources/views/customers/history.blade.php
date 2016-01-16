@@ -66,7 +66,7 @@
                 <th width="20%">Supplier</th>
                 <th width="10%">Job Cost</th>
                 <th width="10%">Job Sell</th>
-                <th width="10%">Date Last Ordered</th>
+                    <th width="10%">Quote/Job Date</th>
                 <th width="10%">Expiry Date</th>
                 <th width="5%"></th>
             </tr>

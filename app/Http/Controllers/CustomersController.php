@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Customer;
 use App\CustomerContact;
 
+use App\QuoteItem;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Session;
@@ -193,31 +194,41 @@ class CustomersController extends Controller {
 		foreach($quotes as $quote)
 		{
 			$array[$i]['quote_number'] = $quote->id;
-			if(isset($quote->job->id)) {
-				$array[$i]['job_number'] = $quote->job->id;
-				$array[$i]['supplier_id'] = $quote->job->supplier->id;
-				$array[$i]['supplier_name'] = $quote->job->supplier->supplier_name;
-				$array[$i]['job_cost'] = $quote->job->net_cost;
-				$array[$i]['job_sell'] = $quote->job->net_sell;
-			}
-			else {
-				$array[$i]['job_number'] = '';
-				$array[$i]['supplier_id'] = '';
-				$array[$i]['supplier_name'] = '';
-				$array[$i]['job_cost'] = '';
-				$array[$i]['job_sell'] = '';
-			}
 			$array[$i]['title'] = $quote->title;
 			$array[$i]['description'] = $quote->summary;
 			$array[$i]['artwork_image'] = $quote->artwork_image;
 
-			$array[$i]['quantity'] = 0;
-			foreach($quote->qris as $item) {
-				$array[$i]['quantity'] += $item->quantity;
-			}
-
 			$array[$i]['request_date'] = $quote->request_date;
 			$array[$i]['expiry_date'] = $quote->expiry_date;
+
+			// Quotes
+			if(isset($quote->get_quote->id)) {
+				$array[$i]['supplier_id'] = $quote->get_quote->supplier->id;
+				$array[$i]['supplier_name'] = $quote->get_quote->supplier->supplier_name;
+			}
+			else {
+				$array[$i]['supplier_id'] = '';
+				$array[$i]['supplier_name'] = '';
+			}
+
+			//Jobs
+			if(isset($quote->job->id)) {
+				$array[$i]['job_number'] = $quote->id;
+				$array[$i]['job_sell'] = $quote->job->job_item->total;
+				$array[$i]['quantity'] = $quote->job->job_item->quantity;
+				$array[$i]['request_date'] = $quote->job->updated_at->format('d/m/Y');
+
+				$query = QuoteItem::where('qri_id', $quote->job->quote_request_items_id)
+					->where('quote_id', $quote->get_quote->id)->first();
+
+				$array[$i]['job_cost'] = $query->total_buy_cost;
+			}
+			else {
+				$array[$i]['job_number'] = '';
+				$array[$i]['job_cost'] = '';
+				$array[$i]['job_sell'] = '';
+				$array[$i]['quantity'] = '';
+			}
 
 			//TODO: add status value after Workflow module done
 			$array[$i]['status'] = 'invoiced';

@@ -25,7 +25,13 @@ class QuoteRequest extends Model {
     // Get quote's jobs
     public function job()
     {
-        return $this->hasOne('App\Quote');
+        return $this->hasOne('App\Job', 'quote_requests_id', 'id');
+    }
+
+    //Get quote
+    public function get_quote()
+    {
+        return $this->belongsTo('App\Quote', 'quote_id', 'id');
     }
 
     public function first_quote(){
