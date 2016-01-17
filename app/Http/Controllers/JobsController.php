@@ -27,8 +27,15 @@ class JobsController extends Controller
 
 
     // Save created job
-    public function save($id)
+    public function save(Request $request, $id)
     {
+        // Validate form
+        $this->validate($request, [
+            'quote_request_items_id' => 'required',
+        ], $messages = array(
+            'quote_request_items_id.required' => 'You should choose a quantity to proceed with'
+        ));
+
         $input = Input::all();
 
         $job = Job::firstOrNew(['quote_requests_id' => $id]);
@@ -38,6 +45,6 @@ class JobsController extends Controller
 
         $job->save();
 
-        return redirect('job/'.$id.'/edit')->with('message', 'Job has been created successfully');
+        return redirect('job/'.$id.'/edit')->with('message', 'Job has been stored successfully');
     }
 }

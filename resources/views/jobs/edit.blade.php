@@ -15,6 +15,18 @@ Create Job
         </div>
     @endif
 
+    @if (count($errors) > 0)
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Error</h4>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if($quote_request->quote_id == 0)
         <div class="alert alert-warning alert-block">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -101,7 +113,7 @@ Create Job
         </div>
 
         <p style="float:right">
-            <input type="submit" class="btn btn-primary" value="Create Job" />
+            <input type="submit" class="btn btn-primary" value="@if(isset($job))Edit @else Create @endif Job" />
         </p>
 
         {!! Form::close() !!}
