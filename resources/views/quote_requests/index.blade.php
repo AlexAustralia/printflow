@@ -85,7 +85,9 @@ Quote Requests
                                 <li><a href="#">Duplicate</a></li>
                                 <li><a href="#" data-toggle="modal" value="{{$q->id}}" data-target="#delete_confirmation" onclick="new_val(this)">Delete</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">Send Invoice</a></li>
+                                <li><a href="#">Delivery Docket</a></li>
+                                <li><a href="#">Delivery Sticker</a></li>
+                                <li><a href="#">Invoice</a></li>
                             </ul>
                         </div>
                     </td>

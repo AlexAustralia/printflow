@@ -212,7 +212,7 @@ class CustomersController extends Controller {
 			}
 
 			//Jobs
-			if(isset($quote->job->id)) {
+			if(isset($quote->job->id) && ($quote->quote_id != 0)) {
 				$array[$i]['job_number'] = $quote->id;
 				$array[$i]['job_sell'] = $quote->job->job_item->total;
 				$array[$i]['quantity'] = $quote->job->job_item->quantity;

@@ -95,6 +95,8 @@
                                 <li><a href="#">Duplicate</i></a></li>
                                 <li><a href="#" data-toggle="modal" value="{{$item['quote_number']}}" data-target="#delete_confirmation" onclick="new_val(this)">Delete</a></li>
                                 <li class="divider"></li>
+                                <li><a href="#">Delivery Docket</a></li>
+                                <li><a href="#">Delivery Sticker</a></li>
                                 <li><a href="#">Invoice</a></li>
                             </ul>
                         </div>
