@@ -18,10 +18,16 @@
 							supplier_name: {
 								required: true,
 							},
+							common_email: {
+								required: true,
+							},
 						},
 						messages: {
 							supplier_name: {
 								required: "Enter Supplier Name"
+							},
+							common_email: {
+								required: "Enter Email Address"
 							}
 						}
 					}
@@ -57,19 +63,24 @@
 		<div class="contact_details">
 
 			<div class="form-group">
-			    {!! Form::label('supplier_name', 'Supplier Name:', ['class' => 'control-label']) !!}
+			    {!! Form::label('supplier_name', 'Supplier Name*:', ['class' => 'control-label']) !!}
 			    {!! Form::text('supplier_name', Input::old('supplier_name') ?: $supplier->supplier_name, ['class' => 'form-control']) !!}
 			</div>
 
 			<div class="row">
-				<div class="form-group col-sm-6">
+				<div class="form-group col-sm-4">
 				    {!! Form::label('web_address', 'Website (URL):', ['class' => 'control-label']) !!}
 				    {!! Form::text('web_address', Input::old('web_address') ?: $supplier->web_address, ['class' => 'form-control']) !!}
 				</div>
 
-				<div class="form-group col-sm-6">
+				<div class="form-group col-sm-4">
 				    {!! Form::label('skype_name', 'Skype Name:', ['class' => 'control-label']) !!}
 				    {!! Form::text('skype_name', Input::old('skype_name') ?: $supplier->skype_name, ['class' => 'form-control']) !!}
+				</div>
+
+				<div class="form-group col-sm-4">
+					{!! Form::label('common_email', 'Common Email*:', ['class' => 'control-label']) !!}
+					{!! Form::text('common_email', Input::old('common_email') ?: $supplier->common_email, ['class' => 'form-control email']) !!}
 				</div>
 			</div>
 

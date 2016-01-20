@@ -47,7 +47,8 @@ class SuppliersController extends Controller {
 	{
 	    $this->validate($request, [
 	        'supplier_name' => 'required|unique:suppliers',
-			'web_address'   => 'url'
+			'web_address'   => 'url',
+			'common_email'  => 'required'
 	    ]);
 
 	    // Store input to session
@@ -109,7 +110,8 @@ class SuppliersController extends Controller {
 	{
 	    $this->validate($request, [
 	        'supplier_name' => 'required|unique:suppliers,supplier_name,' . $id,
-	        'web_address'   => 'url'
+	        'web_address'   => 'url',
+			'common_email'  => 'required'
 	    ]);
 
 	    // Create Supplier

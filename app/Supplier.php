@@ -30,7 +30,8 @@ class Supplier extends Model {
         'direct_number',
         'web_address',
         'skype_name',
-        'notes'
+        'notes',
+        'common_email'
     );
 
     public function supplier_contacts(){
@@ -50,11 +51,21 @@ class Supplier extends Model {
         $c = $this->primary_person();
 
         if ($c === null){
-            return "NO_PRIMARY_PERSON@example.com";
+            if($this->common_email == '') {
+                return "ENTER_EMAIL_ADDRESS";
+            }
+            else {
+                return $this->common_email;
+            }
         }
 
         if ($c->email === null){
-            return "NO_EMAIL_FOR_PRIMARY_PERSON@example.com";
+            if($this->common_email == '') {
+                return "ENTER_EMAIL_ADDRESS";
+            }
+            else {
+                return $this->common_email;
+            }
         }
 
         return $c->email;
