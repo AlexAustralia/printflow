@@ -85,8 +85,9 @@ Quote Requests
                                 <li><a href="#">Duplicate</a></li>
                                 <li><a href="#" data-toggle="modal" value="{{$q->id}}" data-target="#delete_confirmation" onclick="new_val(this)">Delete</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">Delivery Docket</a></li>
-                                <li><a href="#">Delivery Sticker</a></li>
+                                <li>@if(isset($q->job->id) && ($q->quote_id != 0))
+                                        <a href="{{URL::to('job/'.$q->id.'/delivery')}}">Delivery</a></li>
+                                    @endif
                                 <li><a href="#">Invoice</a></li>
                             </ul>
                         </div>

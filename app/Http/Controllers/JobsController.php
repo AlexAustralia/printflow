@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CustomerAddress;
 use App\Job;
 use App\QuoteRequest;
 use Illuminate\Http\Request;
@@ -46,5 +47,43 @@ class JobsController extends Controller
         $job->save();
 
         return redirect('job/'.$id.'/edit')->with('message', 'Job has been stored successfully');
+    }
+
+
+    // Delivery
+    public function delivery_get($id)
+    {
+        $message = Session::get('message');
+
+        $quote = QuoteRequest::find($id);
+        $delivery_addresses = $quote->customer->delivery_addresses;
+
+        return view('jobs.delivery', compact('quote', 'delivery_addresses', 'message'));
+    }
+
+
+    // Delivery Handler
+    public function delivery_post(Request $request)
+    {
+        // Validate form
+        $this->validate($request, [
+            'delivery_date' => 'required',
+            'cartons' => 'required|numeric',
+            'items' => 'required|numeric',
+            'delivery_address' => 'required'
+        ]);
+
+        $input = Input::all();
+        //return $input;
+
+        // Create PDF
+        if($input['value'] == 'sticker')
+        {
+            // Form Sticker
+        }
+        else
+        {
+            // Form Docket
+        }
     }
 }

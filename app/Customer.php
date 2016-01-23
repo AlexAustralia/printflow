@@ -5,7 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 //
 
 
-class Customer extends Model {
+class Customer extends Model
+{
 
     // protected $table = 'customers';
 
@@ -42,15 +43,15 @@ class Customer extends Model {
     {
         return $this->hasMany('App\CustomerContact');
     }
-    
+
     public function postal_address()
     {
         return $this->postal_attention . "\n" .
-                $this->postal_street . "\n" .
-                $this->postal_city . "\n" .
-                $this->postal_state . "\n" .
-                $this->postal_postcode . "\n" .
-                $this->postal_country;
+        $this->postal_street . "\n" .
+        $this->postal_city . "\n" .
+        $this->postal_state . "\n" .
+        $this->postal_postcode . "\n" .
+        $this->postal_country;
     }
 
     // Get customer's quotes
@@ -59,4 +60,9 @@ class Customer extends Model {
         return $this->hasMany('App\QuoteRequest');
     }
 
+    // Get delivery addresses
+    public function delivery_addresses()
+    {
+        return $this->hasMany('App\CustomerAddress');
+    }
 }

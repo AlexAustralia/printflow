@@ -68,6 +68,9 @@ class QuotesController extends Controller {
                 $quote_items = QuoteItem::where('quote_id', $quote->first()->id);
                 $quote_items->delete();
 
+                $quote_request->quote_id = 0;
+                $quote_request->save();
+
                 $quote->delete();
             }
         }

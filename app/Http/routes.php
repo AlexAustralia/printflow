@@ -9,8 +9,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('customers/{id}/history', 'CustomersController@history');
 	Route::resource('customers', 'CustomersController');
 
+	// Customer Delivery Addresses
+	Route::get('customer/{id}/create_address/{job}', 'CustomerAddressesController@create');
+	Route::post('customer_address/save', 'CustomerAddressesController@store');
+
     // Route::resource('customer_contacts', 'CustomerContactsController');
-    // Route::resource('customer_addresses', 'CustomerAddressesController');
 
 	// Supplier section
 	Route::get('suppliers/{id}/products', 'SuppliersController@products');
@@ -47,6 +50,8 @@ Route::group(['middleware' => 'auth'], function(){
 	// Jobs
 	Route::get('job/{id}/edit', 'JobsController@edit');
 	Route::post('job/{id}/save', 'JobsController@save');
+	Route::get('job/{id}/delivery', 'JobsController@delivery_get');
+	Route::post('job/delivery', 'JobsController@delivery_post');
 
 	// Products Library
 	Route::get('products', 'ProductsController@index');

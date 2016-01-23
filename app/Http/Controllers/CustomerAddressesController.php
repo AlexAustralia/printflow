@@ -1,9 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use App\Customer;
+use App\CustomerAddress;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class CustomerAddressesController extends Controller {
 
@@ -22,9 +25,11 @@ class CustomerAddressesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create($id, $job)
 	{
-		//
+		$customer = Customer::find($id);
+
+		return view('customer_addresses.create', compact('customer', 'job'));
 	}
 
 	/**
@@ -32,9 +37,22 @@ class CustomerAddressesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		//
+		// Validate form
+		$this->validate($request, [
+			'name' => 'required',
+			'address' => 'required',
+			'city' => 'required',
+			'state' => 'required',
+			'postcode' => 'required'
+		]);
+
+		$input = Input::all();
+
+		$customer_address = CustomerAddress::create($input);
+
+		return redirect('/job/'.$input['job'].'/delivery')->with('message', 'Delivery Address has been stored successfully');
 	}
 
 	/**
