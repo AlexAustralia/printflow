@@ -52,14 +52,14 @@ class JobsController extends Controller
 
 
     // Delivery
-    public function delivery_get($id)
+    public function delivery_get($id, $page = 0)
     {
         $message = Session::get('message');
 
         $quote = QuoteRequest::find($id);
         $delivery_addresses = $quote->customer->delivery_addresses;
 
-        return view('jobs.delivery', compact('quote', 'delivery_addresses', 'message'));
+        return view('jobs.delivery', compact('quote', 'delivery_addresses', 'message', 'page'));
     }
 
 
@@ -84,6 +84,10 @@ class JobsController extends Controller
         if($input['value'] == 'sticker')
         {
             // Form Sticker
+            $html = view('jobs.sticker', compact('input', 'quote', 'delivery_address'));
+            $dompdf = PDF::loadHTML($html)->setPaper(array(0,0,422.37,283.49));
+            //return $dompdf->stream();
+            return $dompdf->download('sticker-'.$quote->id.'.pdf');
         }
         else
         {

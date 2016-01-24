@@ -63,6 +63,7 @@
 
             // Cancel button
             $('#cancel').on('click', function() {
+
                 location.href="{{URL::to('/')}}"
             });
 
