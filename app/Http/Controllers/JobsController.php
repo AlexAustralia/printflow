@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CustomerAddress;
 use App\Job;
 use App\QuoteRequest;
+use PDF;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -76,6 +77,9 @@ class JobsController extends Controller
         $input = Input::all();
         //return $input;
 
+        $quote = QuoteRequest::find($input['job_id']);
+        $delivery_address = CustomerAddress::find($input['delivery_address']);
+
         // Create PDF
         if($input['value'] == 'sticker')
         {
@@ -84,6 +88,10 @@ class JobsController extends Controller
         else
         {
             // Form Docket
+            $html = view('jobs.docket', compact('input', 'quote', 'delivery_address'));
+            $dompdf = PDF::loadHTML($html);
+            //return $dompdf->stream();
+            return $dompdf->download('docket-'.$quote->id.'.pdf');
         }
     }
 }
