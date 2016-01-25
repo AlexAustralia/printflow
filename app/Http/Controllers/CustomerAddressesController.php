@@ -25,7 +25,7 @@ class CustomerAddressesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create($id, $job)
+	public function create($id, $job = 0)
 	{
 		$customer = Customer::find($id);
 
@@ -52,7 +52,14 @@ class CustomerAddressesController extends Controller {
 
 		$customer_address = CustomerAddress::create($input);
 
-		return redirect('/job/'.$input['job'].'/delivery')->with('message', 'Delivery Address has been stored successfully');
+		if($input['job'] != 0)
+		{
+			return redirect('/job/' . $input['job'] . '/delivery')->with('message', 'Delivery Address has been stored successfully');
+		}
+		else
+		{
+			return redirect('/customers/' . $input['customer_id'] . '/edit')->with('message', 'Delivery Address has been stored successfully');
+		}
 	}
 
 	/**

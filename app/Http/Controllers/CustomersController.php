@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\CustomerAddress;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Customer;
@@ -97,8 +98,11 @@ class CustomersController extends Controller {
 	{
 		$customer = Customer::find($id);
 		$contacts = $customer->customer_contacts;
+		$delivery_addresses = $customer->delivery_addresses;
+
+		$message = Session::get('message');
 		$action   = 'customer.update';
-		return view('customers.edit', compact('customer', 'contacts'))->with(compact('action'));;
+		return view('customers.edit', compact('customer', 'contacts', 'delivery_addresses', 'message'))->with(compact('action'));;
 	}
 
 	/**

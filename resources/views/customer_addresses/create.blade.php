@@ -51,7 +51,11 @@
 
             // Cancel button
             $('#cancel').on('click', function() {
-                location.href="{{URL::to('/job/'.$job.'/delivery')}}"
+                @if($job != 0)
+                    location.href="{{URL::to('/job/'.$job.'/delivery')}}"
+                @else
+                    location.href="{{URL::to('/customers/'.$customer->id.'/edit')}}"
+                @endif
             });
         });
     </script>

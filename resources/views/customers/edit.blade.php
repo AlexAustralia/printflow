@@ -236,6 +236,25 @@ Edit Customer - <?php echo ucwords(strtolower(! empty($customer->customer_name) 
 		</div>
 	</div> <!-- end .address -->
 
+	<div class="row">
+		<div class="col-sm-10">
+			<h3>Delivery Addresses</h3>
+		</div>
+
+		<div class="col-sm-2">
+			<a href="/customer/{{ $customer->id }}/create_address" type="button" class="btn btn-primary" style="margin-top:27px;">Create New</a>
+		</div>
+	</div>
+	<hr>
+
+	<div class="row">
+		@foreach($delivery_addresses as $delivery_address)
+			<div class="form-group col-sm-12">
+				{!! Form::text('delivery_address[]', $delivery_address->name.', '.$delivery_address->address.', '.$delivery_address->city.', '.$delivery_address->state.', '.$delivery_address->postcode, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+			</div>
+		@endforeach
+	</div>
+
 	<div class="contacts">
 
 		<h3>Contacts</h3>
@@ -324,8 +343,8 @@ Edit Customer - <?php echo ucwords(strtolower(! empty($customer->customer_name) 
 		<div id="add-contact" class="btn btn-default pull-right">ADD CONTACT</div>
 
 	</div>
-	
-{!! Form::close() !!}
+
+	{!! Form::close() !!}
 <!-- close form -->
 
 @include('partials.delete_customer')
