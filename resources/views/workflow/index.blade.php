@@ -106,7 +106,7 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td>{!! $item['stage'] !!}</td>
+                        <td class="stage">{!! $item['stage'] !!}</td>
                         <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
                         <td>@if(isset($item['artwork_image']))<a class="fancybox" href="/uploads/artworks/{{$item['artwork_image']}}"><img src="/uploads/thumbnails/{{$item['artwork_image']}}"></a> @endif</td>
                         <td>{{$item['quantity']}}</td>
@@ -167,8 +167,19 @@
             }
         }
 
+        var statuses_id = [
+                @foreach($statuses as $status)
+                    {{ strtolower(str_replace(' ', '_', $status->id)) }},
+                @endforeach
+        ];
+        var statuses_value = [
+            @foreach($statuses as $status)
+                "{{ strtolower(str_replace(' ', '_', $status->value)) }}",
+            @endforeach
+        ];
+
         $(document).ready(function() {
-            $('#table').DataTable( {
+            oTable = $('#table').DataTable( {
                 order: [[ 1, "asc" ]],
                 paging: false
             });
@@ -199,15 +210,33 @@
                 $(line).after('<tr class="loader"><td colspan="5"></td><td colspan="6"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></td></tr>');
 
                 $.ajax({
-                    //headers     : { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') },
                     type        : 'GET',
                     url         : '/change_status/' + quote_id + '/' + new_status,
-                    //dataType    : 'json',
-                    //encode      : true,
                     success: function(response) {
                         $('#table').find('tr.loader').remove();
-                        $(line).show();
-                        //alert(response);
+                        $(line).removeClass(statuses_value[response[0]-1]).addClass(statuses_value[response[1]-1]).show();
+
+                        // Delete unused options in select
+                        for(var j = response[0]; j < response[1]; j++){
+                            $(line).find('select option[value=' + j +']').remove();
+                        }
+
+                        // If New Job status changed, delete redundant rows
+                        if(response[0] == 4){
+                            var count = 0;
+                            $('#table').find('td.quote_number').each(function(){
+                                if($(this).text() == response[2]) {
+                                    if(($($(this).parents('tr').get(0)).find('select').val()) != response[1]){
+                                        $($(this).parents('tr').get(0)).addClass('selected');
+                                        oTable.row('.selected').remove().draw(false);
+                                    }
+                                    else{
+                                        $($(this).parents('tr').get(0)).find('td.stage').html('');
+                                    }
+                                }
+                            });
+                        }
+
                     },
                     error: function() {
                         alert('Some error occurred while storing status');

@@ -130,10 +130,11 @@ class WorkflowController extends Controller
     {
         try {
             $quote_request = QuoteRequest::find($id);
+            $old = $quote_request->status;
             $quote_request->status = $status;
             $quote_request->save();
 
-            return 'OK';
+            return [$old, $status, $id];
         } catch (Exception $e) {
             return $e->getMessage();
         }
