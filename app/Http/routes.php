@@ -3,7 +3,8 @@
 Route::group(['middleware' => 'auth'], function(){
 
 	//Main page
-	Route::get('/', 'QuoteRequestsController@index');
+	Route::get('/', 'WorkflowController@index');
+	Route::get('/change_status/{id}/{status}', 'WorkflowController@change_status');
 
 	// Customer section
 	Route::get('customers/{id}/history', 'CustomersController@history');

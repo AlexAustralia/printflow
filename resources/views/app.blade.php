@@ -89,7 +89,7 @@
 				
 				<ul class="nav navbar-nav">
 
-					<li><a href="{{ url('/') }}">All Quotes</a></li>
+					<li><a href="{{ url('/') }}">Workflow</a></li>
 					
 			        <li class="dropdown">
 			          <a href="{{ url('/customers') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Customers <span class="caret"></span></a>

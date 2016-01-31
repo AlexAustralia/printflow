@@ -64,5 +64,10 @@ class QuoteRequest extends Model {
         return implode(", ", $addresses);
     }
 
+    public function get_status()
+    {
+        return $this->belongsTo('App\Status', 'status', 'id');
+    }
+
 
 }

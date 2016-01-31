@@ -27,9 +27,7 @@ class QuoteRequestsController extends Controller {
 	 */
 	public function index()
 	{
-        $message = Session::get('message');
-        $quote_requests = QuoteRequest::where('customer_id', '>', 0)->get();
-        return view('quote_requests.index', compact('quote_requests', 'message'));
+
 	}
 
 	/**
