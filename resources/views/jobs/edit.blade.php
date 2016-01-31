@@ -112,6 +112,52 @@ Create Job
             </table>
         </div>
 
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Tick needed categories for this job:<br />
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-4">
+            <div class="col-md-2">
+                @if(isset($job))
+                    {!! Form::checkbox('outside_work', 1, $job->outside_work) !!}
+                @else
+                    {!! Form::checkbox('outside_work', 1, null) !!}
+                @endif
+            </div>
+            <div class="col-md-10">
+                {!! Form::label('outside_work', 'Outside Work', array('class' => 'control-label')) !!}
+            </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="col-md-2">
+                    @if(isset($job))
+                        {!! Form::checkbox('design', 1, $job->design) !!}
+                    @else
+                        {!! Form::checkbox('design', 1, null) !!}
+                    @endif
+                </div>
+                <div class="col-md-10">
+                    {!! Form::label('design', 'Design', 1, array('class' => 'control-label')) !!}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="col-md-2">
+                    @if(isset($job))
+                        {!! Form::checkbox('on_proof', 1, $job->on_proof) !!}
+                    @else
+                        {!! Form::checkbox('on_proof', 1, null) !!}
+                    @endif
+                </div>
+                <div class="col-md-10">
+                    {!! Form::label('on_proof', 'On Proof', 1, array('class' => 'control-label')) !!}
+                </div>
+            </div>
+        </div>
+
         <p style="float:right">
             <input type="submit" class="btn btn-primary" value="@if(isset($job))Edit @else Create @endif Job" />
         </p>

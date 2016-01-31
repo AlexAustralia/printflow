@@ -180,7 +180,7 @@
 
         $(document).ready(function() {
             oTable = $('#table').DataTable( {
-                order: [[ 1, "asc" ]],
+                order: [[ 0, "asc" ]],
                 paging: false
             });
 
@@ -223,7 +223,6 @@
 
                         // If New Job status changed, delete redundant rows
                         if(response[0] == 4){
-                            var count = 0;
                             $('#table').find('td.quote_number').each(function(){
                                 if($(this).text() == response[2]) {
                                     if(($($(this).parents('tr').get(0)).find('select').val()) != response[1]){
@@ -237,6 +236,11 @@
                             });
                         }
 
+                        // If new status is 'Cancelled', delete this row
+                        if(response[1] == 10){
+                            $(line).addClass('selected');
+                            oTable.row('.selected').remove().draw(false);
+                        }
                     },
                     error: function() {
                         alert('Some error occurred while storing status');

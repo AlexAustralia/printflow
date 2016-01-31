@@ -8,7 +8,10 @@ class Job extends Model
 {
     protected $fillable = array(
         'quote_requests_id',
-        'quote_request_items_id'
+        'quote_request_items_id',
+        'outside_work',
+        'design',
+        'on_proof'
     );
 
     // Get job item

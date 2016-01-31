@@ -44,8 +44,16 @@ class JobsController extends Controller
 
         $job->quote_requests_id = $id;
         $job->quote_request_items_id = $input['quote_request_items_id'];
+        $job->outside_work = isset($input['outside_work']) ? $input['outside_work'] : 0;
+        $job->design = isset($input['design']) ? $input['design'] : 0;
+        $job->on_proof = isset($input['on_proof']) ? $input['on_proof'] : 0;
 
         $job->save();
+
+        // Update status
+        $quote_request = QuoteRequest::find($id);
+        $quote_request->status = 4;
+        $quote_request->save();
 
         return redirect('job/'.$id.'/edit')->with('message', 'Job has been stored successfully');
     }

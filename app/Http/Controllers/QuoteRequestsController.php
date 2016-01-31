@@ -194,6 +194,10 @@ class QuoteRequestsController extends Controller {
         $q = QuoteRequest::find($id);
         $q->update($qr_input);
 
+        // Update status
+        $q->status = 1;
+        $q->save();
+
         // Storing artwork image
         if (Input::hasFile('artwork'))
         {

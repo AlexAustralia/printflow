@@ -126,10 +126,11 @@ class QuotesController extends Controller {
             return view('quotes.send_rfq_emails', compact('quote_request', 'user', 'message'));
         }
 
-        $quote = $quote_request->first_quote();
-        $quote_request_lines = $quote_request->qris;
+        //Update status
+        $quote_request->status = 2;
+        $quote_request->save();
 
-        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
+        return redirect('/enter_prices/'.$qr_id);
     }
 
 
@@ -372,6 +373,10 @@ class QuotesController extends Controller {
             }
             else
             {
+                // Update status
+                $qr->status = 3;
+                $qr->save();
+
                 return redirect('send_customer_quote/'.$qr_id)->with('message', 'Mail has been sent successfully');
             }
         }
