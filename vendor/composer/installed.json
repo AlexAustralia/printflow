@@ -2228,12 +2228,12 @@
         "version_normalized": "2.7.3.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/Routing.git",
+            "url": "https://github.com/symfony/routing.git",
             "reference": "ea9134f277162b02e5f80ac058b75a77637b0d26"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Routing/zipball/ea9134f277162b02e5f80ac058b75a77637b0d26",
+            "url": "https://api.github.com/repos/symfony/routing/zipball/ea9134f277162b02e5f80ac058b75a77637b0d26",
             "reference": "ea9134f277162b02e5f80ac058b75a77637b0d26",
             "shasum": ""
         },
@@ -3312,6 +3312,47 @@
             "laravel",
             "thumbnail",
             "watermark"
+        ]
+    },
+    {
+        "name": "xero/xerooauth-php",
+        "version": "v0.7",
+        "version_normalized": "0.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/XeroAPI/XeroOAuth-PHP.git",
+            "reference": "d0c284537b15aadb9006a7d446916cc31162d489"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/XeroAPI/XeroOAuth-PHP/zipball/d0c284537b15aadb9006a7d446916cc31162d489",
+            "reference": "d0c284537b15aadb9006a7d446916cc31162d489",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-openssl": "*",
+            "php": ">=5.0.0"
+        },
+        "time": "2016-02-02 04:21:29",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "lib/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "PHP class for the Xero APIs",
+        "homepage": "https://github.com/XeroAPI/XeroOAuth-PHP",
+        "keywords": [
+            "Accounting",
+            "api",
+            "oauth",
+            "xero"
         ]
     }
 ]

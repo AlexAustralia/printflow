@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0318b8a937aa8457acc5b01ae5d8f559",
-    "content-hash": "3aa7cecd7fb5e2144477b6c9aab899f2",
+    "hash": "129eea8ecd536e594b7bb13986e9d9a2",
+    "content-hash": "7c39862f4fc796be7b46d2d34c234042",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -1911,12 +1911,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Routing.git",
+                "url": "https://github.com/symfony/routing.git",
                 "reference": "ea9134f277162b02e5f80ac058b75a77637b0d26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/ea9134f277162b02e5f80ac058b75a77637b0d26",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/ea9134f277162b02e5f80ac058b75a77637b0d26",
                 "reference": "ea9134f277162b02e5f80ac058b75a77637b0d26",
                 "shasum": ""
             },
@@ -2142,6 +2142,45 @@
                 "environment"
             ],
             "time": "2015-05-30 15:59:26"
+        },
+        {
+            "name": "xero/xerooauth-php",
+            "version": "v0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/XeroAPI/XeroOAuth-PHP.git",
+                "reference": "d0c284537b15aadb9006a7d446916cc31162d489"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/XeroAPI/XeroOAuth-PHP/zipball/d0c284537b15aadb9006a7d446916cc31162d489",
+                "reference": "d0c284537b15aadb9006a7d446916cc31162d489",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-openssl": "*",
+                "php": ">=5.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP class for the Xero APIs",
+            "homepage": "https://github.com/XeroAPI/XeroOAuth-PHP",
+            "keywords": [
+                "Accounting",
+                "api",
+                "oauth",
+                "xero"
+            ],
+            "time": "2016-02-02 04:21:29"
         }
     ],
     "packages-dev": [
