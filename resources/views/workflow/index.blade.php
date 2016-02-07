@@ -35,6 +35,22 @@
         </div>
     </div>
 
+    <div class="modal fade" id="ajax_error" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Error!</h4>
+                </div>
+                <div class="modal-body" id="ajax_error_text">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main body-->
     @if (isset($message))
         <div class="alert alert-success alert-block">
@@ -129,7 +145,7 @@
                                         @endif
                                     </li>
                                     @if($item['status'] == 'Invoice')
-                                        <li><a href="#">Invoice</a></li>
+                                        <li><a href="#" value="{{$item['job_number']}}" onclick="invoice_jobs(this);">Invoice</a></li>
                                     @endif
                                 </ul>
                             </div>
@@ -143,6 +159,47 @@
     <hr>
 
     <script>
+        function invoice_jobs(arg){
+            var job_number = $(arg).attr('value');
+            var line = $($(arg).parents('tr').get(0));
+
+            //window.open("{{{ URL::to('/send_invoice') }}}", "_blank");
+
+            $(line).hide();
+            $(line).after('<tr class="loader"><td colspan="5"></td><td colspan="6"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></td></tr>');
+
+            $.ajax({
+                type        : 'GET',
+                url         : '/send_invoice/' + job_number,
+                success: function(response) {
+                    $('#table').find('tr.loader').remove();
+
+                    if(response == 'OK'){
+                        $('#ajax_error_text').html('<p>The Invoice has been sent to Xero successfully</p>');
+                        $('#ajax_error').find('h4').html('Success');
+                        $('#ajax_error').modal('show');
+
+                        // Delete completed jobs from the table
+                        $(line).addClass('selected');
+                        oTable.row('.selected').remove().draw(false);
+                    }
+                    else {
+                        $('#ajax_error_text').html('<p>Some errors occurred while sending the Invoice to Xero</p>');
+                        $('#ajax_error').find('h4').html('Error!');
+                        $('#ajax_error').modal('show');
+                        $(line).show();
+                    }
+                },
+                error: function() {
+                    $('#ajax_error_text').html('<p>Some errors occurred while sending the Invoice to Xero</p>');
+                    $('#ajax_error').find('h4').html('Error!');
+                    $('#ajax_error').modal('show');
+                    $('#table').find('tr.loader').remove();
+                    $(line).show();
+                }
+            });
+        }
+
         function new_val(t){
             var res = $(t).attr('value');
             $('#delete_quote').val(res);
@@ -243,27 +300,12 @@
                         }
                     },
                     error: function() {
-                        alert('Some error occurred while storing status');
+                        $('#ajax_error_text').html('<p>Some errors occurred while storing the new status</p>');
+                        $('#ajax_error').modal('show');
+                        $('#table').find('tr.loader').remove();
+                        $(line).show();
                     }
                 });
-
-                //.done(function(data) {
-                //    $(line).html(line_data);
-                //    alert(data);
-                //});
-
-                /*
-                $.post('/change_status',
-                        {
-                            id: quote_id,
-                            status: new_status
-                        },
-                        function(data)
-                        {
-                            alert(data);
-                        }
-                );
-                */
             });
         });
 

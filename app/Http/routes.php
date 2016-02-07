@@ -5,6 +5,8 @@ Route::group(['middleware' => 'auth'], function(){
 	//Main page
 	Route::get('/', 'WorkflowController@index');
 	Route::get('/change_status/{id}/{status}', 'WorkflowController@change_status');
+	Route::get('send_invoice/{id}', 'WorkflowController@send_invoice');
+
 
 	// Customer section
 	Route::get('customers/{id}/history', 'CustomersController@history');
