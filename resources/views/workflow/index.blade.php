@@ -114,7 +114,7 @@
                         <td>{{$item['job_number']}}</td>
                         <td><select class="form-control" style="width:145px;">
                                 @foreach($statuses as $status)
-                                    @if($status->id >= $item['status_id'] && $status->id != 9)
+                                    @if($status->id != 9)
                                         <option value="{{$status->id}}" @if($status->id == $item['status_id']) selected="selected" @endif >
                                             {{$status->value}}
                                         </option>
@@ -272,11 +272,6 @@
                     success: function(response) {
                         $('#table').find('tr.loader').remove();
                         $(line).removeClass(statuses_value[response[0]-1]).addClass(statuses_value[response[1]-1]).show();
-
-                        // Delete unused options in select
-                        for(var j = response[0]; j < response[1]; j++){
-                            $(line).find('select option[value=' + j +']').remove();
-                        }
 
                         // If New Job status changed, delete redundant rows
                         if(response[0] == 4){
