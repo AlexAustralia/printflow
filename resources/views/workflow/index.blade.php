@@ -293,6 +293,13 @@
                             $(line).addClass('selected');
                             oTable.row('.selected').remove().draw(false);
                         }
+
+                        // If new status 'Invoice', add menu item
+                        if(response[1] == 8){
+                            if(!$(line).find('li.divider').length){
+                                $(line).find('ul').append('<li class="divider"></li>');
+                            }
+                        }
                     },
                     error: function() {
                         $('#ajax_error_text').html('<p>Some errors occurred while storing the new status</p>');

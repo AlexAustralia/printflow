@@ -9,7 +9,12 @@ class QuoteRequest extends Model {
     protected $fillable = array('customer_id', 'request_date', 'expiry_date', 'ref', 'title', 'summary', 'terms');
 	
     public function customer(){
-        return $this->belongsTo('App\Customer');
+        try{
+            return $this->belongsTo('App\Customer');
+        }
+        catch(Exception $e) {
+            return;
+        }
     }
 
     public function qris()

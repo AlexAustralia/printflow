@@ -32,8 +32,12 @@ class WorkflowController extends Controller
             $array[$i]['description'] = $quote_request->summary;
             $array[$i]['artwork_image'] = $quote_request->artwork_image;
             $array[$i]['customer_id'] = $quote_request->customer_id;
-            $array[$i]['customer_name'] = $quote_request->customer->customer_name;
-
+            if(count($quote_request->customer) > 0){
+                $array[$i]['customer_name'] = $quote_request->customer->customer_name;
+            }
+            else {
+                $array[$i]['customer_name'] = '';
+            }
 
             $array[$i]['request_date'] = $quote_request->request_date;
             $array[$i]['expiry_date'] = $quote_request->expiry_date;
