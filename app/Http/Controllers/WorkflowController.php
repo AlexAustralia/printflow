@@ -167,11 +167,11 @@ class WorkflowController extends Controller
         );
         */
 
-        $useragent = "PrintFlow";
+        $useragent = env('USER_AGENT');
 
         $signatures = array (
-            'consumer_key'     => 'SHAH0PAEVZZHMR4CBK8XAZUJSUPW1I',
-            'shared_secret'    => '16HBMGPS6BSC4AB9IOJKKCMP7G8KZX',
+            'consumer_key'     => env('XERO_KEY'),
+            'shared_secret'    => env('XERO_SECRET'),
             // API versions
             'core_version' => '2.0',
             'payroll_version' => '1.0'
@@ -240,7 +240,7 @@ class WorkflowController extends Controller
 								</Contact>
 								<Status>DRAFT</Status>
 								<Date>' . Carbon::now()->format('Y-m-d') . '</Date>
-								<DueDate>' . Carbon::createFromFormat('d/m/Y', $quote_request->expiry_date)->format('Y-m-d') . '</DueDate>
+								<DueDate>' . Carbon::now()->addWeeks(2)->format('Y-m-d') . '</DueDate>
 								<Reference>'. $id .'</Reference>
 								<LineAmountTypes>Exclusive</LineAmountTypes>
 								<LineItems>
