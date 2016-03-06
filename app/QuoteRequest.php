@@ -74,5 +74,8 @@ class QuoteRequest extends Model {
         return $this->belongsTo('App\Status', 'status', 'id');
     }
 
-
+    public function artwork_charges()
+    {
+        return $this->hasMany('App\ArtworkCharge');
+    }
 }

@@ -38,6 +38,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/send_rfq_emails/{id}', 'QuotesController@get_send_rfq_emails');
 	Route::post('/send_rfq_emails/{id}', 'QuotesController@post_send_rfq_emails');
 
+	// Artwork page
+	Route::get('artwork/{id}', 'QuotesController@get_artwork');
+	Route::post('artwork/{id}', 'QuotesController@post_artwork');
+
 	// Enter Supplier Prices on the Quote Module
 	Route::get('/enter_prices/{qrid}', 'QuotesController@get_enter_prices');
 	Route::get('/enter_prices/{qrid}/{qid}', 'QuotesController@get_enter_prices');

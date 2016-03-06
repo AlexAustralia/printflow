@@ -4,8 +4,6 @@ Enter Supplier Prices
 @endsection
 
 @section('content')
-    <link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
-    <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script>
     $(document).ready(function() {
         var find = function(name, index) {
@@ -26,6 +24,7 @@ Enter Supplier Prices
                 find('freight_cbm', index).val(freight_cbm.toFixed(0));
                 var freight_cost = parseFloat(find('freight_cost', index).val()) || 0;
                 var markup = parseFloat(find('markup', index).val())/100 || 0;
+                var artwork = parseFloat(find('artwork', index).val());
 
                 // Outputs
                 var buy_price_unit = buy_price / qty;
@@ -43,10 +42,10 @@ Enter Supplier Prices
                 var total_net = total_buy_cost + markup_amount;
                 find('total_net', index).val(total_net.toFixed(2));
 
-                var gst = total_net * 0.1;
+                var gst = (total_net + artwork) * 0.1;
                 find('gst', index).val(gst.toFixed(2));
 
-                var total_inc_gst = total_net + gst;
+                var total_inc_gst = total_net + artwork + gst;
                 find('total_inc_gst', index).val(total_inc_gst.toFixed(2));
 
                 var unit_price_inc_gst = total_inc_gst / qty;
@@ -197,6 +196,13 @@ Enter Supplier Prices
             <td>Total NET</td>
             @foreach ($quote->quote_items() as $i)
                 <td><input name="total_net[]" value="{!! $i["total_net"] !!}" readonly="readonly" /></td>
+            @endforeach
+        </tr>
+
+        <tr class="success">
+            <td>Artwork Charge</td>
+            @foreach ($quote->quote_items() as $i)
+                <td><input name="artwork[]" value="{!! $quote_request->artwork_charge !!}" readonly="readonly" /></td>
             @endforeach
         </tr>
 

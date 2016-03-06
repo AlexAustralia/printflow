@@ -1,9 +1,11 @@
 <?php namespace App\Http\Controllers;
 
+use App\ArtworkCharge;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Request;
 use Mail;
@@ -147,7 +149,8 @@ class QuotesController extends Controller {
 
         return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
     }
-    
+
+
     public function post_enter_prices($qr_id, $qid=null){
         $quote_request = QuoteRequest::Find($qr_id);
 
@@ -200,8 +203,6 @@ class QuotesController extends Controller {
 
 
     // Evaluate Prices
-
-
     public function get_evaluate($qr_id){
         $quote_request = QuoteRequest::Find($qr_id);
         
@@ -228,7 +229,8 @@ class QuotesController extends Controller {
 
         return view('quotes.evaluate', compact('quote_request', 'quote_request_lines', 'error'));
     }
-    
+
+
     public function post_evaluate(\Illuminate\Http\Request $request, $qr_id){
 
         // Validate form
@@ -298,7 +300,8 @@ class QuotesController extends Controller {
 
         return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message', 'error'));
     }
-    
+
+
     public function post_send_customer_quote(\Illuminate\Http\Request $request, $qr_id)
     {
         $input = Request::all();
@@ -383,78 +386,65 @@ class QuotesController extends Controller {
     }
 
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
+    public function get_artwork($id)
+    {
+        $quote_request = QuoteRequest::Find($id);
+        $artwork_charges = $quote_request->artwork_charges;
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
+        $message = Session::get('message');
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
+        return view('quotes.artwork', compact('quote_request', 'artwork_charges', 'message'));
+    }
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
+    public function post_artwork($id)
+    {
+        $input = Input::all();
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+        $quoute_request = QuoteRequest::find($id);
+        $artwork_lines = $quoute_request->artwork_charges;
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        $artwork_lines_to_delete = array();
 
+        foreach($artwork_lines as $artwork_line) {
+            array_push($artwork_lines_to_delete, $artwork_line->id);
+        }
+
+        if(isset($input['artwork'])) {
+            foreach($input['artwork'] as $line) {
+                if (isset($line['id'])) {
+                    $artwork = ArtworkCharge::find($line['id']);
+
+                    // Delete this item from array for deleting
+                    foreach ($artwork_lines_to_delete as $key => $item) {
+                        if ($item == $artwork->id) {
+                            unset($artwork_lines_to_delete[$key]);
+                        }
+                    }
+                } else {
+                    $artwork = new ArtworkCharge();
+                }
+
+                $artwork->quote_request_id = $quoute_request->id;
+                $artwork->description = $line['description'];
+                $artwork->supplier_id = $line['supplier_id'];
+                $artwork->hours = is_numeric($line['hours']) ? $line['hours'] : NULL;
+                $artwork->rate = is_numeric($line['rate']) ? $line['rate'] : NULL;
+                $artwork->total_cost = $line['total_cost'];
+                $artwork->markup = is_numeric($line['markup']) ? $line['markup'] : 0;
+                $artwork->total = $line['total'];
+
+                $artwork->save();
+            }
+        }
+
+        // Delete needed items
+        ArtworkCharge::destroy($artwork_lines_to_delete);
+
+        $quoute_request->artwork_charge = $input['artwork_charge'];
+
+        $quoute_request->save();
+
+        return redirect('artwork/'.$id)->with('message', 'Artwork charges has been saved successfully');
+    }
 }
