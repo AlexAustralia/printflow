@@ -82,7 +82,8 @@ class QuoteRequestsController extends Controller {
 
         $q = QuoteRequest::find($id);
         $quote_request = $q;
-		return view('quote_requests.edit', compact('q', 'quote_request' ,'message', 'customer_id', 'customer'));
+
+ 		return view('quote_requests.edit', compact('q', 'quote_request' ,'message', 'customer_id', 'customer'));
 	}
 
 	/**

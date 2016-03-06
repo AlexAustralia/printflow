@@ -103,12 +103,20 @@
 
         <div class="col-md-2">
             {!! Form::label('request_date', 'Request Date *', array('class' => 'control-label')) !!}
-            {!! Form::text('request_date', $q->request_date, array('id' => 'request_date', 'class' => 'form-control')) !!}
+            @if(empty($q->request_date))
+                {!! Form::text('request_date', Carbon\Carbon::now()->format('d/m/Y'), array('id' => 'request_date', 'class' => 'form-control')) !!}
+            @else
+                {!! Form::text('request_date', $q->request_date, array('id' => 'request_date', 'class' => 'form-control')) !!}
+            @endif
         </div>
 
         <div class="col-md-2">
             {!! Form::label('expiry_date', 'Expiry Date', array('class' => 'control-label')) !!}
-            {!! Form::text('expiry_date', $q->expiry_date, array('id' => 'expiry_date', 'class' => 'form-control')) !!}
+            @if(empty($q->request_date))
+                {!! Form::text('expiry_date', Carbon\Carbon::now()->addWeeks(2)->format('d/m/Y'), array('id' => 'expiry_date', 'class' => 'form-control')) !!}
+            @else
+                {!! Form::text('expiry_date', $q->expiry_date, array('id' => 'expiry_date', 'class' => 'form-control')) !!}
+            @endif
         </div>
 
         <div class="col-md-2">
