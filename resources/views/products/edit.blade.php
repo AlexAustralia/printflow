@@ -105,15 +105,15 @@
     <div class="row">
         <div class="col-sm-10">
             @if(isset($product))
-                <h2 style="margin:0"> Edit Product - {{$product->name}}</h2>
+                <h2 style="margin:0"><img src="/images/edit.png"> Edit Product - {{$product->name}}</h2>
             @else
-                <h2 style="margin:0">Create Product</h2>
+                <h2 style="margin:0"><img src="/images/customers.png"> Create Product</h2>
             @endif
         </div>
 
         <div class="col-sm-2 pull-right">
-            {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'submit_form']) !!}
-            <div class="btn btn-danger" id="cancel">Cancel</div>
+            {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'submit_form', 'style' => 'margin-top: 30px;']) !!}
+            <div class="btn btn-danger" id="cancel" style="margin-top: 30px;">Cancel</div>
         </div>
     </div>
     <hr>

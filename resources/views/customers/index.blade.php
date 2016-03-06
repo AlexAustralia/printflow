@@ -71,11 +71,11 @@ Customers
     <div class="row">
 
         <div class="col-sm-10">
-            <h2 style="margin:0">Customers</h2>
+            <h2 style="margin:0"><img src="/images/customers.png"> Customers</h2>
         </div>
         
         <div class="col-sm-2">
-            <input class="search" placeholder="search..."/>
+            <input class="search" style="margin-top: 30px;" placeholder="search..."/>
         </div>
 
     </div>

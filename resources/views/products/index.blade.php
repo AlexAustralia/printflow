@@ -32,7 +32,7 @@
     <!-- Main body -->
     <div class="row">
         <div class="col-sm-10">
-            <h2>Product Library</h2>
+            <h2><img src="/images/products.png"> Product Library</h2>
         </div>
     </div>
     <hr>

@@ -45,12 +45,12 @@
 	<div class="row">
 
 		<div class="col-sm-10">
-			<h2 style="margin:0">Edit Supplier: <?php echo ucwords(strtolower(! empty($supplier->supplier_name) ? $supplier->supplier_name : '')); ?></h2>
+			<h2 style="margin:0"><img src="/images/edit.png"> Edit Supplier: <?php echo ucwords(strtolower(! empty($supplier->supplier_name) ? $supplier->supplier_name : '')); ?></h2>
 		</div>
 		
 		<div class="col-sm-2">
-			<div class="btn btn-danger pull-right" data-delete="true" data-toggle="modal" data-target="#deleteModal">Delete</div>
-			{!! Form::submit('Save', ['class' => 'btn btn-primary pull-right']) !!}
+			<div class="btn btn-danger pull-right" data-delete="true" data-toggle="modal" data-target="#deleteModal" style="margin-top: 30px;">Delete</div>
+			{!! Form::submit('Save', ['class' => 'btn btn-primary pull-right', 'style' => 'margin-top: 30px;']) !!}
 		</div>
 
 	</div>

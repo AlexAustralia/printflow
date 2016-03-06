@@ -142,9 +142,9 @@
 
 
     @if (isset($quote_request))
-    <div class="panel panel-default">
+    <div class="panel">
         <div class="panel-heading">
-            <h3 class="panel-title">
+            <h3 class="panel-title"><img src="/images/quote.png">
                 {!! "Quote #".$quote_request->id.": ".$quote_request->title !!}
                 @if (isset($quote_request->customer->customer_name))
                 |

@@ -62,7 +62,7 @@
 
     <div class="row">
         <div class="col-sm-10">
-            <h2>Create Delivery Address</h2>
+            <h2><img src="/images/customers.png"> Create Delivery Address</h2>
         </div>
     </div>
     <hr>

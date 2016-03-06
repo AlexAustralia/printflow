@@ -63,11 +63,11 @@
 
     <div class="row">
         <div class="col-sm-10">
-            <h2 style="margin:0">Workflow</h2>
+            <h2 style="margin:0;"><img src="/images/workflow.png"> Workflow</h2>
         </div>
         <div class="col-sm-2">
             <div class="pull-right">
-                <a href="/quote_requests/create" class="btn btn-primary">Create Quote Request</a>
+                <a href="/quote_requests/create" class="btn btn-primary" style="margin-top: 30px;">Create Quote Request</a>
             </div>
         </div>
     </div>

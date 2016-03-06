@@ -83,7 +83,7 @@
 
     <div class="row">
         <div class="col-sm-10">
-            <h2>Delivery</h2>
+            <h2><img src="/images/delivery.png"> Delivery</h2>
         </div>
     </div>
     <hr>

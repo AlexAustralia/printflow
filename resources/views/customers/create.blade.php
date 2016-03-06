@@ -40,12 +40,12 @@ Create Customer
 
 	<div class="row">
 		<div class="col-sm-10">
-			<h2 style="margin:0">Create Customer</h2>
+			<h2 style="margin:0"><img src="/images/customers.png"> Create Customer</h2>
 		</div>
 		
 		<div class="col-sm-2 pull-right">
-			{!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-			<div class="btn btn-danger" id="cancel">Cancel</div>
+			{!! Form::submit('Save', ['class' => 'btn btn-primary', 'style' => 'margin-top: 30px;']) !!}
+			<div class="btn btn-danger" id="cancel" style="margin-top: 30px;">Cancel</div>
 		</div>
 
 	</div>

@@ -36,7 +36,7 @@
     <div id="customers" class="container-fluid">
         <div class="row">
             <div class="col-sm-10">
-                <h2>Customer History: <small>{{$customer->customer_name}}</small>
+                <h2><img src="/images/history.png"> Customer History: <small>{{$customer->customer_name}}</small>
 
                         <a class="btn btn-default edit" title="Edit {!! ucwords(strtolower($customer->customer_name)) !!}" href="{!! route('customers.edit', ['id' => $customer->id]) !!}"><i class="fa fa-pencil"></i>Edit Customer Details</a>
                     </h2>
