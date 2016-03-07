@@ -34,7 +34,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-10">
-                <h2><img src="/images/products.png"> Products of supplier: <small>{{$supplier->supplier_name}}</small>
+                <h2><img src="/images/supplier_product.png"> Products of supplier: <small>{{$supplier->supplier_name}}</small>
 
                     <a class="btn btn-default edit" title="Edit {!! ucwords(strtolower($supplier->supplier_name)) !!}" href="{!! route('suppliers.edit', ['id' => $supplier->id]) !!}"><i class="fa fa-pencil"></i>Edit Supplier Details</a>
                 </h2>

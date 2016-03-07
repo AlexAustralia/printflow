@@ -105,9 +105,9 @@
     <div class="row">
         <div class="col-sm-10">
             @if(isset($product))
-                <h2 style="margin:0"><img src="/images/edit.png"> Edit Product - {{$product->name}}</h2>
+                <h2 style="margin:0"><img src="/images/edit_product.png"> Edit Product - {{$product->name}}</h2>
             @else
-                <h2 style="margin:0"><img src="/images/customers.png"> Create Product</h2>
+                <h2 style="margin:0"><img src="/images/create_product.png"> Create Product</h2>
             @endif
         </div>
 

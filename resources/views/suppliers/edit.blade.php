@@ -45,7 +45,7 @@
 	<div class="row">
 
 		<div class="col-sm-10">
-			<h2 style="margin:0"><img src="/images/edit.png"> Edit Supplier: <?php echo ucwords(strtolower(! empty($supplier->supplier_name) ? $supplier->supplier_name : '')); ?></h2>
+			<h2 style="margin:0"><img src="/images/edit_supplier.png"> Edit Supplier: <?php echo ucwords(strtolower(! empty($supplier->supplier_name) ? $supplier->supplier_name : '')); ?></h2>
 		</div>
 		
 		<div class="col-sm-2">

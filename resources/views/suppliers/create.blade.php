@@ -48,7 +48,7 @@
 	<div class="row">
 
 		<div class="col-sm-10">
-			<h2 style="margin:0"><img src="/images/customers.png"> Create Supplier</h2>
+			<h2 style="margin:0"><img src="/images/create_supplier.png"> Create Supplier</h2>
 		</div>
 		
 		<div class="col-sm-2 pull-right">
