@@ -296,7 +296,7 @@ class QuotesController extends Controller {
         $error = Session::get('error');
 
         $quote_request = QuoteRequest::Find($qr_id);
-        $qris = $quote_request->qris;
+        $qris = $quote_request->get_quote->qris;
 
         return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message', 'error'));
     }
@@ -308,7 +308,7 @@ class QuotesController extends Controller {
 
         $qr = QuoteRequest::Find($qr_id);
         $customer = $qr->customer;
-        $qris = $qr->qris;
+        $qris = $qr->get_quote->qris;
 
         if($input['submit'] == 'Create PDF')
         {

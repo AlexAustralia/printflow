@@ -78,8 +78,9 @@ Send Customer Quote
         <thead>
         <tr>
             <th width="10%">Quantity</th>
-            <th width="50%">Description</th>
+            <th width="40%">Description</th>
             <th width="10%">Price</th>
+            <th width="10%">Artwork</th>
             <th width="10%">GST</th>
             <th width="10%">Total</th>
             <th width="10%">Unit Price</th>
@@ -89,11 +90,12 @@ Send Customer Quote
         @foreach($qris as $qri)
         <tr>
             <td><input style="width: 100%" type="text" value="{{$qri->quantity}}" readonly></td>
-            <td><input style="width: 100%" type="text" value="{{$qri->description}}" readonly></td>
-            <td><input style="width: 100%" type="text" value="{{$qri->price}}" readonly></td>
+            <td><input style="width: 100%" type="text" value="{{$quote_request->title}}" readonly></td>
+            <td><input style="width: 100%" type="text" value="{{$qri->total_net}}" readonly></td>
+            <td><input style="width: 100%" type="text" value="{{$quote_request->artwork_charge}}" readonly></td>
             <td><input style="width: 100%" type="text" value="{{$qri->gst}}" readonly></td>
-            <td><input style="width: 100%" type="text" value="{{$qri->total}}" readonly></td>
-            <td><input style="width: 100%" type="text" value="{{$qri->unit_price}}" readonly></td>
+            <td><input style="width: 100%" type="text" value="{{$qri->total_inc_gst}}" readonly></td>
+            <td><input style="width: 100%" type="text" value="{{$qri->unit_price_inc_gst}}" readonly></td>
         </tr>
         @endforeach
         </tbody>
