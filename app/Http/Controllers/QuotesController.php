@@ -411,7 +411,7 @@ class QuotesController extends Controller {
         }
 
         if(isset($input['artwork'])) {
-            foreach($input['artwork'] as $line) {
+            foreach($input['artwork'] as $index => $line) {
                 if (isset($line['id'])) {
                     $artwork = ArtworkCharge::find($line['id']);
 
@@ -435,10 +435,65 @@ class QuotesController extends Controller {
                 $artwork->total = $line['total'];
 
                 $artwork->save();
+
+                // Erase ticked files
+                if(isset($line['erase_files'])) {
+                    $file_names_array = is_null($artwork->files) ? [] : unserialize($artwork->files);
+
+                    foreach ($line['erase_files'] as $erase_file_index) {
+                        $path = 'uploads/attachments/' . $file_names_array[$erase_file_index];
+
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
+
+                        unset($file_names_array[$erase_file_index]);
+                    }
+
+                    $artwork->files = serialize($file_names_array);
+                    $artwork->save();
+                }
+
+                // Storing artwork files
+                if (Input::hasFile('files-'.$index))
+                {
+                    $files = Input::file('files-'.$index);
+                    $file_names_array = is_null($artwork->files) ? [] : unserialize($artwork->files);
+
+                    foreach ($files as $file)
+                    {
+                        if ($file->isValid()) {
+                            $filename = $file->getClientOriginalName();
+                            $destination_path = 'uploads/attachments';
+
+                            $file->move($destination_path, $filename);
+
+                            if (!in_array($filename, $file_names_array))
+                                array_push($file_names_array, $filename);
+                        }
+                    }
+
+                    $artwork->files = serialize($file_names_array);
+                    $artwork->save();
+                }
             }
         }
 
         // Delete needed items
+        foreach ($artwork_lines_to_delete as $line){
+            $artwork = ArtworkCharge::find($line);
+
+            $file_names_array = is_null($artwork->files) ? [] : unserialize($artwork->files);
+
+            foreach ($file_names_array as $file) {
+                $path = 'uploads/attachments/' . $file;
+
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
+
         ArtworkCharge::destroy($artwork_lines_to_delete);
 
         $quoute_request->artwork_charge = $input['artwork_charge'];

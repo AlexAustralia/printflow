@@ -11,6 +11,7 @@ return array(
     'AddArtworkChargeToQuoteRequestsTable' => $baseDir . '/database/migrations/2016_03_06_080330_add_artwork_charge_to_quote_requests_table.php',
     'AddArtworkImageToQuoteRequestsTable' => $baseDir . '/database/migrations/2015_12_14_080414_add_artwork_image_to_quote_requests_table.php',
     'AddEmailToSuplliersTable' => $baseDir . '/database/migrations/2016_01_21_050046_add_email_to_suplliers_table.php',
+    'AddFilesToArtworkChargesTable' => $baseDir . '/database/migrations/2016_03_14_041713_add_files_to_artwork_charges_table.php',
     'AddQriIdToQuoteItemsTable' => $baseDir . '/database/migrations/2015_12_08_075721_add_qri_id_to_quote_items_table.php',
     'AddQuoteIdToQuoteRequestsTable' => $baseDir . '/database/migrations/2015_12_07_083208_add_quote_id_to_quote_requests_table.php',
     'AddStagesOfNewJobStatusToJobsTable' => $baseDir . '/database/migrations/2016_01_31_234446_add_stages_of_new_job_status_to_jobs_table.php',

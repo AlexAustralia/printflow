@@ -5,7 +5,10 @@
 
 @section('content')
     <link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
     <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
 
     <div class="modal fade" id="error_supplier" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -34,22 +37,22 @@
         </div>
     @endif
 
-    {!! Form::open(['method' => 'post', 'class' => 'form-horizontal', 'id' => 'artwork_form']) !!}
+    {!! Form::open(['method' => 'post', 'class' => 'form-horizontal', 'id' => 'artwork_form', 'files' => true]) !!}
 
     <button type="button" class="btn btn-primary" id="add_new_row">Add New Artwork Charge</button>
 
     <table class="table col-md-12" id="table">
         <thead>
         <tr>
-            <th width="22%">Description *</th>
-            <th width="20%">Supplier *</th>
+            <th width="19%">Description *</th>
+            <th width="18%">Supplier *</th>
             <th width="8%">Hours</th>
             <th width="8%">Rate</th>
             <th width="9%">Total Cost *</th>
             <th width="9%">Markup % *</th>
             <th width="11%">Markup Amount</th>
             <th width="10%">Total</th>
-            <th width="3%"></th>
+            <th width="8%"></th>
         </tr>
         </thead>
         <tbody>
@@ -70,7 +73,26 @@
             <td><input style="width: 100%" type="text" class="form-control line-markup" name="artwork[{{ $row }}][markup]" value="{{ $artwork->markup }}" required></td>
             <td><input style="width: 100%" type="text" class="form-control line-markup-amount" name="artwork[{{ $row }}][markup_amount]" value="{{ number_format($artwork->markup * $artwork->total_cost / 100, 2) }}" readonly></td>
             <td><input style="width: 100%" type="text" class="form-control line-total-charge" name="artwork[{{ $row }}][total]" value="{{ $artwork->total }}" readonly></td>
-            <td><button class="btn btn-sm btn-danger btn-delete-row pull-right" type="button" data-target="#artwork-{{ $row }}"><span class="fa fa-trash-o"></span></button></td>
+            <td>
+                <button class="btn btn-sm btn-info btn-files" type="button" data-toggle="collapse" data-target="#artwork-files-{{ $row }}"><span class="fa fa-file-text"></span></button>
+                <button class="btn btn-sm btn-danger btn-delete-row pull-right" type="button" data-target="#artwork-{{ $row }}"><span class="fa fa-trash-o"></span></button>
+            </td>
+        </tr>
+        <tr class="artwork-files collapse" id="artwork-files-{{ $row }}">
+            <td colspan="9">
+                <div class="col-xs-6">
+                    {!! Form::file('files-'.$row.'[]', array('multiple' => true)) !!}
+                </div>
+                <div class="col-xs-6">
+                    @foreach(unserialize($artwork->files) as $key => $file)
+                        {!! Form::checkbox('artwork['.$row.'][erase_files]['.$key.']', $key, null) !!}
+                        <a class="artwork_image" target="_blank" href="/uploads/attachments/{{ $file }}">{{ $file }}</a><br>
+                    @endforeach
+                    @if(count(unserialize($artwork->files)) > 0)
+                        <br> Tick to delete
+                    @endif
+                </div>
+            </td>
         </tr>
         @endforeach
         </tbody>
@@ -116,9 +138,18 @@
 
             if(row == 0) add_line();
 
+            //Modify upload button
+            $('input[type=file]').bootstrapFileInput();
+
+            $('.artwork_image').fancybox();
+
             // Deleting a row
             $('#table').on( 'click', '.btn-delete-row', function () {
+                var id = $(this).parents('tr').find('.btn-info').attr('data-target');
+
+                $('#table').find(id).remove();
                 $(this).parents('tr').remove();
+
                 recount_table();
             });
 
@@ -138,7 +169,10 @@
                         <td><input style="width: 100%" type="text" class="form-control line-markup" name="artwork[' + row + '][markup]" required></td>\
                         <td><input style="width: 100%" type="text" class="form-control line-markup-amount" name="artwork[' + row + '][markup_amount]" readonly></td>\
                         <td><input style="width: 100%" type="text" class="form-control line-total-charge" name="artwork[' + row + '][total]" readonly></td>\
-                        <td><button class="btn btn-sm btn-danger btn-delete-row pull-right" type="button" data-target="#artwork-' + row + '"><span class="fa fa-trash-o"></span></button></td></tr>');
+                        <td><button class="btn btn-sm btn-info btn-files" type="button" data-toggle="collapse" data-target="#artwork-files-' + row + '"><span class="fa fa-file-text"></span></button>\
+                        <button class="btn btn-sm btn-danger btn-delete-row pull-right" type="button" data-target="#artwork-' + row + '"><span class="fa fa-trash-o"></span></button></td></tr>\
+                        <tr class="artwork-files collapse" id="artwork-files-' + row + '">\
+                        <td colspan="9"><div class="col-xs-6"><input multiple="1" name="files-' + row + '[]" type="file"></div></td></tr>');
             }
 
             function recount_table() {
