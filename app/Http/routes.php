@@ -70,7 +70,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('products/{id}/edit/{page}', 'ProductsController@edit');
 	Route::post('products/delete', 'ProductsController@delete');
 
-
+	// Users
+	Route::get('users', 'UserController@index');
+	Route::get('users/create', 'UserController@create');
+	Route::get('users/{id}/edit', 'UserController@edit');
+	Route::post('users/save', 'UserController@save');
+	Route::post('users/delete', 'UserController@delete');
 
 
 
