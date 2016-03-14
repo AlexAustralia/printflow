@@ -70,19 +70,6 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('products/{id}/edit/{page}', 'ProductsController@edit');
 	Route::post('products/delete', 'ProductsController@delete');
 
-	// Users
-	Route::get('users', 'UserController@index');
-	Route::get('users/create', 'UserController@create');
-	Route::get('users/{id}/edit', 'UserController@edit');
-	Route::post('users/save', 'UserController@save');
-	Route::post('users/delete', 'UserController@delete');
-
-
-
-	// Not tested routes
-
-
-
 	Route::get('/send_customer_quote/{qrid}', 'QuotesController@get_send_customer_quote');
 	Route::post('/send_customer_quote/{qrid}', 'QuotesController@post_send_customer_quote');
 
@@ -97,16 +84,12 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
 
+Route::group(['middleware' => 'admin'], function() {
 
-
-
-
-
-
-
-
-
-
-
-
-
+	// Users
+	Route::get('users', 'UserController@index');
+	Route::get('users/create', 'UserController@create');
+	Route::get('users/{id}/edit', 'UserController@edit');
+	Route::post('users/save', 'UserController@save');
+	Route::post('users/delete', 'UserController@delete');
+});
