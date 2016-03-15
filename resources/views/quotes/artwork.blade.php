@@ -83,15 +83,17 @@
                 <div class="col-xs-6">
                     {!! Form::file('files-'.$row.'[]', array('multiple' => true)) !!}
                 </div>
-                <div class="col-xs-6">
-                    @foreach(unserialize($artwork->files) as $key => $file)
-                        {!! Form::checkbox('artwork['.$row.'][erase_files]['.$key.']', $key, null) !!}
-                        <a class="artwork_image" target="_blank" href="/uploads/attachments/{{ $file }}">{{ $file }}</a><br>
-                    @endforeach
-                    @if(count(unserialize($artwork->files)) > 0)
-                        <br> Tick to delete
-                    @endif
-                </div>
+                @if(!is_null($artwork->files))
+                    <div class="col-xs-6">
+                        @foreach(unserialize($artwork->files) as $key => $file)
+                            {!! Form::checkbox('artwork['.$row.'][erase_files]['.$key.']', $key, null) !!}
+                            <a class="artwork_image" target="_blank" href="/uploads/attachments/{{ $file }}">{{ $file }}</a><br>
+                        @endforeach
+                        @if(count(unserialize($artwork->files)) > 0)
+                            <br> Tick to delete
+                        @endif
+                    </div>
+                @endif
             </td>
         </tr>
         @endforeach
