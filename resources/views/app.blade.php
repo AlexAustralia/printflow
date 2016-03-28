@@ -165,11 +165,12 @@
     </div>
 
     <div class="btn-group nav" >
-        <a class="btn btn-primary" href="/quote_requests/{!! $quote_request->id !!}/edit">Enter Quote Request</a>
+        <a class="btn btn-primary" href="/quote_requests/{!! $quote_request->id !!}/edit">Quote Request</a>
         <a class="btn btn-primary" href="/choose_suppliers/{!! $quote_request->id !!}">Choose Suppliers</a>
         <a class="btn btn-primary" href="/send_rfq_emails/{!! $quote_request->id !!}">Request Supplier Quotes</a>
 		<a class="btn btn-primary" href="/artwork/{!! $quote_request->id !!}">Artwork</a>
-		<a class="btn btn-primary" href="/enter_prices/{!! $quote_request->id !!}">Enter Supplier Prices</a>
+		<a class="btn btn-primary" href="/freight/{!! $quote_request->id !!}">Freight</a>
+		<a class="btn btn-primary" href="/enter_prices/{!! $quote_request->id !!}">Supplier Prices</a>
         <a class="btn btn-primary" href="/evaluate/{!! $quote_request->id !!}">Evaluate Prices</a>
         <a class="btn btn-primary" href="/send_customer_quote/{!! $quote_request->id !!}">Send Customer Quote</a>
 		<a class="btn btn-primary" href="/job/{!! $quote_request->id !!}/edit">Create Job</a>

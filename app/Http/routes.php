@@ -42,6 +42,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('artwork/{id}', 'QuotesController@get_artwork');
 	Route::post('artwork/{id}', 'QuotesController@post_artwork');
 
+	// Freight page
+	Route::get('freight/{id}', 'QuotesController@get_freight');
+	Route::post('freight/{id}', 'QuotesController@post_freight');
+
 	// Enter Supplier Prices on the Quote Module
 	Route::get('/enter_prices/{qrid}', 'QuotesController@get_enter_prices');
 	Route::get('/enter_prices/{qrid}/{qid}', 'QuotesController@get_enter_prices');

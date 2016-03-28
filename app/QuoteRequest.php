@@ -78,4 +78,9 @@ class QuoteRequest extends Model {
     {
         return $this->hasMany('App\ArtworkCharge');
     }
+
+    public function freight_charges()
+    {
+        return $this->hasMany('App\Freight');
+    }
 }

@@ -20,11 +20,9 @@ Enter Supplier Prices
                 var qty = parseInt($(this).val()) || 1; // Default to 1 not zero, to prevent n/0 problems with bad inputs
                 var buy_price = parseFloat(find('buy_price', index).val()) || 0;
                 var duty = parseFloat(find('duty', index).val())/100 || 0;
-                var freight_cbm = parseInt(find('freight_cbm', index).val()) || 0;
-                find('freight_cbm', index).val(freight_cbm.toFixed(0));
-                var freight_cost = parseFloat(find('freight_cost', index).val()) || 0;
                 var markup = parseFloat(find('markup', index).val())/100 || 0;
                 var artwork = parseFloat(find('artwork', index).val());
+                var freight = parseFloat(find('freight', index).val());
 
                 // Outputs
                 var buy_price_unit = buy_price / qty;
@@ -33,7 +31,7 @@ Enter Supplier Prices
                 var duty_amount = duty * buy_price;
                 find('duty_amount', index).val(duty_amount.toFixed(2));
 
-                var total_buy_cost = buy_price + duty_amount + freight_cost;
+                var total_buy_cost = buy_price + duty_amount;
                 find('total_buy_cost', index).val(total_buy_cost.toFixed(2));
 
                 var markup_amount = buy_price * markup;
@@ -42,10 +40,10 @@ Enter Supplier Prices
                 var total_net = total_buy_cost + markup_amount;
                 find('total_net', index).val(total_net.toFixed(2));
 
-                var gst = (total_net + artwork) * 0.1;
+                var gst = (total_net + artwork + freight) * 0.1;
                 find('gst', index).val(gst.toFixed(2));
 
-                var total_inc_gst = total_net + artwork + gst;
+                var total_inc_gst = total_net + artwork + freight + gst;
                 find('total_inc_gst', index).val(total_inc_gst.toFixed(2));
 
                 var unit_price_inc_gst = total_inc_gst / qty;
@@ -58,8 +56,6 @@ Enter Supplier Prices
         $(function () {
             $('input[name="buy_price[]"]').on('input', updateTotal);
             $('input[name="duty[]"]').on('input', updateTotal);
-            $('input[name="freight_cbm[]"]').on('input', updateTotal);
-            $('input[name="freight_cost[]"]').on('input', updateTotal);
             $('input[name="markup[]"]').on('input', updateTotal);
             updateTotal();
         });
@@ -153,20 +149,6 @@ Enter Supplier Prices
             @endforeach
         </tr>
 
-        <tr>
-            <td>Freight (CBM)</td>
-            @foreach ($quote->quote_items() as $i)
-                <td><input name="freight_cbm[]" value="{!! $i["freight_cbm"] !!}" /></td>
-            @endforeach
-        </tr>
-
-        <tr>
-            <td>Freight Cost</td>
-            @foreach ($quote->quote_items() as $i)
-                <td><input name="freight_cost[]" value="{!! $i["freight_cost"] !!}" /></td>
-            @endforeach
-        </tr>
-
         <tr class="success">
             <td>Total Buy Cost</td>
             @foreach ($quote->quote_items() as $i)
@@ -203,6 +185,13 @@ Enter Supplier Prices
             <td>Artwork Charge</td>
             @foreach ($quote->quote_items() as $i)
                 <td><input name="artwork[]" value="{!! $quote_request->artwork_charge !!}" readonly="readonly" /></td>
+            @endforeach
+        </tr>
+
+        <tr class="success">
+            <td>Freight Charge</td>
+            @foreach ($freight_charge->freight_items as $i)
+                <td><input name="freight[]" value="{!! $i->total !!}" readonly="readonly" /></td>
             @endforeach
         </tr>
 

@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\ArtworkCharge;
+use App\Freight;
+use App\FreightItem;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -147,7 +149,9 @@ class QuotesController extends Controller {
 
         $quote_request_lines = $quote_request->qris;
 
-        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
+        $freight_charge = Freight::find($quote_request->freight_id);
+
+        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines', 'freight_charge'));
     }
 
 
@@ -500,6 +504,158 @@ class QuotesController extends Controller {
 
         $quoute_request->save();
 
-        return redirect('artwork/'.$id)->with('message', 'Artwork charges has been saved successfully');
+        return redirect('artwork/'.$id)->with('message', 'Artwork charges have been saved successfully');
+    }
+
+
+    public function get_freight($id)
+    {
+        $quote_request = QuoteRequest::Find($id);
+        $freights = $quote_request->freight_charges;
+
+        $message = Session::get('message');
+
+        return view('quotes.freight', compact('quote_request', 'freights', 'message'));
+    }
+
+
+    public function post_freight($id)
+    {
+        $input = Input::all();
+
+        $quoute_request = QuoteRequest::find($id);
+        $freight_lines = $quoute_request->freight_charges;
+
+        $freight_lines_to_delete = array();
+
+        foreach($freight_lines as $freight_line) {
+            array_push($freight_lines_to_delete, $freight_line->id);
+        }
+
+        $freight_id_chosen = 0;
+
+        // If Freight data was entered
+        if(isset($input['freight'])) {
+
+            foreach($input['freight'] as $index => $line) {
+
+                if (isset($line['freight_id'])) {
+                    $freight = Freight::find($line['freight_id']);
+
+                    // Delete this item from array for deleting
+                    foreach ($freight_lines_to_delete as $key => $item) {
+                        if ($item == $freight->id) {
+                            unset($freight_lines_to_delete[$key]);
+                        }
+                    }
+                } else {
+                    $freight = new Freight();
+                }
+
+                $freight->quote_request_id = $quoute_request->id;
+                $freight->type = $line['type'];
+
+                $freight->save();
+
+                if (isset($input['freight_id_chosen']) && $input['freight_id_chosen'] == $index) {
+                    $freight_id_chosen = $freight->id;
+                }
+
+                // Save freight items fields
+                foreach($line['qri_id'] as $key => $column) {
+                    if(isset($line['id'])) {
+                        $freight_item = FreightItem::find($line['id'][$key]);
+                    }
+                    else {
+                        $freight_item = new FreightItem();
+                    }
+
+                    $freight_item->freight_id = $freight->id;
+                    $freight_item->qri_id = $line['qri_id'][$key];
+                    $freight_item->supplier_id = $line['supplier_id'][$key];
+                    $freight_item->cbm = isset($line['cbm']) ? $line['cbm'][$key] : null;
+                    $freight_item->cbm_rate = isset($line['cbm_rate']) ? $line['cbm_rate'][$key] : null;
+                    $freight_item->number_items = isset($line['number_items']) ? $line['number_items'][$key] : null;
+                    $freight_item->fixed_cost = isset($line['fixed_cost']) ? $line['fixed_cost'][$key] : null;
+                    $freight_item->total_cost = $line['total_cost'][$key];
+                    $freight_item->markup = $line['markup'][$key];
+                    $freight_item->total = $line['total'][$key];
+
+                    $freight_item->save();
+                }
+
+
+                // Erase ticked files
+                if(isset($line['erase_files'])) {
+                    $file_names_array = is_null($freight->files) ? [] : unserialize($freight->files);
+
+                    foreach ($line['erase_files'] as $erase_file_index) {
+                        $path = 'uploads/attachments/' . $file_names_array[$erase_file_index];
+
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
+
+                        unset($file_names_array[$erase_file_index]);
+                    }
+
+                    $freight->files = serialize($file_names_array);
+                    $freight->save();
+                }
+
+                // Storing freight files
+                if (Input::hasFile('files-'.$index))
+                {
+                    $files = Input::file('files-'.$index);
+                    $file_names_array = is_null($freight->files) ? [] : unserialize($freight->files);
+
+                    foreach ($files as $file)
+                    {
+                        if ($file->isValid()) {
+                            $filename = $file->getClientOriginalName();
+                            $destination_path = 'uploads/attachments';
+
+                            $file->move($destination_path, $filename);
+
+                            if (!in_array($filename, $file_names_array))
+                                array_push($file_names_array, $filename);
+                        }
+                    }
+
+                    $freight->files = serialize($file_names_array);
+                    $freight->save();
+                }
+            }
+        }
+
+        // Delete needed items
+        foreach ($freight_lines_to_delete as $line){
+            $freight = Freight::find($line);
+
+            $file_names_array = is_null($freight->files) ? [] : unserialize($freight->files);
+
+            foreach ($file_names_array as $file) {
+                $path = 'uploads/attachments/' . $file;
+
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+
+            // Delete related freight_items
+            $freight_items = $freight->freight_items;
+
+            foreach($freight_items as $freight_item) {
+                $freight_item->delete();
+            }
+        }
+
+        Freight::destroy($freight_lines_to_delete);
+
+        $quoute_request->freight_id = ($freight_id_chosen > 0) ? $freight_id_chosen : null;
+
+        $quoute_request->save();
+
+        return redirect('freight/'.$id)->with('message', 'Freight charges have been saved successfully');
     }
 }
