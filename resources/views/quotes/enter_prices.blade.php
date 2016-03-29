@@ -190,15 +190,9 @@ Enter Supplier Prices
 
         <tr class="success">
             <td>Freight Charge</td>
-            @if(is_null($freight_charge))
-                @foreach ($quote->quote_items() as $i)
-                    <td><input name="freight[]" value="0.00" readonly="readonly" /></td>
-                @endforeach
-            @else
-                @foreach ($freight_charge->freight_items as $i)
-                    <td><input name="freight[]" value="{!! $i->total !!}" readonly="readonly" /></td>
-                @endforeach
-            @endif
+            @foreach ($quote_request_lines as $i)
+                <td><input name="freight[]" value="{!! $i->freight_charge !!}" readonly="readonly" /></td>
+            @endforeach
         </tr>
 
         <tr class="success">

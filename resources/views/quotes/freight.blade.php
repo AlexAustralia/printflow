@@ -60,7 +60,7 @@
                 <input type="hidden" name="freight[{{ $row }}][type]" value="{{ $freight->type }}">
             </div>
             <div class="col-md-2 col-md-offset-5">
-                <input name="freight_id_chosen" type="radio" value="{{ $row }}" @if($quote_request->freight_id == $freight->id) checked @endif>
+                <input name="freight[{{ $row }}][freight_id_chosen]" type="checkbox" value="{{ $row }}" @if($freight->include_in_quote) checked @endif>
                 <label for="freight_id_chosen" class="control-label">Include In Quote</label>
             </div>
 
@@ -444,7 +444,7 @@
                                 </select>\
                             </div>\
                             <div class="col-md-2 col-md-offset-5">\
-                            <input name="freight_id_chosen" type="radio" value="' + row + '">\
+                            <input name="freight[' + row + '][freight_id_chosen]" type="checkbox" value="' + row + '">\
                             <label for="freight_id_chosen" class="control-label">Include In Quote</label>\
                         </div>\
                         <button class="btn btn-sm btn-danger btn-delete-row pull-right" type="button" data-target="#freight-' + row + '"><span class="fa fa-trash-o"></span></button>\
@@ -482,23 +482,23 @@
                 });
             });
 
-            $('#freight_form').on('change', '.line-cbm-rate', function() {
+            $('#freight_form').on('input', '.line-cbm-rate', function() {
                 var row = $(this).parents('.well').attr('id');
                 row = row.substr(8, row.length - 8);
                 update_total(row);
-            }).on('change', '.line-cbm', function() {
+            }).on('input', '.line-cbm', function() {
                 var row = $(this).parents('.well').attr('id');
                 row = row.substr(8, row.length - 8);
                 update_total(row);
-            }).on('change', '.line-fixed-cost', function() {
+            }).on('input', '.line-fixed-cost', function() {
                 var row = $(this).parents('.well').attr('id');
                 row = row.substr(8, row.length - 8);
                 update_total(row);
-            }).on('change', '.line-markup', function() {
+            }).on('input', '.line-markup', function() {
                 var row = $(this).parents('.well').attr('id');
                 row = row.substr(8, row.length - 8);
                 update_total(row);
-            }).on('change', '.line-total-cost', function() {
+            }).on('input', '.line-total-cost', function() {
                 var row = $(this).parents('.well').attr('id');
                 row = row.substr(8, row.length - 8);
                 update_total(row);

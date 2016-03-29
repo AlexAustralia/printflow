@@ -149,14 +149,7 @@ class QuotesController extends Controller {
 
         $quote_request_lines = $quote_request->qris;
 
-        if (!is_null($quote_request->freight_id)) {
-            $freight_charge = Freight::find($quote_request->freight_id);
-        }
-        else {
-            $freight_charge = null;
-        }
-
-        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines', 'freight_charge'));
+        return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines'));
     }
 
 
@@ -537,7 +530,11 @@ class QuotesController extends Controller {
             array_push($freight_lines_to_delete, $freight_line->id);
         }
 
-        $freight_id_chosen = 0;
+        $freight_charge = [];
+
+        foreach ($quoute_request->qris as $line) {
+            array_push($freight_charge, 0);
+        }
 
         // If Freight data was entered
         if(isset($input['freight'])) {
@@ -560,11 +557,14 @@ class QuotesController extends Controller {
                 $freight->quote_request_id = $quoute_request->id;
                 $freight->type = $line['type'];
 
-                $freight->save();
-
-                if (isset($input['freight_id_chosen']) && $input['freight_id_chosen'] == $index) {
-                    $freight_id_chosen = $freight->id;
+                if (isset($line['freight_id_chosen'])) {
+                    $freight->include_in_quote = true;
                 }
+                else {
+                    $freight->include_in_quote = false;
+                }
+
+                $freight->save();
 
                 // Save freight items fields
                 foreach($line['qri_id'] as $key => $column) {
@@ -587,6 +587,10 @@ class QuotesController extends Controller {
                     $freight_item->total = $line['total'][$key];
 
                     $freight_item->save();
+
+                    if (isset($line['freight_id_chosen'])) {
+                        $freight_charge[$key] += $freight_item->total;
+                    }
                 }
 
 
@@ -633,6 +637,12 @@ class QuotesController extends Controller {
             }
         }
 
+        // Save freight charges
+        foreach ($quoute_request->qris as $key => $line) {
+            $line->freight_charge = $freight_charge[$key];
+            $line->save();
+        }
+
         // Delete needed items
         foreach ($freight_lines_to_delete as $line){
             $freight = Freight::find($line);
@@ -656,10 +666,6 @@ class QuotesController extends Controller {
         }
 
         Freight::destroy($freight_lines_to_delete);
-
-        $quoute_request->freight_id = ($freight_id_chosen > 0) ? $freight_id_chosen : null;
-
-        $quoute_request->save();
 
         return redirect('freight/'.$id)->with('message', 'Freight charges have been saved successfully');
     }
