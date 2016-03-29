@@ -182,14 +182,14 @@ Enter Supplier Prices
         </tr>
 
         <tr class="success">
-            <td>Artwork Charge</td>
+            <td><a href="{{ URL::to('/artwork/'.$quote_request->id) }}">Artwork Charge</a></td>
             @foreach ($quote->quote_items() as $i)
                 <td><input name="artwork[]" value="{!! $quote_request->artwork_charge !!}" readonly="readonly" /></td>
             @endforeach
         </tr>
 
         <tr class="success">
-            <td>Freight Charge</td>
+            <td><a href="{{ URL::to('/freight/'.$quote_request->id) }}">Freight Charge</td>
             @foreach ($quote_request_lines as $i)
                 <td><input name="freight[]" value="{!! $i->freight_charge !!}" readonly="readonly" /></td>
             @endforeach

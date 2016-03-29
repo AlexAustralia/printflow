@@ -126,7 +126,7 @@
                     @endforeach
                 </tr>
 
-                <tr class="success">
+                <tr class="warning">
                     <td>Total CBM Charge</td>
                     @foreach ($freight->freight_items as $line)
                         <td>
@@ -144,7 +144,7 @@
                     @endforeach
                 </tr>
 
-                <tr class="success">
+                <tr class="warning">
                     <td>Total Sea Freight Cost</td>
                     @foreach ($freight->freight_items as $line)
                         <td>
@@ -162,7 +162,7 @@
                     @endforeach
                 </tr>
 
-                <tr class="success">
+                <tr class="warning">
                     <td>Markup Amount</td>
                     @foreach ($freight->freight_items as $line)
                         <td>
@@ -171,7 +171,7 @@
                     @endforeach
                 </tr>
 
-                <tr class="success">
+                <tr class="warning">
                     <td>Total</td>
                     @foreach ($freight->freight_items as $line)
                         <td>
@@ -220,7 +220,7 @@
                     @endforeach
                 </tr>
 
-                <tr class="success">
+                <tr class="warning">
                     <td>Markup Amount</td>
                     @foreach ($freight->freight_items as $line)
                         <td>
@@ -229,7 +229,7 @@
                     @endforeach
                 </tr>
 
-                <tr class="success">
+                <tr class="warning">
                     <td>Total</td>
                     @foreach ($freight->freight_items as $line)
                         <td>
@@ -351,7 +351,7 @@
                             </td>\
                         @endforeach
                         </tr>\
-                        <tr class="success">\
+                        <tr class="warning">\
                         <td>Total CBM Charge</td>\
                         @foreach ($quote_request->qris as $qri)
                             <td>\
@@ -367,7 +367,7 @@
                             </td>\
                         @endforeach
                         </tr>\
-                        <tr class="success">\
+                        <tr class="warning">\
                         <td>Total Sea Freight Cost</td>\
                         @foreach ($quote_request->qris as $qri)
                             <td>\
@@ -383,7 +383,7 @@
                             </td>\
                         @endforeach
                         </tr>\
-                        <tr class="success">\
+                        <tr class="warning">\
                         <td>Markup Amount</td>\
                         @foreach ($quote_request->qris as $qri)
                             <td>\
@@ -391,7 +391,7 @@
                             </td>\
                         @endforeach
                         </tr>\
-                        <tr class="success">\
+                        <tr class="warning">\
                         <td>Total</td>\
                         @foreach ($quote_request->qris as $qri)
                             <td>\
@@ -436,7 +436,7 @@
                             </td>\
                         @endforeach
                         </tr>\
-                        <tr class="success">\
+                        <tr class="warning">\
                         <td>Markup Amount</td>\
                         @foreach ($quote_request->qris as $qri)
                             <td>\
@@ -444,7 +444,7 @@
                             </td>\
                         @endforeach
                         </tr>\
-                        <tr class="success">\
+                        <tr class="warning">\
                         <td>Total</td>\
                         @foreach ($quote_request->qris as $qri)
                             <td>\
