@@ -27,6 +27,24 @@
         </div>
     </div>
 
+    <div class="modal fade" id="delete_line" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this freight line?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="confirm">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (isset($message))
         <div class="alert alert-success alert-block">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -263,6 +281,7 @@
         $(document).ready(function(){
 
             var row = {{ $row }};
+            var row_to_delete;
 
             if(row == 0) {
                 add_line();
@@ -279,7 +298,13 @@
 
             // Deleting a freight charge
             $('#freight_form').on( 'click', '.btn-delete-row', function () {
-                $(this).parents('.well').remove();
+                row_to_delete = this;
+                $('#delete_line').modal('show');
+            });
+
+            $('#confirm').on('click', function() {
+                $(row_to_delete).parents('.well').remove();
+                $('#delete_line').modal('hide');
             });
 
             // Add a new freight charge
