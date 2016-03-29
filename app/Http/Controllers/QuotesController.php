@@ -149,7 +149,12 @@ class QuotesController extends Controller {
 
         $quote_request_lines = $quote_request->qris;
 
-        $freight_charge = Freight::find($quote_request->freight_id);
+        if (!is_null($quote_request->freight_id)) {
+            $freight_charge = Freight::find($quote_request->freight_id);
+        }
+        else {
+            $freight_charge = null;
+        }
 
         return view('quotes.enter_prices', compact('quote_request', 'quote', 'quote_request_lines', 'freight_charge'));
     }
