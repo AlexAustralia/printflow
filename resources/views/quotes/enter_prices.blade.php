@@ -34,7 +34,7 @@ Enter Supplier Prices
                 var total_buy_cost = buy_price + duty_amount;
                 find('total_buy_cost', index).val(total_buy_cost.toFixed(2));
 
-                var markup_amount = buy_price * markup;
+                var markup_amount = total_buy_cost * markup;
                 find('markup_amount', index).val(markup_amount.toFixed(2));
 
                 var total_net = total_buy_cost + markup_amount;
