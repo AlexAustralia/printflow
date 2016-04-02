@@ -52,7 +52,7 @@
     </div>
 
     <div id="summary" style="position:absolute;top:350px;left:0px;width:700px;">
-        {{{ $qr->summary }}}
+        {!! nl2br($qr->summary) !!}
     </div>
 
     <div id="quote_details" style="position:absolute;top:550px;left:0px;width:700px;">
