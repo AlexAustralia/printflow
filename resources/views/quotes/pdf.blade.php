@@ -84,9 +84,7 @@
                 <th style="text-align: left;border-bottom: solid 1px;">Terms</th>
             </tr>
             <tr>
-                <td>Price is valid for 7 days from date of quotation and is subject to viewing files. Price is subject to no heavy fluctuations in currency or material cost.
-                Adjustments in price would only be made if material costs increase by over 3% between date of quotation and final materials being ordered.
-                    <br>70% deposit required on acceptance of quote. Balance invoiced upon delivery of order.</td>
+                <td>{!! nl2br($qr->terms) !!}</td>
             </tr>
         </table>
     </div>

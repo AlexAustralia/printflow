@@ -67,9 +67,14 @@ Send Customer Quote
 </div>
 
 <div class="form-group">
-    <div class="col-md-12">
+    <div class="col-md-6">
         {!! Form::label('summary', 'Summary', array('class' => 'control-label')) !!}
         {!! Form::textarea('summary', $quote_request->summary, array('rows' => '4', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+    </div>
+
+    <div class="col-md-6">
+        {!! Form::label('terms', 'Terms', array('class' => 'control-label')) !!}
+        {!! Form::textarea('terms', $quote_request->terms, array('rows' => '4', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
     </div>
 </div>
 

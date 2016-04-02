@@ -298,7 +298,7 @@ class QuotesController extends Controller {
         $error = Session::get('error');
 
         $quote_request = QuoteRequest::Find($qr_id);
-        $qris = $quote_request->get_quote->qris;
+        $qris = count($quote_request->get_quote) > 0 ? $quote_request->get_quote->qris : [];
 
         return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message', 'error'));
     }
