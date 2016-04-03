@@ -65,12 +65,12 @@
                 <th width="50px" style="text-align: left;border-bottom: solid 2px;">GST Amount</th>
                 <th width="50px" style="text-align: left;border-bottom: solid 2px;">TOTAL AUD</th>
             </tr>
-            @foreach($qris as $qri)
+            @foreach($qris as $key => $qri)
             <tr style="border-bottom: solid 1px;">
                 <td style="border-bottom: solid 1px;">{{$qr->title}}</td>
                 <td style="border-bottom: solid 1px;">{{$qri->quantity}}</td>
                 <td style="border-bottom: solid 1px;">{{$qr->artwork_charge}}</td>
-                <td style="border-bottom: solid 1px;">{{$qri->total_net}}</td>
+                <td style="border-bottom: solid 1px;">{{$qri->total_net + $qr->qris[$key]->freight_charge}}</td>
                 <td style="border-bottom: solid 1px;">{{$qri->gst}}</td>
                 <td style="border-bottom: solid 1px;">{{$qri->total_inc_gst}}</td>
             </tr>
@@ -79,7 +79,7 @@
     </div>
 
     <div id="terms" style="position:absolute;top:800px;left:0px;width:700px;">
-        <table width="100%" cellspacing="0" cellpadding="10">
+            <table width="100%" cellspacing="0" cellpadding="10">
             <tr>
                 <th style="text-align: left;border-bottom: solid 1px;">Terms</th>
             </tr>

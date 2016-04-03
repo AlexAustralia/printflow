@@ -92,11 +92,11 @@ Send Customer Quote
         </tr>
         </thead>
         <tbody>
-        @foreach($qris as $qri)
+        @foreach($qris as $key => $qri)
         <tr>
             <td><input style="width: 100%" type="text" value="{{$qri->quantity}}" readonly></td>
             <td><input style="width: 100%" type="text" value="{{$quote_request->title}}" readonly></td>
-            <td><input style="width: 100%" type="text" value="{{$qri->total_net}}" readonly></td>
+            <td><input style="width: 100%" type="text" value="{{$qri->total_net + $quote_request->qris[$key]->freight_charge}}" readonly></td>
             <td><input style="width: 100%" type="text" value="{{$quote_request->artwork_charge}}" readonly></td>
             <td><input style="width: 100%" type="text" value="{{$qri->gst}}" readonly></td>
             <td><input style="width: 100%" type="text" value="{{$qri->total_inc_gst}}" readonly></td>
