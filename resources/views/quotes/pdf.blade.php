@@ -19,7 +19,6 @@
     <div style="font-size: 28px; position: relative; top:10px;">QUOTE</div>
 
     <div id="client_address" style="position:relative;top:25px;left:100px;width:200px;">
-        {{$customer->customer_name}}<br>
         Attention: {{$customer->postal_attention}}<br>
         {{$customer->customer_name}}<br>
         {{$customer->postal_street}}<br>
@@ -58,21 +57,25 @@
     <div id="quote_details" style="position:absolute;top:550px;left:0px;width:700px;">
         <table width="100%" cellspacing="0" cellpadding="10">
             <tr style="border-bottom: solid 3px;">
-                <th width="280px" style="text-align: left;border-bottom: solid 2px;">Description</th>
+                <th width="170px" style="text-align: left;border-bottom: solid 2px;">Description</th>
                 <th width="50px" style="text-align: left;border-bottom: solid 2px;">Quantity</th>
                 <th width="50px" style="text-align: left;border-bottom: solid 2px;">Artwork</th>
+                <th width="50px" style="text-align: left;border-bottom: solid 2px;">Print</th>
                 <th width="50px" style="text-align: left;border-bottom: solid 2px;">Net Price</th>
-                <th width="50px" style="text-align: left;border-bottom: solid 2px;">GST Amount</th>
-                <th width="50px" style="text-align: left;border-bottom: solid 2px;">TOTAL AUD</th>
+                <th width="50px" style="text-align: left;border-bottom: solid 2px;">GST</th>
+                <th width="50px" style="text-align: left;border-bottom: solid 2px;">TOTAL</th>
+                <th width="60px" style="text-align: left;border-bottom: solid 2px;">Unit Price</th>
             </tr>
             @foreach($qris as $key => $qri)
             <tr style="border-bottom: solid 1px;">
                 <td style="border-bottom: solid 1px;">{{$qr->title}}</td>
                 <td style="border-bottom: solid 1px;">{{$qri->quantity}}</td>
-                <td style="border-bottom: solid 1px;">{{$qr->artwork_charge}}</td>
-                <td style="border-bottom: solid 1px;">{{$qri->total_net + $qr->qris[$key]->freight_charge}}</td>
-                <td style="border-bottom: solid 1px;">{{$qri->gst}}</td>
-                <td style="border-bottom: solid 1px;">{{$qri->total_inc_gst}}</td>
+                <td style="border-bottom: solid 1px;">${{$qr->artwork_charge}}</td>
+                <td style="border-bottom: solid 1px;">${{$qri->total_net}}</td>
+                <td style="border-bottom: solid 1px;">${{$qri->total_net + $qr->artwork_charge}}</td>
+                <td style="border-bottom: solid 1px;">${{$qri->gst}}</td>
+                <td style="border-bottom: solid 1px;">${{$qri->total_inc_gst}}</td>
+                <td style="border-bottom: solid 1px;">${{$qri->unit_price_inc_gst}}</td>
             </tr>
             @endforeach
         </table>
