@@ -72,6 +72,8 @@ class CustomersController extends Controller {
 			}
 		}
 
+		$this->push_to_xero($result->id);
+
         //redirect after successful save to customers.edit
 	    return redirect()->route('customers.edit', $result->id)->with('message', 'Customer created!')->withInput();
 
@@ -165,6 +167,8 @@ class CustomersController extends Controller {
 
         Debugbar::addMessage(Input::all(), 'input');
 
+		$this->push_to_xero($id);
+
         return redirect()->route('customers.edit', compact('customer'))->with(['message' => 'Customer updated successfully!', 'action' => $customer])->withInput();
 	}
 
@@ -241,6 +245,248 @@ class CustomersController extends Controller {
 		}
 
 		return view('customers.history', compact('customer', 'array', 'message'));
+	}
+
+	private function push_to_xero($id)
+	{
+		// Get data for sending customer details
+		$customer = Customer::find($id);
+		$contacts = $customer->customer_contacts;
+
+		$contactsXML = '<ContactPersons>';
+
+		foreach($contacts as $contact) {
+			$contactsXML .= '<ContactPerson>
+							 <FirstName>'.$contact->first_name.'</FirstName>
+							 <LastName>'.$contact->last_name.'</LastName>
+							 <EmailAddress>'.$contact->email.'</EmailAddress>
+							 </ContactPerson>';
+		}
+		$contactsXML .= '</ContactPersons>';
+
+		if(count($contacts) > 0) {
+			$first_name = $contacts[0]->first_name;
+			$last_name = $contacts[0]->last_name;
+			$email = $contacts[0]->email;
+		}
+		else
+		{
+			$first_name = '';
+			$last_name = '';
+			$email = '';
+		}
+
+		define('BASE_PATH', $_SERVER['DOCUMENT_ROOT']);
+		define ( "XRO_APP_TYPE", "Private" );
+		define ( "OAUTH_CALLBACK", 'http://printflow.local:8000/' );
+
+		/* For Demo-Company
+        define ( "OAUTH_CALLBACK", 'http://printflow.local:8000/' );
+        $useragent = "Demo-Printflow";
+
+        $signatures = array (
+            'consumer_key'     => 'NLOXKOEM8QUFCW9XCKWH7DQMARCWUW',
+            'shared_secret'    => 'YEACQD0QQ2R5X1YCBFV6LZKMMLIYRT',
+            // API versions
+            'core_version' => '2.0',
+            'payroll_version' => '1.0'
+        );
+        */
+
+		$useragent = env('USER_AGENT');
+
+		$signatures = array (
+			'consumer_key'     => env('XERO_KEY'),
+			'shared_secret'    => env('XERO_SECRET'),
+			// API versions
+			'core_version' => '2.0',
+			'payroll_version' => '1.0'
+		);
+
+		if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Partner") {
+			$signatures ['rsa_private_key'] = BASE_PATH . '/certs/privatekey.pem';
+			$signatures ['rsa_public_key'] = BASE_PATH . '/certs/publickey.cer';
+		}
+
+		$XeroOAuth = new \XeroOAuth(array_merge(array('application_type' => XRO_APP_TYPE, 'oauth_callback' => OAUTH_CALLBACK,
+			'user_agent' => $useragent), $signatures));
+
+		$initialCheck = $XeroOAuth->diagnostics();
+		$checkErrors = count($initialCheck);
+		if ($checkErrors > 0)
+		{
+			// you could handle any config errors here, or keep on truckin if you like to live dangerously
+			foreach($initialCheck as $check) {
+				echo 'Error: ' . $check . PHP_EOL;
+			}
+		}
+		else
+		{
+			$session = $this->persistSession(array(
+				'oauth_token' => $XeroOAuth->config['consumer_key'],
+				'oauth_token_secret' => $XeroOAuth->config['shared_secret'],
+				'oauth_session_handle' => ''
+			));
+			$oauthSession = $this->retrieveSession();
+
+			if (isset ($oauthSession['oauth_token'])) {
+				$XeroOAuth->config['access_token'] = $oauthSession['oauth_token'];
+				$XeroOAuth->config['access_token_secret'] = $oauthSession['oauth_token_secret'];
+
+				if (isset($_REQUEST)) {
+					if(!isset($_REQUEST['where'])) $_REQUEST['where'] = "";
+				}
+
+				if (isset($_REQUEST['wipe'])) {
+					session_destroy();
+					header("Location: {$here}");
+
+					// already got some credentials stored?
+				} elseif (isset($_REQUEST['refresh'])) {
+					$response = $XeroOAuth->refreshToken($oauthSession['oauth_token'], $oauthSession['oauth_session_handle']);
+					if ($XeroOAuth->response['code'] == 200) {
+						$session = $this->persistSession($response);
+						$oauthSession = $this->retrieveSession();
+					} else {
+						$this->outputError($XeroOAuth);
+						if ($XeroOAuth->response['helper'] == "TokenExpired") $XeroOAuth->refreshToken($oauthSession['oauth_token'], $oauthSession['session_handle']);
+					}
+
+					} elseif (isset($oauthSession['oauth_token']) && isset($_REQUEST)) {
+
+					$XeroOAuth->config['access_token'] = $oauthSession['oauth_token'];
+					$XeroOAuth->config['access_token_secret'] = $oauthSession['oauth_token_secret'];
+					$XeroOAuth->config['session_handle'] = $oauthSession['oauth_session_handle'];
+
+					$xml = '<Contacts>
+							 <Contact>
+							   <Name>'.$customer->customer_name.'</Name>
+							   <FirstName>'.$first_name.'</FirstName>
+							   <LastName>'.$last_name.'</LastName>
+							   <EmailAddress>'.$email.'</EmailAddress>
+							   <Addresses>
+									<Address>
+										<AddressType>POBOX</AddressType>
+										<AttentionTo>'.$customer->postal_attention.'</AttentionTo>
+										<AddressLine1>'.$customer->customer_name.'</AddressLine1>
+										<AddressLine2>'.$customer->postal_street.'</AddressLine2>
+										<AddressLine3> </AddressLine3>
+										<AddressLine4> </AddressLine4>
+										<City>'.$customer->postal_city.'</City>
+										<Region>'.$customer->postal_state.'</Region>
+										<PostalCode>'.$customer->postal_postcode.'</PostalCode>
+										<Country>'.$customer->postal_country.'</Country>
+									</Address>
+									<Address>
+										<AddressType>STREET</AddressType>
+										<AttentionTo>'.$customer->postal_attention.'</AttentionTo>
+										<AddressLine1>'.$customer->customer_name.'</AddressLine1>
+										<AddressLine2>'.$customer->postal_street.'</AddressLine2>
+										<AddressLine3> </AddressLine3>
+										<AddressLine4> </AddressLine4>
+										<City>'.$customer->postal_city.'</City>
+										<Region>'.$customer->postal_state.'</Region>
+										<PostalCode>'.$customer->postal_postcode.'</PostalCode>
+										<Country>'.$customer->postal_country.'</Country>
+									</Address>
+							   </Addresses>
+							   <Phones>
+									<Phone>
+										<PhoneType>DEFAULT</PhoneType>
+										<PhoneNumber>'.$customer->tel_number.'</PhoneNumber>
+										<PhoneAreaCode>'.$customer->tel_area.'</PhoneAreaCode>
+										<PhoneCountryCode>'.$customer->tel_country.'</PhoneCountryCode>
+									</Phone>
+									<Phone>
+										<PhoneType>MOBILE</PhoneType>
+										<PhoneNumber>'.$customer->mobile_number.'</PhoneNumber>
+										<PhoneAreaCode>'.$customer->mobile_area.'</PhoneAreaCode>
+										<PhoneCountryCode>'.$customer->mobile_country.'</PhoneCountryCode>
+									</Phone>
+							   </Phones>
+							   <Website>'.$customer->web_address.'</Website>
+							 <IsCustomer>true</IsCustomer>
+							   '.$contactsXML.'
+							 </Contact>
+						   </Contacts>';
+
+					$response = $XeroOAuth->request('POST', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
+					if ($XeroOAuth->response['code'] == 200)
+					{
+						return 'OK';
+
+					} else {
+						$this->outputError($XeroOAuth);
+						return 'ERROR';
+					}
+				}
+			}
+		}
+
+		return 'ERROR';
+	}
+
+	/**
+	 * Persist the OAuth access token and session handle
+	 */
+	function persistSession($response)
+	{
+		if (isset($response)) {
+			$_SESSION['access_token']       = $response['oauth_token'];
+			$_SESSION['oauth_token_secret'] = $response['oauth_token_secret'];
+			if(isset($response['oauth_session_handle']))  $_SESSION['session_handle']     = $response['oauth_session_handle'];
+		} else {
+			return false;
+		}
+
+	}
+
+
+	/**
+	 * Retrieve the OAuth access token and session handle
+	 */
+	private function retrieveSession()
+	{
+		if (isset($_SESSION['access_token'])) {
+			$response['oauth_token']            =    $_SESSION['access_token'];
+			$response['oauth_token_secret']     =    $_SESSION['oauth_token_secret'];
+			$response['oauth_session_handle']   =    $_SESSION['session_handle'];
+			return $response;
+		} else {
+			return false;
+		}
+
+	}
+
+	private function outputError($XeroOAuth)
+	{
+		//echo $customerName;
+		echo 'Error: ' . $XeroOAuth->response['response'] . PHP_EOL;
+		$this->pr($XeroOAuth);
+	}
+
+	/**
+	 * Debug function for printing the content of an object
+	 *
+	 * @param mixes $obj
+	 */
+	private function pr($obj)
+	{
+		if (!$this->is_cli())
+			echo '<pre style="word-wrap: break-word">';
+		if (is_object($obj))
+			print_r($obj);
+		elseif (is_array($obj))
+			print_r($obj);
+		else
+			echo $obj;
+		if (!$this->is_cli())
+			echo '</pre>';
+	}
+
+	private function is_cli()
+	{
+		return (PHP_SAPI == 'cli' && empty($_SERVER['REMOTE_ADDR']));
 	}
 
 }
