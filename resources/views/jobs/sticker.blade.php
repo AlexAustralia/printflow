@@ -28,7 +28,7 @@
 </div>
 
 <div style="position:absolute;top:185px;font-size:25px;">
-    Carton  Quantity: {{$input['items']}}<br>&nbsp;<br>
+    Carton  Quantity: @if(isset($input['number'])) {{$qtys[$i - 1]}} @else {{$input['items']}} @endif<br>&nbsp;<br>
     Carton {{$i}} of {{$input['cartons']}}
 </div>
 @if($i < $input['cartons'])

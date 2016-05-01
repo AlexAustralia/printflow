@@ -77,8 +77,6 @@ class JobsController extends Controller
         // Validate form
         $this->validate($request, [
             'delivery_date' => 'required',
-            'cartons' => 'required|numeric',
-            'items' => 'required|numeric',
             'delivery_address' => 'required'
         ]);
 
@@ -89,10 +87,11 @@ class JobsController extends Controller
         $delivery_address = CustomerAddress::find($input['delivery_address']);
 
         // Create PDF
+        $qtys = isset($input['number']) ? $input['number'] : '';
         if($input['value'] == 'sticker')
         {
             // Form Sticker
-            $html = view('jobs.sticker', compact('input', 'quote', 'delivery_address'));
+            $html = view('jobs.sticker', compact('input', 'quote', 'delivery_address', 'qtys'));
             $dompdf = PDF::loadHTML($html)->setPaper(array(0,0,422.37,283.49));
             //return $dompdf->stream();
             return $dompdf->download('sticker-'.$quote->id.'.pdf');
@@ -100,10 +99,11 @@ class JobsController extends Controller
         else
         {
             // Form Docket
-            $html = view('jobs.docket', compact('input', 'quote', 'delivery_address'));
+            $html = view('jobs.docket', compact('input', 'quote', 'delivery_address', 'qtys'));
             $dompdf = PDF::loadHTML($html);
             //return $dompdf->stream();
-            return $dompdf->download('docket-'.$quote->id.'.pdf');
+            $dompdf->save('../public/delivery/docket-'.$quote->id.'.pdf');
+            return redirect('/job/'.$input['job_id'].'/delivery');
         }
     }
 }

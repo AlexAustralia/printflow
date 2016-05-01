@@ -50,7 +50,12 @@ class CustomerAddressesController extends Controller {
 
 		$input = Input::all();
 
-		$customer_address = CustomerAddress::create($input);
+		if (isset($input['id'])) {
+			$customer_address = CustomerAddress::find($input['id']);
+			$customer_address->update($input);
+		} else {
+			$customer_address = CustomerAddress::create($input);
+		}
 
 		if($input['job'] != 0)
 		{
@@ -79,9 +84,12 @@ class CustomerAddressesController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(CustomerAddress $add)
+	public function edit($id, $job)
 	{
-		//
+		$customer_address = CustomerAddress::find($id);
+		$customer = $customer_address->customer_name;
+
+		return view('customer_addresses.edit', compact('customer', 'job', 'customer_address'));
 	}
 
 	/**

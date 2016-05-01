@@ -15,4 +15,8 @@ class CustomerAddress extends Model {
         'notes'
     );
 
+    public function customer_name()
+    {
+        return $this->hasOne('App\Customer', 'id', 'customer_id');
+    }
 }

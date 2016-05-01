@@ -16,6 +16,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('customer/{id}/create_address/{job}', 'CustomerAddressesController@create');
 	Route::get('customer/{id}/create_address', 'CustomerAddressesController@create');
 	Route::post('customer_address/save', 'CustomerAddressesController@store');
+	Route::get('customer/edit_address/{id}/{job}', 'CustomerAddressesController@edit');
 
     // Route::resource('customer_contacts', 'CustomerContactsController');
 
