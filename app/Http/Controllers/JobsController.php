@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CustomerAddress;
 use App\Job;
 use App\QuoteRequest;
+use Illuminate\Support\Collection;
 use PDF;
 use Illuminate\Http\Request;
 
@@ -99,7 +100,21 @@ class JobsController extends Controller
         else
         {
             // Form Docket
-            $html = view('jobs.docket', compact('input', 'quote', 'delivery_address', 'qtys'));
+            if (isset($input['number'])) {
+                $collection = Collection::make($input['number']);
+                $numbers = $collection->flip()->map(function() {
+                        return 0;
+                });
+
+                foreach ($collection as $item) {
+                    $numbers[$item] += 1;
+                }
+
+                $html = view('jobs.docket', compact('input', 'quote', 'delivery_address', 'qtys', 'numbers'));
+            } else {
+                $html = view('jobs.docket', compact('input', 'quote', 'delivery_address', 'qtys'));
+            }
+
             $dompdf = PDF::loadHTML($html);
             //return $dompdf->stream();
             $dompdf->save('../public/delivery/docket-'.$quote->id.'.pdf');
