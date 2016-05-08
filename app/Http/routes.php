@@ -65,6 +65,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('job/{id}/save', 'JobsController@save');
 	Route::get('job/{id}/delivery', 'JobsController@delivery_get');
 	Route::post('job/delivery', 'JobsController@delivery_post');
+	Route::get('job/delivery/docket/{id}', 'JobsController@show_docket');
+	Route::get('job/delivery/sticker/{id}', 'JobsController@show_sticker');
 
 	// Products Library
 	Route::get('products', 'ProductsController@index');

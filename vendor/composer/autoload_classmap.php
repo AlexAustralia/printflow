@@ -36,6 +36,7 @@ return array(
     'CreateCustomerAddressesTable' => $baseDir . '/database/migrations/2015_04_22_144224_create_customer_addresses_table.php',
     'CreateCustomerContactsTable' => $baseDir . '/database/migrations/2015_04_22_144359_create_customer_contacts_table.php',
     'CreateCustomersTable' => $baseDir . '/database/migrations/2015_04_22_144223_create_customers_table.php',
+    'CreateDeliveryHistoriesTable' => $baseDir . '/database/migrations/2016_05_09_044443_create_delivery_histories_table.php',
     'CreateFreightItemsTable' => $baseDir . '/database/migrations/2016_03_27_071526_create_freight_items_table.php',
     'CreateFreightsTable' => $baseDir . '/database/migrations/2016_03_27_070605_create_freights_table.php',
     'CreateJobsTable' => $baseDir . '/database/migrations/2016_01_17_052310_create_jobs_table.php',

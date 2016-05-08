@@ -61,18 +61,6 @@
                 location.href="{{URL::to('/')}}"
             });
 
-            // Sticker button
-            $('#sticker').on('click', function() {
-                $('#act').append('<input type="hidden" name="value" value="sticker">');
-                $('#delivery_form').submit();
-            });
-
-            // Docket button
-            $('#docket').on('click', function() {
-                $('#act').append('<input type="hidden" name="value" value="docket">');
-                $('#delivery_form').submit();
-            });
-
             // Edit button
             $('#edit').on('click', function() {
                 var id = $('#delivery_address').val();
@@ -170,6 +158,20 @@
             $('#page-2').on('click', '.btn-delete-row', function() {
                 $(this).parents('.lines').remove();
             })
+
+            $('#delivery-button').on('click', function() {
+                $('#history-page').hide();
+                $('#delivery-page').show();
+                $('#delivery-button').attr('disabled', true);
+                $('#history-button').removeAttr('disabled');
+            });
+
+            $('#history-button').on('click', function() {
+                $('#delivery-page').hide();
+                $('#history-page').show();
+                $('#history-button').attr('disabled', true);
+                $('#delivery-button').removeAttr('disabled');
+            });
         });
     </script>
 
@@ -207,198 +209,225 @@
         </div>
     @endif
 
-    {!! Form::open(array('url' => 'job/delivery', 'method' => 'post', 'id' => 'delivery_form', 'class' => 'form-horizontal')) !!}
-    {!! Form::hidden('job_id', $quote->id) !!}
+    <div class="btn-group nav" >
+        <a class="btn btn-primary" id="delivery-button" href="javascript:;" @if($page == 'delivery') disabled @endif>Delivery</a>
+        <a class="btn btn-primary" id="history-button" href="javascript:;" @if($page == 'history') disabled @endif>History</a>
+    </div>
+    <p style="clear:both; margin-bottom:40px;"></p>
 
-    <div id="page-1">
-        <div class="row">
-            <div class="form-group col-md-12">
-                {!! Form::label('customer', 'Customer', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-6">
-                    {!! Form::text('customer', $quote->customer->customer_name, array('id' => 'customer', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+    <div id="delivery-page" @if($page != 'delivery') style="display: none;" @endif>
+        {!! Form::open(array('url' => 'job/delivery', 'method' => 'post', 'id' => 'delivery_form', 'class' => 'form-horizontal')) !!}
+        {!! Form::hidden('job_id', $quote->id) !!}
+
+        <div id="page-1">
+            <div class="row">
+                <div class="form-group col-md-12">
+                    {!! Form::label('customer', 'Customer', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-6">
+                        {!! Form::text('customer', $quote->customer->customer_name, array('id' => 'customer', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    {!! Form::label('job_title', 'Job Name', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-6">
+                        {!! Form::text('job_title', $quote->title, array('id' => 'job_title', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    {!! Form::label('job_qty', 'Job Quantity', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-2">
+                        {!! Form::text('job_qty', $quote->job->job_item->quantity, array('id' => 'job_qty', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group col-md-12">
-                {!! Form::label('job_title', 'Job Name', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-6">
-                    {!! Form::text('job_title', $quote->title, array('id' => 'job_title', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+            <hr>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    {!! Form::label('delivery_date', 'Delivery Date *', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-2">
+                        {!! Form::text('delivery_date', null, array('id' => 'delivery_date', 'class' => 'form-control')) !!}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    {!! Form::label('qty_deliver', 'Quantity to be Delivered', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-2">
+                        {!! Form::text('qty_deliver', null, array('id' => 'qty_deliver', 'class' => 'form-control')) !!}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    {!! Form::label('delivery_address', 'Delivery Address *', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-6">
+                        <select id="delivery_address" name="delivery_address" class="form-control">
+                            @foreach ($delivery_addresses as $delivery_address)
+                                <option value="{{ $delivery_address->id }}">
+                                    {{ $delivery_address->name }} {{ $delivery_address->address }} {{ $delivery_address->city }}, {{ $delivery_address->state }} {{ $delivery_address->postcode }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-warning" id="edit">Edit</button>
+                    <a href="/customer/{{ $quote->customer->id }}/create_address/{{$quote->id}}" type="button" class="btn btn-primary">Create New</a>
                 </div>
             </div>
 
-            <div class="form-group col-md-12">
-                {!! Form::label('job_qty', 'Job Quantity', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-2">
-                    {!! Form::text('job_qty', $quote->job->job_item->quantity, array('id' => 'job_qty', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
-                </div>
+            <hr>
+
+            <div class="pull-right">
+                <button type="button" class="btn btn-danger cancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="go-to-page2">Next</button>
             </div>
         </div>
 
-        <hr>
+        <div id="page-2" style="display: none;">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 style="font-weight: bold; margin-bottom: 20px;">If Quantities Are Equal:</h4>
+                </div>
 
-        <div class="row">
-            <div class="form-group col-md-12">
-                {!! Form::label('delivery_date', 'Delivery Date *', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-2">
-                    {!! Form::text('delivery_date', null, array('id' => 'delivery_date', 'class' => 'form-control')) !!}
+                <div class="form-group col-md-12">
+                    {!! Form::label('cartons', 'Number of Cartons', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-2">
+                        <select class="form-control" id="cartons">
+                            @for($i = 1; $i <= 100; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    {!! Form::label('items', 'Number Per Carton', array('class' => 'control-label col-md-3')) !!}
+                    <div class="col-md-2">
+                        {!! Form::text('items', null, array('id' => 'items', 'class' => 'form-control')) !!}
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group col-md-12">
-                {!! Form::label('qty_deliver', 'Quantity to be Delivered', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-2">
-                    {!! Form::text('qty_deliver', null, array('id' => 'qty_deliver', 'class' => 'form-control')) !!}
+            <hr>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <h4 style="font-weight: bold; margin-bottom: 20px;">If Quantities Are Not Equal Specify Below:</h4>
+                </div>
+
+                <div class="col-md-7 lines">
+                    <button type="button" class="btn btn-primary" id="add_carton">Add a Carton</button>
                 </div>
             </div>
 
-            <div class="form-group col-md-12">
-                {!! Form::label('delivery_address', 'Delivery Address *', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-6">
-                    <select id="delivery_address" name="delivery_address" class="form-control">
-                        @foreach ($delivery_addresses as $delivery_address)
-                            <option value="{{ $delivery_address->id }}">
-                                {{ $delivery_address->name }} {{ $delivery_address->address }} {{ $delivery_address->city }}, {{ $delivery_address->state }} {{ $delivery_address->postcode }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="button" class="btn btn-warning" id="edit">Edit</button>
-                <a href="/customer/{{ $quote->customer->id }}/create_address/{{$quote->id}}" type="button" class="btn btn-primary">Create New</a>
+            <hr>
+
+            <div class="pull-right">
+                <button type="button" class="btn btn-danger cancel">Cancel</button>
+                <button type="button" class="btn btn-warning" id="back-to-page1">Back</button>
+                <button type="button" class="btn btn-primary" id="go-to-page3">Next</button>
             </div>
         </div>
 
-        <hr>
+        <div id="page-3" style="display: none;">
+            <div class="row">
+                <div class="col-md-5">
+                    <h4 style="font-weight: bold; margin-bottom: 20px;">Confirm Details:</h4>
+                </div>
+            </div>
 
-        <div class="pull-right">
-            <button type="button" class="btn btn-danger cancel">Cancel</button>
-            <button type="button" class="btn btn-primary" id="go-to-page2">Next</button>
-            @if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/delivery/docket-'. $quote->id . '.pdf'))
-                <a target='_blank' href="/delivery/docket-{{$quote->id}}.pdf" class="btn btn-warning">View PDF Docket</a>
-            @endif
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-3">Customer</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="customer_confirm" value="{{ $quote->customer->customer_name }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-3">Job Name</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="job_title_confirm" value="{{ $quote->title }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-3">Job Quantity</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="job_qty_confirm" value="{{ $quote->job->job_item->quantity }}" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-3">Delivery Date</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="delivery_date_confirm" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-3">Quantity to be Delivered</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="qty_deliver_confirm" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-3">Delivery Address</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="delivery_address_confirm" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row" id="qty_confirm"></div>
+
+            <hr>
+
+            <div class="pull-right">
+                <button type="button" class="btn btn-danger cancel">Cancel</button>
+                <button type="button" class="btn btn-warning" id="back-to-page2">Back</button>
+                <button type="submit" class="btn btn-primary">Create Sticker and Docket</button>
+            </div>
         </div>
+
+        <div id="act"></div>
+        {!! Form::close() !!}
     </div>
 
-    <div id="page-2" style="display: none;">
-        <div class="row">
-            <div class="col-xs-12">
-                <h4 style="font-weight: bold; margin-bottom: 20px;">If Quantities Are Equal:</h4>
-            </div>
-
-            <div class="form-group col-md-12">
-                {!! Form::label('cartons', 'Number of Cartons', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-2">
-                    <select class="form-control" id="cartons">
-                        @for($i = 1; $i <= 100; $i++)
-                            <option value="{{ $i }}">{{ $i }}</option>
-                        @endfor
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                {!! Form::label('items', 'Number Per Carton', array('class' => 'control-label col-md-3')) !!}
-                <div class="col-md-2">
-                    {!! Form::text('items', null, array('id' => 'items', 'class' => 'form-control')) !!}
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-md-5">
-                <h4 style="font-weight: bold; margin-bottom: 20px;">If Quantities Are Not Equal Specify Below:</h4>
-            </div>
-
-            <div class="col-md-7 lines">
-                <button type="button" class="btn btn-primary" id="add_carton">Add a Carton</button>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="pull-right">
-            <button type="button" class="btn btn-danger cancel">Cancel</button>
-            <button type="button" class="btn btn-warning" id="back-to-page1">Back</button>
-            <button type="button" class="btn btn-primary" id="go-to-page3">Next</button>
-            @if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/delivery/docket-'. $quote->id . '.pdf'))
-                <a target='_blank' href="/delivery/docket-{{$quote->id}}.pdf" class="btn btn-warning">View PDF Docket</a>
-            @endif
+    <div id="history-page" @if($page != 'history') style="display: none;" @endif>
+        <div class="col-xs-6 col-xs-offset-3">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Delivery Date</th>
+                    <th>Docket Number</th>
+                    <th>Sticker Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if(count($delivery_history) > 0)
+                    @foreach($delivery_history as $line)
+                        <tr>
+                            <td>{{ $line->delivery_date }}</td>
+                            <td><a href="/job/delivery/docket/{{ $line->id }}" target="_blank">{{ $line->number }}</a></td>
+                            <td><a href="/job/delivery/sticker/{{ $line->id }}" target="_blank">{{ $line->number }}</a></td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="3">No Dockets and Stickers created yet</td>
+                    </tr>
+                @endif
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <div id="page-3" style="display: none;">
-        <div class="row">
-            <div class="col-md-5">
-                <h4 style="font-weight: bold; margin-bottom: 20px;">Confirm Details:</h4>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-3">Customer</label>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" id="customer_confirm" value="{{ $quote->customer->customer_name }}" disabled>
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-3">Job Name</label>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" id="job_title_confirm" value="{{ $quote->title }}" disabled>
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-3">Job Quantity</label>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="job_qty_confirm" value="{{ $quote->job->job_item->quantity }}" disabled>
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-3">Delivery Date</label>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="delivery_date_confirm" disabled>
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-3">Quantity to be Delivered</label>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="qty_deliver_confirm" disabled>
-                </div>
-            </div>
-
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-3">Delivery Address</label>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" id="delivery_address_confirm" disabled>
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row" id="qty_confirm"></div>
-
-        <hr>
-
-        <div class="pull-right">
-            <button type="button" class="btn btn-danger cancel">Cancel</button>
-            <button type="button" class="btn btn-warning" id="back-to-page2">Back</button>
-            <button type="button" class="btn btn-primary" id="sticker">Create Sticker</button>
-            <button type="button" class="btn btn-primary" id="docket">Create Docket</button>
-            @if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/delivery/docket-'. $quote->id . '.pdf'))
-                <a target='_blank' href="/delivery/docket-{{$quote->id}}.pdf" class="btn btn-warning">View PDF Docket</a>
-            @endif
-        </div>
-    </div>
-
-    <div id="act"></div>
-    {!! Form::close() !!}
 
 @endsection
