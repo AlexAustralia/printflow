@@ -125,8 +125,13 @@
         </div>
 
         <div class="col-md-2">
-            {!! Form::label('ref', 'Ref', array('class' => 'control-label')) !!}
+            {!! Form::label('ref', 'Reference', array('class' => 'control-label')) !!}
             {!! Form::text('ref', $q->ref, array('class' => 'form-control')) !!}
+        </div>
+
+        <div class="col-md-2">
+            {!! Form::label('po_number', 'PO Number', array('class' => 'control-label')) !!}
+            {!! Form::text('po_number', $q->po_number, array('class' => 'form-control')) !!}
         </div>
     </div>
 

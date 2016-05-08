@@ -18,7 +18,7 @@
 
 <div id="job_details" style="position:absolute;top:30px;left:400px;width:300px;font-size:15px;">
     <strong>Delivery Docket Number:</strong> {{$quote->id}}<br>
-    <strong>PO Number:</strong> (Reference Number)<br>
+    <strong>PO Number:</strong> {{ $quote->po_number }}<br>
     <strong>Date:</strong> {{$input['delivery_date']}}<br>
     <strong>Job Quantity:</strong> {{$quote->job->job_item->quantity}}
 </div>
@@ -66,7 +66,7 @@
 
 <div id="job_details" style="position:absolute;top:555px;left:400px;width:300px;font-size:15px;">
     <strong>Delivery Docket Number:</strong> {{$quote->id}}<br>
-    <strong>PO Number:</strong> (Reference Number)<br>
+    <strong>PO Number:</strong> {{ $quote->po_number }}<br>
     <strong>Date:</strong> {{$input['delivery_date']}}<br>
     <strong>Job Quantity:</strong> {{$quote->job->job_item->quantity}}
 </div>
@@ -127,7 +127,7 @@
 
 <div id="job_details" style="position:absolute;top:30px;left:400px;width:300px;font-size:15px;">
     <strong>Delivery Docket Number:</strong> {{$quote->id}}<br>
-    <strong>PO Number:</strong> (Reference Number)<br>
+    <strong>PO Number:</strong> {{ $quote->po_number }}<br>
     <strong>Date:</strong> {{$input['delivery_date']}}<br>
     <strong>Job Quantity:</strong> {{$quote->job->job_item->quantity}}
 </div>
@@ -175,7 +175,7 @@
 
 <div id="job_details" style="position:absolute;top:555px;left:400px;width:300px;font-size:15px;">
     <strong>Delivery Docket Number:</strong> {{$quote->id}}<br>
-    <strong>PO Number:</strong> (Reference Number)<br>
+    <strong>PO Number:</strong> {{ $quote->po_number }}<br>
     <strong>Date:</strong> {{$input['delivery_date']}}<br>
     <strong>Job Quantity:</strong> {{$quote->job->job_item->quantity}}
 </div>

@@ -6,7 +6,7 @@ require("helpers.php");
 
 class QuoteRequest extends Model {
     protected $guarded = array('id');
-    protected $fillable = array('customer_id', 'request_date', 'expiry_date', 'ref', 'title', 'summary', 'terms');
+    protected $fillable = array('customer_id', 'request_date', 'expiry_date', 'ref', 'title', 'summary', 'terms', 'po_number');
 	
     public function customer(){
         try{
