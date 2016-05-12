@@ -241,7 +241,7 @@ class WorkflowController extends Controller
 								<Status>DRAFT</Status>
 								<Date>' . Carbon::now()->format('Y-m-d') . '</Date>
 								<DueDate>' . Carbon::now()->addWeeks(2)->format('Y-m-d') . '</DueDate>
-								<Reference>'. $id .'</Reference>
+								<Reference>'. $quote_request->ref .'-'. $id .'</Reference>
 								<LineAmountTypes>Exclusive</LineAmountTypes>
 								<LineItems>
 								  <LineItem>
