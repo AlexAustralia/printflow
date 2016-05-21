@@ -35,7 +35,7 @@ Enter Supplier Prices
                 find('total_buy_cost', index).val(total_buy_cost.toFixed(2));
 
                 var markup_amount = total_buy_cost * markup;
-                find('markup_amount', index).val(markup_amount.toFixed(2));
+                find('markup_amount', index).val(markup_amount.toFixed(4));
 
                 var total_net = total_buy_cost + markup_amount;
                 find('total_net', index).val(total_net.toFixed(2));

@@ -28,7 +28,7 @@ class CreateQuoteItemsTable extends Migration {
             $table->decimal('freight_cost', 8, 2);
             $table->decimal('total_buy_cost', 8, 2);
 
-            $table->decimal('markup', 8, 2);
+            $table->decimal('markup', 8, 4);
             $table->decimal('total_net', 8, 2);
             $table->decimal('gst', 8, 2);            
             $table->decimal('total_inc_gst', 8, 2);
