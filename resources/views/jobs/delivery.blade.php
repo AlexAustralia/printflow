@@ -449,6 +449,7 @@
                     <th>Delivery Date</th>
                     <th>Docket Number</th>
                     <th>Sticker Number</th>
+                    <th>Delivered Quantity</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -458,6 +459,7 @@
                             <td>{{ $line->delivery_date }}</td>
                             <td><a href="/job/delivery/docket/{{ $line->id }}" target="_blank">{{ $line->number }}</a></td>
                             <td><a href="/job/delivery/sticker/{{ $line->id }}" target="_blank">{{ $line->number }}</a></td>
+                            <td>{{ unserialize($line->input)['qty_deliver'] }}</td>
                         </tr>
                     @endforeach
                 @else

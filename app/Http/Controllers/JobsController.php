@@ -68,7 +68,7 @@ class JobsController extends Controller
 
         $quote = QuoteRequest::find($id);
         $delivery_addresses = $quote->customer->delivery_addresses;
-        $delivery_history = DeliveryHistory::select('id', 'number', 'delivery_date')->where('qr_id', $id)->get();
+        $delivery_history = DeliveryHistory::select('id', 'number', 'delivery_date', 'input')->where('qr_id', $id)->get();
 
         $page = isset($message) ? 'history' : 'delivery';
 
