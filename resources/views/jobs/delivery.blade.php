@@ -172,6 +172,27 @@
                 $('#history-button').attr('disabled', true);
                 $('#delivery-button').removeAttr('disabled');
             });
+
+            $('#dispatched').on('click', function() {
+                $(this).after('<div class="loader"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></div>');
+                $(this).hide();
+
+                $.ajax({
+                    type        : 'GET',
+                    url         : '/change_status/{{ $quote->id }}/7',
+                    success: function(response) {
+                        $('#dispatched').attr('disabled', true).show();
+                        $('.loader').remove();
+                    },
+                    error: function() {
+                        $('#ajax_error_text').html('<p>Some errors occurred while storing the new status</p>');
+                        $('#ajax_error').modal('show');
+                        $('#dispatched').show();
+                        $('.loader').remove();
+                    }
+                });
+
+            });
         });
     </script>
 
@@ -185,6 +206,22 @@
                 </div>
                 <div class="modal-body">
                     <p>You should enter <strong>Number Per Carton</strong> and it must be a <strong>number</strong> greater than 0!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ajax_error" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Error!</h4>
+                </div>
+                <div class="modal-body" id="ajax_error_text">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">OK</button>
@@ -212,6 +249,9 @@
     <div class="btn-group nav" >
         <a class="btn btn-primary" id="delivery-button" href="javascript:;" @if($page == 'delivery') disabled @endif>Delivery</a>
         <a class="btn btn-primary" id="history-button" href="javascript:;" @if($page == 'history') disabled @endif>History</a>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="dispatched" @if($quote->status == 7) disabled @endif>Dispatched</button>
     </div>
     <p style="clear:both; margin-bottom:40px;"></p>
 
@@ -426,6 +466,7 @@
                     </tr>
                 @endif
                 </tbody>
+            </table>
             </table>
         </div>
     </div>
