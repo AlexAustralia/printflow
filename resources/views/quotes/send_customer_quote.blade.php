@@ -73,13 +73,16 @@ Send Customer Quote
     </div>
 
     <div class="col-md-6">
-        {!! Form::label('terms', 'Terms', array('class' => 'control-label')) !!}
+        <div class="col-md-9">
+            {!! Form::label('terms', 'Terms', array('class' => 'control-label')) !!}
         <select class="form-control" name="term_id">
             <option value="0">No Terms</option>
             @foreach($terms as $term)
                 <option value="{{ $term->id }}" @if($term->id == $quote_request->terms_id) selected @endif>{{ $term->name }}</option>
             @endforeach
         </select>
+        </div>
+        <a href="/terms" target="_blank" class="btn btn-primary" style="margin-top: 26px">Edit</a>
     </div>
 </div>
 

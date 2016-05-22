@@ -114,18 +114,19 @@
 							<li><a href="{{ url('/products/create') }}">Create Product</a></li>
 						</ul>
 					</li>
-					@if(Auth::check())
-						@if(Auth::user()->admin == 1)
-							<li class="dropdown">
-								<a href="{{ url('/') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setup <span class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li><a href="{{ url('/delivery_address') }}">Delivery Addresses</a></li>
+
+					<li class="dropdown">
+						<a href="{{ url('/') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setup <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ url('/delivery_address') }}">Delivery Addresses</a></li>
+							@if(Auth::check())
+								@if(Auth::user()->admin == 1)
 									<li><a href="{{ url('/users') }}">Users</a></li>
-									<li><a href="{{ url('/terms') }}">Terms</a></li>
-								</ul>
-							</li>
-						@endif
-					@endif
+								@endif
+							@endif
+							<li><a href="{{ url('/terms') }}">Terms</a></li>
+						</ul>
+					</li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
