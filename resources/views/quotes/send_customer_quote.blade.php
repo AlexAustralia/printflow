@@ -56,11 +56,19 @@ Send Customer Quote
         {!! Form::label('id', 'Quote Number', array('class' => 'control-label')) !!}
         {!! Form::text('id', $quote_request->id, array('disabled' => 'disabled', 'class' => 'form-control')) !!}
     </div>
-
 </div>
 
 <div class="form-group">
-    <div class="col-md-12">
+    <div class="col-md-6">
+        {!! Form::label('email_to', 'Email To *', array('class' => 'control-label')) !!}
+        <select class="form-control" name="email_to">
+            @foreach($quote_request->customer->customer_contacts as $contact)
+                <option value="{{ $contact->id }}">{{ $contact->first_name }} {{ $contact->last_name }}, {{ $contact->email }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-6">
         {!! Form::label('title', 'Title *', array('class' => 'control-label')) !!}
         {!! Form::text('title', $quote_request->title, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
     </div>
@@ -119,7 +127,7 @@ Send Customer Quote
         <p style="float:right;">
             @if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/quotes/'. $quote_request->id . '.pdf'))
                 <a target='_blank' href="/quotes/{{$quote_request->id}}.pdf" class="btn btn-warning">View PDF Quote</a>
-                <input name="submit" type="submit" class="btn btn-primary" value="Send Email" />
+                <input name="submit" type="submit" class="btn btn-primary" value="Send Email" @if(count($quote_request->customer->customer_contacts) == 0) disabled @endif/>
             @else
                 <input name="submit" type="submit" class="btn btn-primary" value="Create PDF" />
                 <input name="submit" type="submit" class="btn btn-primary" value="Send Email" disabled/>

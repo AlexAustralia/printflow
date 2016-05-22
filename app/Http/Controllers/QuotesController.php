@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\ArtworkCharge;
+use App\CustomerContact;
 use App\Freight;
 use App\FreightItem;
 use App\Http\Requests;
@@ -336,19 +337,12 @@ class QuotesController extends Controller {
         {
             // Sending email
             $user = Auth::user();
-            $contacts = $customer->customer_contacts;
+            $contact = CustomerContact::find($input['email_to']);
 
             $from = $user->email;
             $replyto = $from;
 
-            $mail_to = array();
-            foreach($contacts as $contact)
-            {
-                array_push($mail_to, $contact->email);
-            }
-
-            $mail_to = implode(', ', $mail_to);
-
+            $mail_to = $contact->email;
             $subject = 'Quote';
             $body = '<p>Dear '.$customer->postal_attention.',</p><p>Please find enclosed a quote for your order.</p>'.
                     '<p>Kind Regards,<br>'.$user->name.' at Franklin Direct</p>';
@@ -394,7 +388,8 @@ class QuotesController extends Controller {
                 $qr->status = 3;
                 $qr->save();
 
-                return redirect('send_customer_quote/'.$qr_id)->with('message', 'Mail has been sent successfully');
+                return redirect('send_customer_quote/'.$qr_id)->with('message', 'Mail sent successfully to '.
+                    $contact->first_name . ' ' . $contact->last_name . ', ' . $contact->email);
             }
         }
     }
