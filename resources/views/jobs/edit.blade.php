@@ -37,38 +37,6 @@ Create Job
 
         {!! Form::open(array('url' => 'job/'.$quote_request->id.'/save', 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
-        <div class="form-group">
-            <div class="col-md-4">
-                {!! Form::label('customer', 'Customer', array('class' => 'control-label')) !!}
-                {!! Form::text('customer', $quote_request->customer["customer_name"], array('id' => 'customer', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
-            </div>
-
-            <div class="col-md-4">
-                {!! Form::label('job_date', 'Job Date', array('class' => 'control-label')) !!}
-                @if(isset($job))
-                    {!! Form::text('job_date', $job->updated_at->format('d/m/Y'), array('id' => 'job_date', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
-                @else
-                    {!! Form::text('job_date', null, array('id' => 'job_date', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
-                @endif
-            </div>
-
-            <div class="col-md-4">
-                {!! Form::label('id', 'Job Number', array('class' => 'control-label')) !!}
-                @if(isset($job))
-                    {!! Form::text('id', $quote_request->id, array('disabled' => 'disabled', 'class' => 'form-control')) !!}
-                @else
-                    {!! Form::text('id', null, array('disabled' => 'disabled', 'class' => 'form-control')) !!}
-                @endif
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-12">
-                {!! Form::label('title', 'Title', array('class' => 'control-label')) !!}
-                {!! Form::text('title', $quote_request->title, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
-            </div>
-        </div>
-
         <div class="alert alert-success alert-block">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             Select the quantity that the customer has chosen and create a job based on this<br />
