@@ -87,7 +87,7 @@
                 <th style="text-align: left;border-bottom: solid 1px;">Terms</th>
             </tr>
             <tr>
-                <td>{!! nl2br($qr->terms) !!}</td>
+                <td>@if(isset($terms)){!! nl2br($terms->description) !!}@endif</td>
             </tr>
         </table>
     </div>

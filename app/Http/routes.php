@@ -99,4 +99,8 @@ Route::group(['middleware' => 'admin'], function() {
 	Route::get('users/{id}/edit', 'UserController@edit');
 	Route::post('users/save', 'UserController@save');
 	Route::post('users/delete', 'UserController@delete');
+
+	// Terms
+	Route::get('terms', 'TermsController@get_terms');
+	Route::post('terms', 'TermsController@post_terms');
 });

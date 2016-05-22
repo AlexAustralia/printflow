@@ -83,4 +83,9 @@ class QuoteRequest extends Model {
     {
         return $this->hasMany('App\Freight');
     }
+
+    public function terms()
+    {
+        return $this->belongsTo('App\Term', 'terms_id', 'id');
+    }
 }

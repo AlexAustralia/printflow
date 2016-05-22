@@ -117,10 +117,11 @@
 					@if(Auth::check())
 						@if(Auth::user()->admin == 1)
 							<li class="dropdown">
-								<a href="{{ url('/users') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
+								<a href="{{ url('/') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setup <span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="{{ url('/users') }}">Manage Users</a></li>
-									<li><a href="{{ url('/users/create') }}">Create User</a></li>
+									<li><a href="{{ url('/delivery_address') }}">Delivery Addresses</a></li>
+									<li><a href="{{ url('/users') }}">Users</a></li>
+									<li><a href="{{ url('/terms') }}">Terms</a></li>
 								</ul>
 							</li>
 						@endif

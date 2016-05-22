@@ -74,7 +74,12 @@ Send Customer Quote
 
     <div class="col-md-6">
         {!! Form::label('terms', 'Terms', array('class' => 'control-label')) !!}
-        {!! Form::textarea('terms', $quote_request->terms, array('rows' => '4', 'class' => 'form-control', 'disabled' => 'disabled')) !!}
+        <select class="form-control" name="term_id">
+            <option value="0">No Terms</option>
+            @foreach($terms as $term)
+                <option value="{{ $term->id }}" @if($term->id == $quote_request->terms_id) selected @endif>{{ $term->name }}</option>
+            @endforeach
+        </select>
     </div>
 </div>
 

@@ -6,6 +6,7 @@ use App\FreightItem;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Term;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
@@ -300,7 +301,9 @@ class QuotesController extends Controller {
         $quote_request = QuoteRequest::Find($qr_id);
         $qris = count($quote_request->get_quote) > 0 ? $quote_request->get_quote->qris : [];
 
-        return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message', 'error'));
+        $terms = Term::all();
+
+        return view('quotes.send_customer_quote', compact('quote_request' ,'qris', 'message', 'error', 'terms'));
     }
 
 
@@ -312,10 +315,19 @@ class QuotesController extends Controller {
         $customer = $qr->customer;
         $qris = $qr->get_quote->qris;
 
+        if ($input['term_id'] > 0) {
+            $qr->terms_id = $input['term_id'];
+        } else {
+            $qr->terms_id = null;
+        }
+        $qr->save();
+
+        $terms = $qr->terms;
+
         if($input['submit'] == 'Create PDF')
         {
             // Creating PDF Quote
-            $html = view('quotes.pdf', compact('qr', 'customer', 'qris'));
+            $html = view('quotes.pdf', compact('qr', 'customer', 'qris', 'terms'));
             $dompdf = PDF::loadHTML($html)->save('../public/quotes/'.$qr->id.'.pdf');
 
             return redirect('send_customer_quote/'.$qr_id)->with('message', 'PDF Quote has been successfully created');

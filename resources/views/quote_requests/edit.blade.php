@@ -152,13 +152,9 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-6">
+        <div class="col-md-12">
             {!! Form::label('summary', 'Summary', array('class' => 'control-label')) !!}
             {!! Form::textarea('summary', $q->summary, array('rows' => '4', 'class' => 'form-control')) !!}
-        </div>
-        <div class="col-md-6">
-            {!! Form::label('terms', 'Terms', array('class' => 'control-label')) !!}
-            {!! Form::textarea('terms', $q->terms, array('rows' => '4', 'class' => 'form-control')) !!}
         </div>
     </div>
 
