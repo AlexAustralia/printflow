@@ -6,8 +6,6 @@
 @endsection
 
 @section('content')
-    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
-    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
     <style>
         #table_info{
             display:none;
@@ -98,12 +96,9 @@
                     <th width="7%">Quote Num</th>
                     <th width="7%">Job Num</th>
                     <th width="20%">Status</th>
-                    <th>Job Stage</th>
                     <th>Title</th>
-                    <th width="55">Artwork</th>
                     <th width="10%">Quantity</th>
                     <th>Customer</th>
-                    <th>Supplier</th>
                     <th width="5%"></th>
                 </tr>
                 </thead>
@@ -122,12 +117,9 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td class="stage">{!! $item['stage'] !!}</td>
                         <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
-                        <td>@if(isset($item['artwork_image']))<a class="fancybox" href="/uploads/artworks/{{$item['artwork_image']}}"><img src="/uploads/thumbnails/{{$item['artwork_image']}}"></a> @endif</td>
                         <td>{{$item['quantity']}}</td>
                         <td><a href="{{URL::to('/customers/'.$item["customer_id"].'/edit')}}">{{$item['customer_name']}}<a/></td>
-                        <td><a href="{{URL::to('/suppliers/'.$item["supplier_id"].'/edit')}}">{{$item['supplier_name']}}<a/></td>
                         <td><div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle"
                                         data-toggle="dropdown" aria-expanded="false">
@@ -242,8 +234,6 @@
             });
 
             $('#table').show();
-
-            $('.fancybox').fancybox();
 
             $("[data-toggle='tooltip']").tooltip();
 
