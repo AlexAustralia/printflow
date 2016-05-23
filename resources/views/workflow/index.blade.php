@@ -76,18 +76,6 @@
             Nothing to Display: There are no Active Quotes and Jobs
         </div>
     @else
-        <ul class="nav nav-tabs" id="workflow_tab" style="margin-bottom: 20px;">
-            <li class="active"><a href="#" id="all_jobs">All Jobs</a></li>
-            <li><a href="#" id="quote_in" onclick="filter_table(this)">Quote In</a></li>
-            <li><a href="#" id="supplier_quote" onclick="filter_table(this)">Supplier Quote</a></li>
-            <li><a href="#" id="quote_out" onclick="filter_table(this)">Quote Out</a></li>
-            <li><a href="#" id="new_job" onclick="filter_table(this)">New Jobs</a></li>
-            <li><a href="#" id="production" onclick="filter_table(this)">Production</a></li>
-            <li><a href="#" id="incoming" onclick="filter_table(this)">Incoming</a></li>
-            <li><a href="#" id="delivery" onclick="filter_table(this)">Delivery</a></li>
-            <li><a href="#" id="invoice" onclick="filter_table(this)">Invoice</a></li>
-        </ul>
-
         <form>
             <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
             <table class="table table-striped table-hover" id="table" style="display: none;">
@@ -158,7 +146,7 @@
             //window.open("{{{ URL::to('/send_invoice') }}}", "_blank");
 
             $(line).hide();
-            $(line).after('<tr class="loader"><td colspan="5"></td><td colspan="6"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></td></tr>');
+            $(line).after('<tr class="loader"><td colspan="3"></td><td colspan="4"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></td></tr>');
 
             $.ajax({
                 type        : 'GET',
@@ -198,24 +186,6 @@
             return false;
         }
 
-        function filter_table(el) {
-            $(el).tab('show');
-            $('tbody').find('tr').each(function() {
-                $(this).hide();
-            });
-            var i = 0;
-            $('tbody').find('tr.'+el.id).each(function() {
-                $(this).show();
-                i++;
-            });
-            if(i == 0) {
-                $('tbody').append('<tr class="inform"><td valign="top" colspan="11" class="dataTables_empty">No Quotes/Jobs with This Status</td></tr>')
-            }
-            else {
-                $('tbody').find('tr.inform').remove();
-            }
-        }
-
         var statuses_id = [
                 @foreach($statuses as $status)
                     {{ strtolower(str_replace(' ', '_', $status->id)) }},
@@ -237,15 +207,6 @@
 
             $("[data-toggle='tooltip']").tooltip();
 
-            $('#all_jobs').click(function(e){
-                e.preventDefault();
-                $(this).tab('show');
-                $('tbody').find('tr').each(function() {
-                    $(this).show();
-                });
-                $('tbody').find('tr.inform').remove();
-            });
-
             // Status is changed
             $('select').on('change', function(){
                 var line = $($(this).parents('tr').get(0));
@@ -254,7 +215,7 @@
                 var quote_id = $($(this).parents('tr').get(0)).find('td.quote_number').text();
 
                 $(line).hide();
-                $(line).after('<tr class="loader"><td colspan="5"></td><td colspan="6"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></td></tr>');
+                $(line).after('<tr class="loader"><td colspan="3"></td><td colspan="4"><img src="{{asset('images/loading-lg.gif')}}" height="30px"></td></tr>');
 
                 $.ajax({
                     type        : 'GET',
