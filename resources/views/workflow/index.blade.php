@@ -130,7 +130,7 @@
                         <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
                         <td>{{$item['quantity']}}</td>
                         <td>{{$item['total']}}</td>
-                        <td>{{$item['expiry_date']}}</td>
+                        <td><span style="color: @if(Carbon\Carbon::createFromFormat('d/m/Y', $item['expiry_date']) > Carbon\Carbon::now()) #00aa00 @else #dd0000 @endif">{{$item['expiry_date']}}</span></td>
                         <td><select class="select" style="width:145px;">
                                 @foreach($statuses as $status)
                                     @if($status->id != 9)
