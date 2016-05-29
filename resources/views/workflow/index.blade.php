@@ -13,10 +13,10 @@
         table {
             font-size: 13px;
         }
-        #table td {
+        #table tr.lines td {
             border-left: 1px solid #dddddd;
         }
-        #table tr td:last-child {
+        #table tr.lines td:last-child {
             border-right: 1px solid #dddddd;
         }
     </style>
@@ -120,8 +120,10 @@
                 </tr>
                 </thead>
                 <tbody>
+                <?php $total = 0; ?>
                 @foreach($array as $item)
-                    <tr class="{{ strtolower(str_replace(' ', '_', $item['status'])) }}">
+                    <?php $total += $item['total']; ?>
+                    <tr class="{{ strtolower(str_replace(' ', '_', $item['status'])) }} lines">
                         <td class="quote_number">{{$item['quote_number']}}</td>
                         <td>{{$item['job_number']}}</td>
                         <td><a href="{{URL::to('/customers/'.$item["customer_id"].'/edit')}}">{{$item['customer_name']}}<a/></td>
@@ -142,7 +144,7 @@
                         <td><div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle btn-sm"
                                         data-toggle="dropdown" aria-expanded="false">
-                                    
+
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}">Edit</a></li>
@@ -164,6 +166,13 @@
                     </tr>
                 @endforeach
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5"><strong>Total</strong></td>
+                    <td><strong>{{ $total }}</strong></td>
+                    <td colspan="3"></td>
+                </tr>
+                </tfoot>
             </table>
         </form>
     @endif
