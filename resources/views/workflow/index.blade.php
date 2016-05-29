@@ -13,6 +13,12 @@
         table {
             font-size: 13px;
         }
+        #table td {
+            border-left: 1px solid #dddddd;
+        }
+        #table tr td:last-child {
+            border-right: 1px solid #dddddd;
+        }
     </style>
 
     <!-- Modal -->
