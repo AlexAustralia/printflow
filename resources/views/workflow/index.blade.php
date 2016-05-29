@@ -107,6 +107,7 @@
                     <th>Customer</th>
                     <th>Title</th>
                     <th width="10%">Quantity</th>
+                    <th width="10%">Job Value</th>
                     <th>Due Date</th>
                     <th width="20%">Status</th>
                     <th width="5%"></th>
@@ -120,6 +121,7 @@
                         <td><a href="{{URL::to('/customers/'.$item["customer_id"].'/edit')}}">{{$item['customer_name']}}<a/></td>
                         <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
                         <td>{{$item['quantity']}}</td>
+                        <td>{{$item['total']}}</td>
                         <td>{{$item['expiry_date']}}</td>
                         <td><select class="form-control select" style="width:145px;">
                                 @foreach($statuses as $status)

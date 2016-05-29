@@ -58,6 +58,7 @@ class WorkflowController extends Controller
             if(isset($quote_request->job->id) && ($quote_request->quote_id != 0)) {
                 $array[$i]['job_number'] = $quote_request->id;
                 $array[$i]['quantity'] = $quote_request->job->job_item->quantity;
+                $array[$i]['total'] = $quote_request->job->job_item->total;
                 $array[$i]['request_date'] = $quote_request->job->updated_at->format('d/m/Y');
 
                 if ($array[$i]['status'] == 'New Job')
@@ -123,6 +124,7 @@ class WorkflowController extends Controller
                 $array[$i]['job_number'] = '';
                 $array[$i]['quantity'] = '';
                 $array[$i]['stage'] = '';
+                $array[$i]['total'] = '';
             }
 
             $i++;
