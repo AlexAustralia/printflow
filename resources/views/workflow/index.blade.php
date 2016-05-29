@@ -129,7 +129,7 @@
                         <td>{{$item['quantity']}}</td>
                         <td>{{$item['total']}}</td>
                         <td>{{$item['expiry_date']}}</td>
-                        <td><select class="form-control select" style="width:145px;">
+                        <td><select class="select" style="width:145px;">
                                 @foreach($statuses as $status)
                                     @if($status->id != 9)
                                         <option value="{{$status->id}}" @if($status->id == $item['status_id']) selected="selected" @endif >
@@ -140,9 +140,9 @@
                             </select>
                         </td>
                         <td><div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle"
+                                <button type="button" class="btn btn-default dropdown-toggle btn-sm"
                                         data-toggle="dropdown" aria-expanded="false">
-                                    ...
+                                    
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}">Edit</a></li>
