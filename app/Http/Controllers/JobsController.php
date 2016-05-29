@@ -46,9 +46,6 @@ class JobsController extends Controller
 
         $job->quote_requests_id = $id;
         $job->quote_request_items_id = $input['quote_request_items_id'];
-        $job->outside_work = isset($input['outside_work']) ? $input['outside_work'] : 0;
-        $job->design = isset($input['design']) ? $input['design'] : 0;
-        $job->on_proof = isset($input['on_proof']) ? $input['on_proof'] : 0;
 
         $job->save();
 
