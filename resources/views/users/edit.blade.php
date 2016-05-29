@@ -69,7 +69,7 @@
 
         <div class="col-sm-2">
             @if(isset($user))
-                <div class="btn btn-danger pull-right" data-delete="true" data-toggle="modal" data-target="#deleteModal" style="margin-top: 30px;">Delete</div>
+                <div class="btn btn-danger pull-right" data-delete="true" data-toggle="modal" data-target="#deleteModal" style="margin-top: 30px;" @if(Auth::user()->name == $user->name) disabled @endif>Delete</div>
             @endif
             {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right', 'style' => 'margin-top: 30px;']) !!}
         </div>
