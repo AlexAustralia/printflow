@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth'], function(){
     // Route::resource('customer_contacts', 'CustomerContactsController');
 
 	// Supplier section
+	Route::get('suppliers/{id}/review', 'SuppliersController@review');
 	Route::get('suppliers/{id}/products', 'SuppliersController@products');
 	Route::resource('suppliers', 'SuppliersController');
 

@@ -186,4 +186,17 @@ class SuppliersController extends Controller {
 
 		return view('suppliers.products', compact('supplier', 'products', 'message'));
 	}
+
+	/**
+	 * Show Supplier Review page
+	 *
+	 * @param $id
+	 * @return \Illuminate\View\View
+	 */
+	public function review($id)
+	{
+		$supplier = Supplier::find($id);
+
+		return view('suppliers.review', compact('supplier'));
+	}
 }

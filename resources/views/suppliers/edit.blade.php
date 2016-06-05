@@ -57,6 +57,7 @@
 
 	<hr>
 
+	@include('partials.edit_supplier_menu')
 	@include('partials.errors')
 
 	<div class="row">
