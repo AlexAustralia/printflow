@@ -78,4 +78,10 @@ class Supplier extends Model {
     {
         return $this->hasMany('App\Product', 'supplier_id', 'id');
     }
+
+    // Get Supplier Review
+    public function review()
+    {
+        return $this->hasOne('App\SupplierReview', 'supplier_id', 'id');
+    }
 }

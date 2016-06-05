@@ -3,6 +3,8 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\SupplierReview;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Supplier;
@@ -196,7 +198,35 @@ class SuppliersController extends Controller {
 	public function review($id)
 	{
 		$supplier = Supplier::find($id);
+		$review = $supplier->review;
 
-		return view('suppliers.review', compact('supplier'));
+		return view('suppliers.review', compact('supplier', 'review'));
+	}
+
+	/**
+	 * Update Supplier Review page
+	 *
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
+	public function review_update($id)
+	{
+		$input = Input::all();
+
+		$input['supplier_id'] = $id;
+		unset($input['_token']);
+		$input['date_visited'] = Carbon::createFromFormat('d/m/Y', $input['date_visited']);
+
+		$supplier_review = new SupplierReview();
+
+		foreach ($input as $key => $value) {
+			if (is_array($value)) $input[$key] = json_encode($value);
+
+			$supplier_review->$key = $input[$key];
+		}
+
+		$supplier_review->save();
+
+		return redirect('/suppliers/'.$id.'/review');
 	}
 }

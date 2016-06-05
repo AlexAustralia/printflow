@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// Supplier section
 	Route::get('suppliers/{id}/review', 'SuppliersController@review');
+	Route::post('suppliers/{id}/review/update', 'SuppliersController@review_update');
 	Route::get('suppliers/{id}/products', 'SuppliersController@products');
 	Route::resource('suppliers', 'SuppliersController');
 

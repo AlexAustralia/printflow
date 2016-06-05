@@ -6,17 +6,21 @@
 
 @section('content')
 
+    {!! Form::open(['url' => 'suppliers/'.$supplier->id.'/review/update', 'method' => 'post', 'id' => 'review_form', 'class' => 'form-horizontal', 'files' => true]) !!}
+
     <div class="row">
         <div class="col-sm-10">
             <h2 style="margin:0"><img src="/images/edit_supplier.png"> Review Supplier: <?php echo ucwords(strtolower(! empty($supplier->supplier_name) ? $supplier->supplier_name : '')); ?></h2>
+        </div>
+
+        <div class="col-sm-2">
+            {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right', 'style' => 'margin-top: 30px;']) !!}
         </div>
     </div>
 
     <hr>
 
     @include('partials.edit_supplier_menu')
-
-    {!! Form::open(['url' => 'suppliers/'.$supplier->id, 'method' => 'post', 'id' => 'review_form', 'class' => 'form-horizontal', 'files' => true]) !!}
 
     <div class="form-group">
         {!! Form::label('product', 'Product Supplied', array('class' => 'control-label col-md-3')) !!}
@@ -188,9 +192,9 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('condition', 'Condition', array('class' => 'control-label col-md-3')) !!}
+                        {!! Form::label('conditions', 'Condition', array('class' => 'control-label col-md-3')) !!}
                         <div class="col-md-3">
-                            <select name="condition" class="form-control">
+                            <select name="conditions" class="form-control">
                                 <option value="Excellent">Excellent</option>
                                 <option value="Good">Good</option>
                                 <option value="Satisfactory">Satisfactory</option>
@@ -201,9 +205,9 @@
                             </select>
                         </div>
 
-                        {!! Form::label('condition_notes', 'Notes', array('class' => 'control-label col-md-1')) !!}
+                        {!! Form::label('conditions_notes', 'Notes', array('class' => 'control-label col-md-1')) !!}
                         <div class="col-md-4">
-                            {!! Form::text('condition_notes', null, array('class' => 'form-control')) !!}
+                            {!! Form::text('conditions_notes', null, array('class' => 'form-control')) !!}
                         </div>
                     </div>
 
@@ -240,7 +244,7 @@
                     <div class="form-group">
                         {!! Form::label('packing', 'Pallet Strapping and Packing', array('class' => 'control-label col-md-3')) !!}
                         <div class="col-md-3">
-                            <select name="condition" class="form-control">
+                            <select name="packing" class="form-control">
                                 <option value="Excellent">Excellent</option>
                                 <option value="Good">Good</option>
                                 <option value="Satisfactory">Satisfactory</option>
@@ -286,7 +290,7 @@
                     <div class="form-group">
                         {!! Form::label('age_machine', 'Age of Machines', array('class' => 'control-label col-md-3')) !!}
                         <div class="col-md-3">
-                            <select name="sample_room" class="form-control">
+                            <select name="age_machine" class="form-control">
                                 <option value="1-3 Years Old">1-3 Years Old</option>
                                 <option value="4-5 Years Old">4-5 Years Old</option>
                                 <option value="6-10 Years Old">6-10 Years Old</option>
@@ -316,7 +320,7 @@
                     <div class="form-group">
                         {!! Form::label('samples', 'Dummies / Samples', array('class' => 'control-label col-md-3')) !!}
                         <div class="col-md-3">
-                            <select name="proofing" class="form-control">
+                            <select name="samples" class="form-control">
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
                                 <option value="Not Applicable">Not Applicable</option>
@@ -352,7 +356,7 @@
 
                         {!! Form::label('ctp_age', 'Age', array('class' => 'control-label col-md-1')) !!}
                         <div class="col-md-2">
-                            <select name="crp_age" class="form-control">
+                            <select name="ctp_age" class="form-control">
                                 <option value="1-3 Years Old">1-3 Years Old</option>
                                 <option value="4-5 Years Old">4-5 Years Old</option>
                                 <option value="6-10 Years Old">6-10 Years Old</option>
@@ -396,9 +400,9 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('photo_office', 'Add Photos', array('class' => 'control-label col-md-3')) !!}
+                        {!! Form::label('photo_pre_press', 'Add Photos', array('class' => 'control-label col-md-3')) !!}
                         <div class="col-md-3">
-                            {!! Form::file('photo_office[]', array('multiple' => true)) !!}
+                            {!! Form::file('photo_pre_press[]', array('multiple' => true)) !!}
                         </div>
                     </div>
                 </td>
@@ -428,11 +432,11 @@
                         </div>
 
                         <div class="col-md-1">
-                            <input type="checkbox" value="1" name="uv"> UV
+                            <input type="checkbox" value="0" name="uv[]"> UV
                         </div>
 
                         <div class="col-md-1">
-                            <input type="checkbox" value="1" name="coater"> Coater
+                            <input type="checkbox" value="0" name="coater[]"> Coater
                         </div>
 
                         <button type="button" class="btn btn-primary" id="add_machine">Add Another</button>
@@ -487,7 +491,7 @@
                     <div class="form-group binding">
                         {!! Form::label('binding', 'Binding', array('class' => 'control-label col-md-1')) !!}
                         <div class="col-md-2">
-                            <select name="folding[]" class="form-control">
+                            <select name="binding[]" class="form-control">
                                 <option value="Perfect Binding">Perfect Binding</option>
                                 <option value="Case Binding">Case Binding</option>
                                 <option value="Saddle Stitching">Saddle Stitching</option>
@@ -683,12 +687,17 @@
             });
 
             $('#add_machine').on('click', function() {
+                var machines = 0;
+                $('.machines').each(function(){
+                    machines++;
+                });
+
                 $('.machines:last').after('<div class="form-group machines"><label class="control-label col-md-1 col-md-offset-1">Brand</label>' +
                                 '<div class="col-md-2"><input type="text" name="brand[]" class="form-control"></div>' +
                                 '<label class="control-label col-md-2">Number of colours</label><div class="col-md-2">' +
                                 '<input type="text" class="form-control" name="colors[]"></div>' +
-                                '<div class="col-md-1"><input type="checkbox" value="1" name="uv"> UV</div>' +
-                                '<div class="col-md-1"><input type="checkbox" value="1" name="coater"> Coater</div>' +
+                                '<div class="col-md-1"><input type="checkbox" value="' + machines + '" name="uv[]"> UV</div>' +
+                                '<div class="col-md-1"><input type="checkbox" value="' + machines + '" name="coater[]"> Coater</div>' +
                                 '<button type="button" class="btn btn-sm btn-danger remove-machine"><span class="fa fa-trash-o"></span></button></div>');
             });
 

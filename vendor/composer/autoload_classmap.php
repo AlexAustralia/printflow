@@ -49,6 +49,7 @@ return array(
     'CreateQuotesTable' => $baseDir . '/database/migrations/2015_05_11_091419_create_quotes_table.php',
     'CreateStatusesTable' => $baseDir . '/database/migrations/2016_01_31_010424_create_statuses_table.php',
     'CreateSupplierContactsTable' => $baseDir . '/database/migrations/2015_04_23_063544_create_supplier_contacts_table.php',
+    'CreateSupplierReviewsTable' => $baseDir . '/database/migrations/2016_06_06_061534_create_supplier_reviews_table.php',
     'CreateSuppliersTable' => $baseDir . '/database/migrations/2015_04_23_063358_create_suppliers_table.php',
     'CreateTermsTable' => $baseDir . '/database/migrations/2016_05_23_031556_create_terms_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
