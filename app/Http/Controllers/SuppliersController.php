@@ -200,7 +200,11 @@ class SuppliersController extends Controller {
 		$supplier = Supplier::find($id);
 		$review = $supplier->review;
 
-		return view('suppliers.review', compact('supplier', 'review'));
+		$valuation = ['Excellent', 'Good', 'Satisfactory', 'Fair', 'Poor', 'Not Rated', 'Not Applicable'];
+		$yesno = ['Yes', 'No', 'Not Applicable', 'No Assessed'];
+		$ages = ['1-3 Years Old', '4-5 Years Old', '6-10 Years Old', '11 Years and Older', 'Not Applicable'];
+
+		return view('suppliers.review', compact('supplier', 'review', 'valuation', 'yesno', 'ages'));
 	}
 
 	/**
@@ -217,7 +221,10 @@ class SuppliersController extends Controller {
 		unset($input['_token']);
 		$input['date_visited'] = Carbon::createFromFormat('d/m/Y', $input['date_visited']);
 
-		$supplier_review = new SupplierReview();
+		$supplier_review = isset($input['id']) ? SupplierReview::find($input['id']) : new SupplierReview();
+
+		$supplier_review->uv = null;
+		$supplier_review->coater = null;
 
 		foreach ($input as $key => $value) {
 			if (is_array($value)) $input[$key] = json_encode($value);

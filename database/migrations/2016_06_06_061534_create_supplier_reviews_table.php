@@ -86,7 +86,12 @@ class CreateSupplierReviewsTable extends Migration
             $table->text('cutting_notes')->nullable();
 
             $table->string('in_house')->nullable();
-            $table->string('other')->nullable();
+
+            // arrays
+            $table->text('other')->nullable();
+            $table->text('other_age')->nullable();
+            $table->text('other_model')->nullable();
+            $table->text('other_notes')->nullable();
 
             // photos
             $table->text('photo_office')->nullable();
