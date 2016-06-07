@@ -227,13 +227,65 @@ class SuppliersController extends Controller {
 		$supplier_review->coater = null;
 
 		foreach ($input as $key => $value) {
-			if (is_array($value)) $input[$key] = json_encode($value);
+			if (substr($key, 0, 5) != 'photo') {
+				if (is_array($value)) $input[$key] = json_encode($value);
 
-			$supplier_review->$key = $input[$key];
+				$supplier_review->$key = $input[$key];
+			}
 		}
 
 		$supplier_review->save();
 
+		// Proceed with photos
+		$this->process_photo(isset($input['photo_office_erase']) ? $input['photo_office_erase'] : null, 'photo_office', $supplier_review);
+		$this->process_photo(isset($input['photo_warehouse_erase']) ? $input['photo_warehouse_erase'] : null, 'photo_warehouse', $supplier_review);
+		$this->process_photo(isset($input['photo_pre_press_erase']) ? $input['photo_pre_press_erase'] : null, 'photo_pre_press', $supplier_review);
+		$this->process_photo(isset($input['photo_finishing_erase']) ? $input['photo_finishing_erase'] : null, 'photo_finishing', $supplier_review);
+
 		return redirect('/suppliers/'.$id.'/review');
+	}
+
+	private function process_photo($to_erase, $photo, $supplier_review)
+	{
+		// Erase ticked photo
+		if(!is_null($to_erase)) {
+			$file_names_array = is_null($supplier_review->$photo) ? [] : unserialize($supplier_review->$photo);
+
+			foreach ($to_erase as $erase_file_index) {
+				$path = 'uploads/supplier-reviews/' . $file_names_array[$erase_file_index];
+
+				if (file_exists($path)) {
+					unlink($path);
+				}
+
+				unset($file_names_array[$erase_file_index]);
+			}
+
+			$supplier_review->$photo = serialize($file_names_array);
+			$supplier_review->save();
+		}
+
+		// Storing photo files
+		if (Input::hasFile($photo))
+		{
+			$files = Input::file($photo);
+			$file_names_array = is_null($supplier_review->$photo) ? [] : unserialize($supplier_review->$photo);
+
+			foreach ($files as $file)
+			{
+				if ($file->isValid()) {
+					$filename = rand(111111,999999).'-'.$file->getClientOriginalName();
+					$destination_path = 'uploads/supplier-reviews/';
+
+					$file->move($destination_path, $filename);
+
+					if (!in_array($filename, $file_names_array))
+						array_push($file_names_array, $filename);
+				}
+			}
+
+			$supplier_review->$photo = serialize($file_names_array);
+			$supplier_review->save();
+		}
 	}
 }

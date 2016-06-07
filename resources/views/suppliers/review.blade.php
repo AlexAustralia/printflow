@@ -7,6 +7,7 @@
 @section('content')
 
     <link href="{{ asset('css/errors.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
 
     {!! Form::open(['url' => 'suppliers/'.$supplier->id.'/review/update', 'method' => 'post', 'id' => 'review_form', 'class' => 'form-horizontal', 'files' => true]) !!}
     @if(isset($review))
@@ -101,9 +102,20 @@
 
                     <div class="form-group">
                         {!! Form::label('photo_office', 'Add Photos', array('class' => 'control-label col-md-3')) !!}
-                        <div class="col-md-3">
+                        <div class="col-xs-3">
                             {!! Form::file('photo_office[]', array('multiple' => true)) !!}
                         </div>
+                        @if(!is_null($review->photo_office))
+                            <div class="col-xs-6">
+                                @foreach(unserialize($review->photo_office) as $key => $file)
+                                    {!! Form::checkbox('photo_office_erase[]', $key, null) !!}
+                                    <a class="review_image" target="_blank" href="/uploads/supplier-reviews/{{ $file }}">{{ substr($file, 7) }}</a><br>
+                                @endforeach
+                                @if(count(unserialize($review->photo_office)) > 0)
+                                    <br> Tick to delete
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -242,9 +254,20 @@
 
                     <div class="form-group">
                         {!! Form::label('photo_warehouse', 'Add Photos', array('class' => 'control-label col-md-3')) !!}
-                        <div class="col-md-3">
+                        <div class="col-xs-3">
                             {!! Form::file('photo_warehouse[]', array('multiple' => true)) !!}
                         </div>
+                        @if(!is_null($review->photo_warehouse))
+                            <div class="col-xs-6">
+                                @foreach(unserialize($review->photo_warehouse) as $key => $file)
+                                    {!! Form::checkbox('photo_warehouse_erase[]', $key, null) !!}
+                                    <a class="review_image" target="_blank" href="/uploads/supplier-reviews/{{ $file }}">{{ substr($file, 7) }}</a><br>
+                                @endforeach
+                                @if(count(unserialize($review->photo_warehouse)) > 0)
+                                    <br> Tick to delete
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -392,9 +415,20 @@
 
                     <div class="form-group">
                         {!! Form::label('photo_pre_press', 'Add Photos', array('class' => 'control-label col-md-3')) !!}
-                        <div class="col-md-3">
+                        <div class="col-xs-3">
                             {!! Form::file('photo_pre_press[]', array('multiple' => true)) !!}
                         </div>
+                        @if(!is_null($review->photo_pre_press))
+                            <div class="col-xs-6">
+                                @foreach(unserialize($review->photo_pre_press) as $key => $file)
+                                    {!! Form::checkbox('photo_pre_press_erase[]', $key, null) !!}
+                                    <a class="review_image" target="_blank" href="/uploads/supplier-reviews/{{ $file }}">{{ substr($file, 7) }}</a><br>
+                                @endforeach
+                                @if(count(unserialize($review->photo_pre_press)) > 0)
+                                    <br> Tick to delete
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -808,12 +842,6 @@
                         </div>
                     @endif
 
-
-
-
-
-
-
                     <div class="form-group">
                         {!! Form::label('in_house', 'In House Formes', array('class' => 'control-label col-md-2')) !!}
                         <div class="col-md-2">
@@ -832,17 +860,22 @@
                         </div>
                     </div>
 
-
-
-
-
-
-
                     <div class="form-group">
                         {!! Form::label('photo_finishing', 'Add Photos', array('class' => 'control-label col-md-3')) !!}
-                        <div class="col-md-3">
+                        <div class="col-xs-3">
                             {!! Form::file('photo_finishing[]', array('multiple' => true)) !!}
                         </div>
+                        @if(!is_null($review->photo_finishing))
+                            <div class="col-xs-6">
+                                @foreach(unserialize($review->photo_finishing) as $key => $file)
+                                    {!! Form::checkbox('photo_finishing_erase[]', $key, null) !!}
+                                    <a class="review_image" target="_blank" href="/uploads/supplier-reviews/{{ $file }}">{{ substr($file, 7) }}</a><br>
+                                @endforeach
+                                @if(count(unserialize($review->photo_finishing)) > 0)
+                                    <br> Tick to delete
+                                @endif
+                            </div>
+                        @endif
                     </div>
 
                 </td>
@@ -853,7 +886,7 @@
     {!! Form::close() !!}
 
     <script src="{{ asset('js/bootstrap.file-input.js') }}"></script>
-    <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
+    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
     <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script>
         $(document).ready(function() {
@@ -865,6 +898,8 @@
             });
 
             $('input[type=file]').bootstrapFileInput();
+
+            $('.review_image').fancybox();
 
             $('#add_program').on('click', function(){
                 $('.programs:last').after('<div class="form-group programs"><div class="col-md-4 col-md-offset-3">' +
