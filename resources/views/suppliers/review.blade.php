@@ -105,7 +105,7 @@
                         <div class="col-xs-3">
                             {!! Form::file('photo_office[]', array('multiple' => true)) !!}
                         </div>
-                        @if(!is_null($review->photo_office))
+                        @if(isset($review) && !is_null($review->photo_office))
                             <div class="col-xs-6">
                                 @foreach(unserialize($review->photo_office) as $key => $file)
                                     {!! Form::checkbox('photo_office_erase[]', $key, null) !!}
@@ -257,7 +257,7 @@
                         <div class="col-xs-3">
                             {!! Form::file('photo_warehouse[]', array('multiple' => true)) !!}
                         </div>
-                        @if(!is_null($review->photo_warehouse))
+                        @if(isset($review) && !is_null($review->photo_warehouse))
                             <div class="col-xs-6">
                                 @foreach(unserialize($review->photo_warehouse) as $key => $file)
                                     {!! Form::checkbox('photo_warehouse_erase[]', $key, null) !!}
@@ -418,7 +418,7 @@
                         <div class="col-xs-3">
                             {!! Form::file('photo_pre_press[]', array('multiple' => true)) !!}
                         </div>
-                        @if(!is_null($review->photo_pre_press))
+                        @if(isset($review) && !is_null($review->photo_pre_press))
                             <div class="col-xs-6">
                                 @foreach(unserialize($review->photo_pre_press) as $key => $file)
                                     {!! Form::checkbox('photo_pre_press_erase[]', $key, null) !!}
@@ -865,7 +865,7 @@
                         <div class="col-xs-3">
                             {!! Form::file('photo_finishing[]', array('multiple' => true)) !!}
                         </div>
-                        @if(!is_null($review->photo_finishing))
+                        @if(isset($review) && !is_null($review->photo_finishing))
                             <div class="col-xs-6">
                                 @foreach(unserialize($review->photo_finishing) as $key => $file)
                                     {!! Form::checkbox('photo_finishing_erase[]', $key, null) !!}
