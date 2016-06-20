@@ -127,7 +127,7 @@
                         <td class="quote_number">{{$item['quote_number']}}</td>
                         <td>{{$item['job_number']}}</td>
                         <td><a href="{{URL::to('/customers/'.$item["customer_id"].'/edit')}}">{{$item['customer_name']}}<a/></td>
-                        <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
+                        <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}">{{$item['title']}}</a></td>
                         <td>{{$item['quantity']}}</td>
                         <td>{{$item['total']}}</td>
                         <td><span style="color: @if(Carbon\Carbon::createFromFormat('d/m/Y', $item['expiry_date']) > Carbon\Carbon::now()) #00aa00 @else #dd0000 @endif">{{$item['expiry_date']}}</span></td>
@@ -273,8 +273,6 @@
                     filter_table(this.value);
                 }
             });
-
-            $("[data-toggle='tooltip']").tooltip();
 
             // Status is changed
             $('.select').on('change', function(){

@@ -77,7 +77,7 @@
                     <td>{{$item['quote_number']}}</td>
                     <td>{{$item['job_number']}}</td>
                     <td><span class="label label-info">{{$item['status']}}</span></td>
-                    <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}" data-toggle="tooltip" title="{{$item['description']}}">{{$item['title']}}</a></td>
+                    <td><a href="{{URL::to('quote_requests/'.$item["quote_number"].'/edit')}}">{{$item['title']}}</a></td>
                     <td>@if(isset($item['artwork_image']))<a class="fancybox" href="/uploads/artworks/{{$item['artwork_image']}}"><img src="/uploads/thumbnails/{{$item['artwork_image']}}"></a> @endif</td>
                     <td>{{$item['quantity']}}</td>
                     <td><a href="{{URL::to('/suppliers/'.$item["supplier_id"].'/edit')}}">{{$item['supplier_name']}}<a/></td>
@@ -123,7 +123,6 @@
     }
     $(document).ready(function(){
         $('#table').DataTable();
-        $("[data-toggle='tooltip']").tooltip();
         $('.fancybox').fancybox();
     });
 </script>
