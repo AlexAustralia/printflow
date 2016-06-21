@@ -105,4 +105,8 @@ Route::group(['middleware' => 'admin'], function() {
 	// Terms
 	Route::get('terms', 'TermsController@get_terms');
 	Route::post('terms', 'TermsController@post_terms');
+
+	// Access to Review Supplier page
+	Route::get('suppliers/{id}/access', 'SuppliersController@access');
+	Route::post('suppliers/{id}/access/update', 'SuppliersController@access_update');
 });

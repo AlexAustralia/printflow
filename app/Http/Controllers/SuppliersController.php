@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\SupplierReview;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -244,6 +245,52 @@ class SuppliersController extends Controller {
 
 		return redirect('/suppliers/'.$id.'/review');
 	}
+
+	/**
+	 * Show Supplier Access to Review page
+	 *
+	 * @param $id
+	 * @return \Illuminate\View\View
+	 */
+	public function access($id)
+	{
+		$supplier = Supplier::find($id);
+		$allowed_users_id = is_null($supplier->access_to_review) ? [] : unserialize($supplier->access_to_review);
+
+		$users = User::select('id', 'name')->where('admin', 0)->get();
+
+		$allowed_users = $users->filter(function($user) use ($allowed_users_id) {
+			return in_array($user->id, $allowed_users_id);
+		});
+
+		$users = $users->reject(function($user) use ($allowed_users_id) {
+			return in_array($user->id, $allowed_users_id);
+		});
+
+		$message = Session::get('message');
+
+		return view('suppliers.access', compact('supplier', 'users', 'allowed_users', 'message'));
+	}
+
+	/**
+	 * Save Supplier Access to Review page
+	 *
+	 * @param $id
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
+	public function access_update($id)
+	{
+		$input = Input::all();
+
+		$supplier = Supplier::find($id);
+
+		$supplier->access_to_review = isset($input['allowed_users']) ? serialize($input['allowed_users']) : null;
+
+		$supplier->save();
+
+		return redirect('suppliers/'.$id.'/access')->with('message', 'Access to Review page has been updated successfully');
+	}
+
 
 	private function process_photo($to_erase, $photo, $supplier_review)
 	{
