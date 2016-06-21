@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Supplier;
 use App\SupplierContact;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use URL;
 use Input;
@@ -205,7 +206,21 @@ class SuppliersController extends Controller {
 		$yesno = ['Yes', 'No', 'Not Applicable', 'No Assessed'];
 		$ages = ['1-3 Years Old', '4-5 Years Old', '6-10 Years Old', '11 Years and Older', 'Not Applicable'];
 
-		return view('suppliers.review', compact('supplier', 'review', 'valuation', 'yesno', 'ages'));
+		// Check user rights
+		$allowed_users_id = is_null($supplier->access_to_review) ? [] : unserialize($supplier->access_to_review);
+		$allow = false;
+
+		if (Auth::check()) {
+			if (Auth::user()->admin == 1) {
+				$allow = true;
+			} else {
+				if (in_array(Auth::user()->id, $allowed_users_id)) {
+					$allow = true;
+				}
+			}
+		}
+
+		return view('suppliers.review', compact('supplier', 'review', 'valuation', 'yesno', 'ages', 'allow'));
 	}
 
 	/**
