@@ -13,16 +13,31 @@ use Intervention\Image\Facades\Image;
 
 class ProjectsController extends Controller
 {
+    /**
+     * Display Project Brief page
+     *
+     * @return \Illuminate\View\View
+     */
     public function brief()
     {
         return view('projects.brief');
     }
 
+    /**
+     * Display Project Checklist page
+     *
+     * @return \Illuminate\View\View
+     */
     public function checklist()
     {
         return view('projects.checklist');
     }
 
+    /**
+     * Display Project Discussion page
+     *
+     * @return \Illuminate\View\View
+     */
     public function discussion()
     {
         $messages = Message::all();
@@ -30,6 +45,11 @@ class ProjectsController extends Controller
         return view('projects.discussion', compact('messages'));
     }
 
+    /**
+     * Save message to Discussion page
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function saveDiscussion()
     {
         $input = Input::all();
@@ -62,6 +82,31 @@ class ProjectsController extends Controller
         }
 
         $message->save();
+
+        return redirect('/projects/discussion');
+    }
+
+    /**
+     * Remove message from Discussion
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function deleteMessage()
+    {
+        $input = Input::all();
+
+        $message = Message::find($input['delete']);
+
+        if (!is_null($message->attachment)) {
+
+            $image = 'uploads/projects/' . $message->attachment;
+            $thumbnail = 'uploads/projects/thumbnails/' . $message->attachment;
+
+            if (file_exists($image)) unlink($image);
+            if (file_exists($thumbnail)) unlink($thumbnail);
+        }
+
+        $message->delete();
 
         return redirect('/projects/discussion');
     }

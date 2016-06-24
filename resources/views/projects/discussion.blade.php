@@ -8,6 +8,28 @@
 
     <link href="{{ asset('fancybox/source/jquery.fancybox.css?v=2.1.5') }}" rel="stylesheet" type="text/css">
 
+    <!-- Modal -->
+    <div class="modal fade" id="delete_confirmation" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this message?</p>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::open(array('url' => 'projects/discussion/delete', 'method' => 'post')) !!}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" name="delete" value="" class="btn btn-danger" id="delete_message">OK</button>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Body -->
     {!! Form::open(['url' => '/projects/discussion/save', 'method' => 'post', 'id' => 'discussion_form', 'class' => 'form-horizontal', 'files' => true]) !!}
 
     <div class="row">
@@ -29,7 +51,7 @@
                         <img src="/uploads/projects/thumbnails/{{ $message->attachment }}">
                     </a>@endif</div>
                 <div class="col-sm-6">{{ $message->body }}</div>
-                <div class="col-sm-1">@if(Auth::user()->id == $message->user_id)<button type="button" class="btn btn-sm btn-danger delete-message pull-right"><span class="fa fa-trash-o"></span></button>@endif</div>
+                <div class="col-sm-1">@if(Auth::user()->id == $message->user_id)<button type="button" class="btn btn-sm btn-danger delete-message pull-right" data-toggle="modal" value="{{ $message->id }}" data-target="#delete_confirmation" onclick="new_val(this)"><span class="fa fa-trash-o"></span></button>@endif</div>
             </div>
             <hr>
         @endforeach
@@ -59,10 +81,20 @@
     <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
 
     <script>
+        function new_val(t){
+            var res = $(t).attr('value');
+            $('#delete_message').val(res);
+            return false;
+        }
+
         $(document).ready(function() {
             $('input[type=file]').bootstrapFileInput();
 
             $('.review_image').fancybox();
+
+            $('#delete_message').on('click', function() {
+                $('#delete_confirmation').modal('hide');
+            })
         });
     </script>
 
