@@ -238,18 +238,18 @@ class WorkflowController extends Controller
 							  <Invoice>
 								<Type>ACCREC</Type>
 								<Contact>
-								  <Name>' . $quote_request->customer->customer_name . '</Name>
+								  <Name>' . htmlspecialchars($quote_request->customer->customer_name) . '</Name>
 								</Contact>
 								<Status>DRAFT</Status>
 								<Date>' . Carbon::now()->format('Y-m-d') . '</Date>
 								<DueDate>' . Carbon::now()->addWeeks(2)->format('Y-m-d') . '</DueDate>
-								<Reference>'. $quote_request->ref .'-'. $id .'</Reference>
+								<Reference>'. htmlspecialchars($quote_request->ref) .'-'. $id .'</Reference>
 								<LineAmountTypes>Exclusive</LineAmountTypes>
 								<LineItems>
 								  <LineItem>
 									<JobNo>' . $id . '</JobNo>
-									<Title>' . $quote_request->title . '</Title>
-									<Description>' . $quote_request->title . '</Description>
+									<Title>' . htmlspecialchars($quote_request->title) . '</Title>
+									<Description>' . htmlspecialchars($quote_request->title) . '</Description>
 									<UnitAmount>' . $quote_request->job->job_item->price / $quote_request->job->job_item->quantity . '</UnitAmount>
 									<GST>' . $quote_request->job->job_item->gst . '</GST>
 									<AccountCode>230/</AccountCode>
@@ -259,7 +259,7 @@ class WorkflowController extends Controller
 								  </LineItem>';
                     if(!empty($quote_request->summary)) {
                         $xml .= '<LineItem>
-									<Description>' . $quote_request->summary . '</Description>
+									<Description>' . htmlspecialchars($quote_request->summary) . '</Description>
 								  </LineItem>';
                     }
                     $xml .= '</LineItems>
