@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-sm-10">
-            <h2 style="margin:0"><img src="/images/products.png"> Project Brief</h2>
+            <h2 style="margin:0"><img src="/images/projects.png"> Project Brief</h2>
         </div>
     </div>
 
@@ -31,5 +31,6 @@
         </div>
     @endfor
 
+    {!! Form::close() !!}
 
 @endsection

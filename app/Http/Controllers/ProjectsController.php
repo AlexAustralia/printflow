@@ -13,4 +13,14 @@ class ProjectsController extends Controller
     {
         return view('projects.brief');
     }
+
+    public function checklist()
+    {
+        return view('projects.checklist');
+    }
+
+    public function discussion()
+    {
+        return view('projects.discussion');
+    }
 }
