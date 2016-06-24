@@ -51,7 +51,7 @@
                         <img src="/uploads/projects/thumbnails/{{ $message->attachment }}">
                     </a>@endif</div>
                 <div class="col-sm-6">{{ $message->body }}</div>
-                <div class="col-sm-1">@if(Auth::user()->id == $message->user_id)<button type="button" class="btn btn-sm btn-danger delete-message pull-right" data-toggle="modal" value="{{ $message->id }}" data-target="#delete_confirmation" onclick="new_val(this)"><span class="fa fa-trash-o"></span></button>@endif</div>
+                <div class="col-sm-1">@if(Auth::user()->id == $message->user_id)<button type="button" class="btn btn-danger delete-message pull-right" data-toggle="modal" value="{{ $message->id }}" data-target="#delete_confirmation" onclick="new_val(this)"><span class="fa fa-trash-o"></span></button>@endif</div>
             </div>
             <hr>
         @endforeach
