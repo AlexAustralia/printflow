@@ -42,6 +42,7 @@ return array(
     'CreateFreightItemsTable' => $baseDir . '/database/migrations/2016_03_27_071526_create_freight_items_table.php',
     'CreateFreightsTable' => $baseDir . '/database/migrations/2016_03_27_070605_create_freights_table.php',
     'CreateJobsTable' => $baseDir . '/database/migrations/2016_01_17_052310_create_jobs_table.php',
+    'CreateMessagesTable' => $baseDir . '/database/migrations/2016_06_24_213618_create_messages_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateProductsTable' => $baseDir . '/database/migrations/2016_01_10_051904_create_products_table.php',
     'CreateQuoteItemsTable' => $baseDir . '/database/migrations/2015_05_14_091240_create_quote_items_table.php',

@@ -82,6 +82,7 @@ Route::group(['middleware' => 'auth'], function(){
 	// Projects
 	Route::get('projects/brief', 'ProjectsController@brief');
 	Route::get('projects/discussion', 'ProjectsController@discussion');
+	Route::post('projects/discussion/save', 'ProjectsController@saveDiscussion');
 	Route::get('projects/checklist', 'ProjectsController@checklist');
 
 	Route::get('/send_customer_quote/{qrid}', 'QuotesController@get_send_customer_quote');
