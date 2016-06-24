@@ -79,6 +79,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('products/{id}/edit/{page}', 'ProductsController@edit');
 	Route::post('products/delete', 'ProductsController@delete');
 
+	// Projects
+	Route::get('projects/brief', 'ProjectsController@brief');
+	Route::get('projects/discussion', 'ProjectsController@discussion');
+	Route::get('projects/checklist', 'ProjectsController@checklist');
+
 	Route::get('/send_customer_quote/{qrid}', 'QuotesController@get_send_customer_quote');
 	Route::post('/send_customer_quote/{qrid}', 'QuotesController@post_send_customer_quote');
 

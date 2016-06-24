@@ -115,6 +115,8 @@
 						</ul>
 					</li>
 
+					<li><a href="{{ url('/projects/brief') }}">Projects</a></li>
+
 					<li class="dropdown">
 						<a href="{{ url('/') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setup <span class="caret"></span></a>
 						<ul class="dropdown-menu">
